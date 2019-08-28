@@ -1,0 +1,22 @@
+<h4>Uloguj se: </h4>
+<br>
+<form name="login" (ngSubmit)="login()">
+
+    <table>
+  
+      <tr>
+      <label>Ime</label>
+      <input type="text" [(ngModel)]="korime_login" name="korime_login">
+      </tr>
+  
+      <tr>
+      <label>Lozinka</label>
+      <input type="password" [(ngModel)]="lozinka_login" name="lozinka_login">
+      </tr>
+  
+    </table>
+   
+  
+    <input type="submit" value="Uloguj se">
+    
+  </form>

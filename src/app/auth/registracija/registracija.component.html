@@ -1,0 +1,67 @@
+<h4>Registruj se:</h4>
+<br>
+
+<form [formGroup]="regForma" name="registracija" (ngSubmit)="registracija()">
+
+  <table>
+
+    <tr>
+    <label>Ime</label>
+    <input type="text" formControlName="ime"  >
+    </tr>
+
+    <tr>
+    <label>Prezime</label>
+    <input type="text" formControlName="prezime" >
+    </tr>
+
+    <tr>
+    <label>Email</label>
+    <input type="text" formControlName="email">
+
+
+  
+    <div >
+      😢 Oh noes, this email is already taken!
+    </div>
+
+    </tr>
+
+    <tr>
+    <label>Zanimanje</label>
+    <input type="text" formControlName="zanimanje" >  
+    </tr>
+
+    <tr>
+    <label>Korisnicko ime</label>
+    <input type="text" formControlName="korime">
+    </tr>
+
+    <tr>
+    <label>Lozinka</label>
+    <input type="password" formControlName="lozinka">
+    </tr>
+
+    <tr>
+    <label>Ponovi lozinku</label>
+    <input type="password" formControlName="potvrdaLozinke" >
+    </tr>
+
+    <tr>
+    <label>Pol</label>
+    <input type="text" formControlName="pol" >
+    </tr>
+
+    <tr>
+    <label>JMBG</label>
+    <input type="text" formControlName="jmbg" >
+    </tr>
+
+  </table>
+ 
+
+  <input type="submit" value="Registruj se">
+
+  
+</form>
+

@@ -1,0 +1,28 @@
+<h4>Promeni lozinku:</h4>
+<br>
+
+<form name="promeniLozinku" (ngSubmit)="promeniLozinku()">
+
+    <table>
+  
+      <tr>
+      <label>Stara lozinka</label>
+      <input type="text" [(ngModel)]="staralozinka_login" name="staralozinka_login">
+      </tr>
+  
+      <tr>
+      <label>Nova lozinka</label>
+      <input type="password" [(ngModel)]="novalozinka_login" name="novalozinka_login">
+      </tr>
+
+      <tr>
+          <label>Potvrdi novu lozinku</label>
+          <input type="password" [(ngModel)]="novalozinka2_login" name="novalozinka2_login">
+          </tr>
+  
+    </table>
+   
+  
+    <input type="submit" value="Promeni lozinku">
+    
+  </form>
