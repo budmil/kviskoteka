@@ -21,8 +21,12 @@
 
 
   
-    <div >
-      😢 Oh noes, this email is already taken!
+    <div *ngIf="regForma.get('email').hasError('emailZauzet')">
+      😢 Ovaj e-mail je vec registrovan!
+    </div>
+
+    <div *ngIf="regForma.get('email').hasError('email')">
+      😢 Unesite validan email!
     </div>
 
     </tr>
@@ -35,6 +39,9 @@
     <tr>
     <label>Korisnicko ime</label>
     <input type="text" formControlName="korime">
+    <div *ngIf="regForma.get('korime').hasError('korimeZauzeto')">
+      😢 Dato korisnicko ime je zauzeto!
+    </div>
     </tr>
 
     <tr>
@@ -44,7 +51,10 @@
 
     <tr>
     <label>Ponovi lozinku</label>
-    <input type="password" formControlName="potvrdaLozinke" >
+    <input  type="password" formControlName="potvrdaLozinke"  >
+    <div *ngIf="regForma.get('potvrdaLozinke').hasError('razliciteLozinke')">
+      😢 Lozinke se ne poklapaju!
+    </div>
     </tr>
 
     <tr>
@@ -54,7 +64,19 @@
 
     <tr>
     <label>JMBG</label>
-    <input type="text" formControlName="jmbg" >
+    <input type="text" formControlName="jmbg" pattern="[0-9]{13}" name="jmbg">
+    <div *ngIf="((regForma.get('jmbg').hasError('neispravanJmbg') || regForma.get('jmbg').hasError('pattern'))&&regForma.get('jmbg').touched)">
+      😢 Nije dobar JMBG format!
+    </div>
+    </tr>
+
+    <tr>
+      <label>Profilna slika</label>
+      <button mat-stroked-button type="button" (click)="izaberiFajl.click()">Izaberi sliku</button>
+      <input type="file" #izaberiFajl (change)="izabranaSlika($event)">
+      <div class="image-preview" *ngIf="linkSlike !=='' && linkSlike && regForma.get('slika').valid">
+          <img [src]="linkSlike" [alt]="regForma.value.naslovSlike">
+      </div>
     </tr>
 
   </table>

@@ -1,3 +1,31 @@
-<p>
-  administrator works!
-</p>
+<mat-accordion multi="true" *ngIf="zahteviZaRegistraciju.length > 0">
+
+  <mat-expansion-panel *ngFor="let zahtev of zahteviZaRegistraciju">
+  <mat-expansion-panel-header>
+    {{zahtev.ime}}
+    {{zahtev.prezime}}
+  </mat-expansion-panel-header>
+
+  <div class="profilna">
+    <img [src]="zahtev.linkDoSlike" alt="Profilna slika">
+    <label>Korisnicko ime: {{zahtev.korime}}</label>
+    <label>Zanimanje: {{zahtev.zanimanje}}</label>
+    <label>Pol: {{zahtev.pol}}</label>
+    <label>Email: {{zahtev.email}}</label>
+    <label>Jmbg: {{zahtev.jmbg}}</label>
+
+  </div>
+
+  <mat-action-row>
+    <button mat-button color="primary" (click)="odobriZahtev(zahtev.korime)">Prihvati</button>
+    <button mat-button color="warn">Odbij</button>
+  </mat-action-row>
+
+  </mat-expansion-panel>
+
+
+
+
+
+
+</mat-accordion> 

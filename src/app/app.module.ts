@@ -2,8 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
-import {MatToolbarModule, MatButtonModule} from "@angular/material";
+import {MatToolbarModule, MatButtonModule, MatExpansionModule} from "@angular/material";
+
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -37,6 +39,8 @@ import { PromeniLozinkuComponent } from './auth/promeni-lozinku/promeni-lozinku.
     HttpClientModule,
     MatToolbarModule,
     MatButtonModule,
+    MatExpansionModule,
+    BrowserAnimationsModule,
     ReactiveFormsModule
   ],
   providers: [],

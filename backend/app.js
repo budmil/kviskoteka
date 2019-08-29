@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const path = require("path");
 
 const Korisnik = require("./models/korisnikk");
 
@@ -17,6 +18,7 @@ mongoose.connect("mongodb+srv://budmil:Mpof5aoEghx3a5we@clusterkviskoteka-0mizt.
     });
 
 app.use(bodyParser.json());
+app.use("/profilneSlike", express.static(path.join("backend/profilneSlike")));
 
 app.use((req,res,next) => {
 

@@ -9,4 +9,5 @@ class Korisnik {
     lozinka : string;
     pol : string;
     jmbg : string;
+    linkDoSlike : string;
 }
