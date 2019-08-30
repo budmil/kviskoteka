@@ -1,0 +1,45 @@
+.slova {
+    height: 40px;
+    width: 40px;
+    background-color: #0074d9;
+    border-radius: 80px;
+    margin-bottom: 30px;
+    float: left;
+    margin-right: 20px;
+    border-radius: 5px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 40px; 
+    color: whitesmoke;
+    text-shadow: 5px;
+  
+  }
+
+
+  .azbuka{
+        height: 30px;
+        width: 30px;
+        background-color: #0074d9;
+        border-radius: 80px;
+        margin-bottom: 30px;
+        float: left;
+        margin-right: 20px;
+        border-radius: 5px;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 30px; 
+        color: whitesmoke;
+        text-shadow: 5px;
+  }
+
+  
+
+ 
+  mat-grid-tile {
+    background-color: #0aaaab;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  

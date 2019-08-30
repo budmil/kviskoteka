@@ -1,0 +1,23 @@
+<form class="form">
+
+        <mat-label> <b> {{anagram.anagram}} </b> </mat-label>
+
+
+        <mat-form-field class="input" >
+          <input matInput placeholder="Vaš odgovor" value="" [(ngModel)]="odgovor" name="odgovor">
+        </mat-form-field>
+
+        <mat-label *ngIf="netacanOdgovor"> <b> Netačno! </b> </mat-label>
+
+        <mat-label *ngIf="tacanOdgovor"> <b> Bravo! Osvojili ste 5 poena! </b> </mat-label>
+
+        <button mat-stroked-button color="accent" (click)="proveriOdgovor()" >Potvrdi</button>
+
+        
+
+        <mat-label class="tajmer"> <b> {{brojac}} </b> </mat-label>
+        <mat-label *ngIf="brojac==0"> <b> Vreme isteklo! </b> </mat-label>
+
+
+      
+</form>

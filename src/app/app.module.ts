@@ -4,7 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
-import {MatToolbarModule, MatButtonModule, MatExpansionModule} from "@angular/material";
+import {MatToolbarModule, MatButtonModule, MatExpansionModule, MatGridListModule, MatFormFieldModule, MatInputModule} from "@angular/material";
 
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -18,6 +18,9 @@ import { IgraDanaComponent } from './mod/igra-dana/igra-dana.component';
 import { RegistracijaComponent } from './auth/registracija/registracija.component';
 import { LoginComponent } from './auth/login/login.component';
 import { PromeniLozinkuComponent } from './auth/promeni-lozinku/promeni-lozinku.component';
+import { VesalaComponent } from './igre/vesala/vesala.component';
+import { AnagramComponent } from './igre/anagram/anagram.component';
+import { SimpleTimer } from 'ng2-simple-timer';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,9 @@ import { PromeniLozinkuComponent } from './auth/promeni-lozinku/promeni-lozinku.
     IgraDanaComponent,
     RegistracijaComponent,
     LoginComponent,
-    PromeniLozinkuComponent
+    PromeniLozinkuComponent,
+    VesalaComponent,
+    AnagramComponent
   ],
   imports: [
     BrowserModule,
@@ -41,9 +46,12 @@ import { PromeniLozinkuComponent } from './auth/promeni-lozinku/promeni-lozinku.
     MatButtonModule,
     MatExpansionModule,
     BrowserAnimationsModule,
+    MatGridListModule,
+    MatFormFieldModule,
+    MatInputModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [SimpleTimer],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

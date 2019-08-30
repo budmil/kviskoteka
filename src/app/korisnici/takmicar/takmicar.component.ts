@@ -11,5 +11,6 @@ export class TakmicarComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  
+  
 }
