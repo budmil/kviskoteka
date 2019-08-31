@@ -46,7 +46,7 @@ export class AuthService {
     return this.http.get<{imaKorime:boolean}>('http://localhost:3000/api/korisnici/korime' + '?korime=' + korime);
   }
 
-  dodajZahtevZaRegistraciju(ime : string, prezime : string, email : string, zanimanje : string, korime : string, lozinka : string, pol : string, jmbg : string, profilnaSlika : File) {
+  dodajZahtevZaRegistraciju(ime : string, prezime : string, email : string, zanimanje : string, korime : string, lozinka : string, pol : string, jmbg : string, profilnaSlika : File, tajanstvenoPitanje : string, tajanstveniOdgovor : string) {
   
     alert("servis");
 
@@ -60,6 +60,8 @@ export class AuthService {
     podaci.append("pol",pol);
     podaci.append("jmbg",jmbg);
     podaci.append("profilnaSlika", profilnaSlika, korime + "_profilePic" );
+    podaci.append("tajanstvenoPitanje", tajanstvenoPitanje);
+    podaci.append("tajanstveniOdgovor", tajanstveniOdgovor);
 
     this.http.post<{message:string}>('http://localhost:3000/api/korisnici/signup', podaci)
       .subscribe(responseData => {
@@ -102,6 +104,7 @@ export class AuthService {
       });
 
   }
+
 
 
 
@@ -201,4 +204,76 @@ export class AuthService {
       this.dohvatiZahteve();
     });
   }
+
+  promeniLozinku(korime:string, staraLozinka:string, novaLozinka:string) {
+    this.http.post(
+      "http://localhost:3000/api/korisnici/promenaLozinke",
+      {korime: korime, staraLozinka:staraLozinka, novaLozinka:novaLozinka}
+    )
+    .subscribe(response => {
+
+    });
+  }
+
+
+  proveriJmbgKorime(korime : string, jmbg : string) {
+    return this.http.post<{pitanje: string, odgovor: string, korime: string}>(
+      "http://localhost:3000/api/korisnici/promenaLozinke/jmbg",
+      {korime: korime, jmbg:jmbg}
+    );
+ 
+  }
+
+  promeniZaboravljenuLozinku(korime:string, novaLozinka:string) {
+    this.http.post(
+      "http://localhost:3000/api/korisnici/promenaZaboravljeneLozinke",
+      {korime: korime, novaLozinka:novaLozinka}
+    )
+    .subscribe(response => {
+        alert("uspesno promenjena lozinka");
+    });
+  }
+
+
+  private takmicariUpdated = new Subject<Korisnik[]>();
+  getTakmicariUpdatedListener() {
+    return this.takmicariUpdated.asObservable();
+  }
+  dohvatiTakmicare() {
+    this.http.get<{message:string; takmicari: any}>('http://localhost:3000/api/korisnici/takmicari')
+      .pipe(map((podaci)=>{
+        return podaci.takmicari.map(takmicar => {
+          return {
+            ime : takmicar.ime,
+            prezime : takmicar.prezime,
+            email : takmicar.email,
+            zanimanje : takmicar.zanimanje,
+            korime : takmicar.korime,
+            lozinka : takmicar.lozinka,
+            pol : takmicar.pol,
+            jmbg : takmicar.jmbg,
+            linkDoSlike : takmicar.linkDoSlike
+          }
+        });
+      }))
+      .subscribe(sviTakmicari => {
+          this.takmicariUpdated.next([...sviTakmicari]);
+      });
+
+  }
+
+
+
+  unaprediUSupervizora(korime : string) {
+    this.http.post<{message: string}>(
+      "http://localhost:3000/api/korisnici/unaprediUSupervizora",
+      {korime:korime}
+    )
+    .subscribe(res => {
+      this.dohvatiTakmicare();
+    });
+  }
+
+  
+
 }

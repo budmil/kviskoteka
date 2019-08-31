@@ -12,7 +12,9 @@ const korisnikkSchema = mongoose.Schema({
     jmbg : {type: String},
     tip : {type: String, enum: ['Takmicar', 'Supervizor', 'Admin']},
     linkDoSlike: {type: String},
-    valid : {type: Boolean}  //1 valid, 0 ceka se odobrenje administratora
+    valid : {type: Boolean},  //1 valid, 0 ceka se odobrenje administratora
+    tajanstvenoPitanje : {type: String},
+    tajanstveniOdgovor: {type: String}
 });
 
 module.exports = mongoose.model('Korisnikk', korisnikkSchema);

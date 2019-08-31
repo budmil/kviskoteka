@@ -3,7 +3,7 @@ import { AuthService } from '../auth.service';
 import { FormGroup, FormBuilder, AbstractControl, Validators, FormControl } from '@angular/forms';
 import { Observable, timer, Observer } from 'rxjs';
 import { switchMap, map, delay } from 'rxjs/operators';
-import { mimeType } from './mime-validator';
+//import { mimeType } from './mime-validator';
 
 @Component({
   selector: 'app-registracija',
@@ -12,6 +12,7 @@ import { mimeType } from './mime-validator';
 })
 export class RegistracijaComponent implements OnInit {
   
+  isLoading;
 
   constructor(private authService : AuthService, private fb : FormBuilder) { }
 
@@ -20,6 +21,7 @@ export class RegistracijaComponent implements OnInit {
   linkSlike : string;
 
   ngOnInit() {
+    this.isLoading = false;
     this.regForma = this.fb.group({
       ime: [''],
       prezime: [''],
@@ -38,7 +40,9 @@ export class RegistracijaComponent implements OnInit {
       pol: [''],
       jmbg: ['', this.validirajJmbg.bind(this)],
       potvrdaLozinke: ['', this.validirajLozinku.bind(this)],
-      slika: ['', [Validators.required ], [this.validirajVelicinuSlike.bind(this),mimeType]]
+      slika: ['', [Validators.required ], [this.mimeType ]],
+      tajanstvenoPitanje: ['',Validators.required],
+      tajanstveniOdgovor: ['',Validators.required]
     }, 
     
     );
@@ -46,30 +50,77 @@ export class RegistracijaComponent implements OnInit {
 
   }
 
-  validirajVelicinuSlike(control: AbstractControl) {
-    if(this.regForma)
-      {
-      var img = new Image();
-      const frObs = Observable.create(
-        (observer: Observer<{ [key: string]: any }>) => {
-          img.onload = () => {
-            if (img.width > 300 || img.height>300) {
-              observer.next(null);
-            } else { 
-              observer.next({ prevelika: true });
-            }
-            observer.complete();
+
+  mimeType = (
+    control: AbstractControl
+  ): Promise<{ [key: string]: any }> | Observable<{ [key: string]: any }> => {
+    console.log("tip");
+    const file = control.value as File;
+    const fileReader = new FileReader();
+    const frObs = Observable.create(
+      (observer: Observer<{ [key: string]: any }>) => {
+        this.isLoading = true;
+        fileReader.addEventListener("loadend", () => {    
+          this.isLoading = false;
+          const arr = new Uint8Array(fileReader.result as ArrayBuffer).subarray(0, 4);
+          let header = "";
+          let isValid = false;
+          for (let i = 0; i < arr.length; i++) {
+            header += arr[i].toString(16);
           }
-        }
-      );
+          switch (header) {
+            case "89504e47":
+              isValid = true;
+              break;
+            case "ffd8ffe0":
+            case "ffd8ffe1":
+            case "ffd8ffe2":
+            case "ffd8ffe3":
+            case "ffd8ffe8":
+              isValid = true;
+              break;
+            default:
+              isValid = false; 
+              break;
+          };
+          if (isValid) {
+            observer.next(null);
+          } else { 
+            observer.next({ invalidMimeType: true });
+          }
+          observer.complete();
+        });
+        fileReader.readAsArrayBuffer(file);
+      }
+    );
+    return frObs;
+  };
+  
+  // validirajVelicinuSlike(control: AbstractControl) {
+  //   if(this.regForma)
+  //     {
+  //     var img = new Image();
+  //     const frObs = Observable.create(
+  //       (observer: Observer<{ [key: string]: any }>) => {
+  //         img.onload = () => {
+  //           if (img.width > 300 || img.height>300) {
+  //             observer.next({ prevelika: true });
+  //           } else { 
+  //             observer.next(null);
+  //           }
+  //           console.log(img.width + " * " + img.height);
+  //           observer.complete();
+  //         }
+  //       }
+  //     );
       
-      if (this.linkSlike) {
-        img.src = this.linkSlike;
-     }
-      return frObs;
+  //     if (this.linkSlike) {
+  //       img.src = this.linkSlike;
+  //    }
+  //     return frObs;
       
-    }
-  }
+  //   }
+  // }
 
 
   izabranaSlika(event: Event) {
@@ -106,9 +157,7 @@ export class RegistracijaComponent implements OnInit {
       var jmbg = +this.regForma.get('jmbg').value;
       jmbg+=10000000000000;
       var kontrolnaCifra = jmbg % 10;
-      console.log(jmbg);
       jmbg = Math.floor(jmbg/10);
-      console.log(jmbg);
       var s = 0;
       for (var j = 0; j <2; j++) {
         for (var i=2; i<=7; i++) {
@@ -147,7 +196,7 @@ export class RegistracijaComponent implements OnInit {
     // if (this.regForma.invalid) {
     //   return;
     // }
-    this.authService.dodajZahtevZaRegistraciju(this.regForma.get('ime').value, this.regForma.get('prezime').value, this.regForma.get('email').value, this.regForma.get('zanimanje').value, this.regForma.get('korime').value, this.regForma.get('lozinka').value, this.regForma.get('pol').value, this.regForma.get('jmbg').value, this.regForma.get("slika").value);
+    this.authService.dodajZahtevZaRegistraciju(this.regForma.get('ime').value, this.regForma.get('prezime').value, this.regForma.get('email').value, this.regForma.get('zanimanje').value, this.regForma.get('korime').value, this.regForma.get('lozinka').value, this.regForma.get('pol').value, this.regForma.get('jmbg').value, this.regForma.get("slika").value, this.regForma.get("tajanstvenoPitanje").value, this.regForma.get("tajanstveniOdgovor").value);
 
   }
 }

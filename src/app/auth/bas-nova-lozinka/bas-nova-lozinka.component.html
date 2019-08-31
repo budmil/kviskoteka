@@ -1,0 +1,28 @@
+<form [formGroup]="forma" name="forma" (ngSubmit)="promeniZaboravljenuLozinku()">
+
+
+
+<mat-form-field>
+        <input matInput type="password" placeholder="Nova lozinka" formControlName="novaLozinka" pattern="">
+        <mat-error *ngIf="forma.get('novaLozinka').hasError('pattern') && !forma.get('novaLozinka').hasError('required')">
+          Lozinka se mora sastojati iz toga i toga. 
+        </mat-error>
+        <mat-error *ngIf="forma.get('novaLozinka').hasError('required')">
+          Morate uneti <strong>novu lozinku</strong>
+        </mat-error>
+      </mat-form-field>
+  
+        <mat-form-field>
+        <input matInput type="password" placeholder="Potvrda nove lozinke" formControlName="potvrdaNoveLozinke">
+        <mat-error *ngIf="forma.get('potvrdaNoveLozinke').hasError('razliciteLozinke') && !forma.get('potvrdaNoveLozinke').hasError('required')">
+          Lozinke se ne poklapaju.
+        </mat-error>
+        <mat-error *ngIf="forma.get('potvrdaNoveLozinke').hasError('required')">
+          Obavezno unesite ponovo <strong>novu lozinku</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-button type="submit">Potvrdi</button>
+
+
+      </form>

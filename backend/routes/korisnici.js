@@ -44,7 +44,8 @@ router.post("/signup", multer({storage: storage}).single("profilnaSlika"), (req,
             tip: "Takmicar",
             linkDoSlike: url + "/profilneSlike/" + req.file.filename,
             valid: false,
-
+            tajanstvenoPitanje: req.body.tajanstvenoPitanje,
+            tajanstveniOdgovor: req.body.tajanstveniOdgovor
         });
         console.log(korisnik);
         korisnik.save()
@@ -152,6 +153,96 @@ router.post("/odobriZahtev", (req,res,next) => {
         .then(korisnik => {
             return res.status(200).json({message: "Takmicar uspesno postao ucesnik kviza."});
         })
+});
+
+router.post("/promenaLozinke", (req,res,next) => {
+    bcrypt.hash(req.body.novaLozinka, 10).then(hash => {
+        let fetchedUser;
+        Korisnikk.findOne({korime: req.body.korime})
+        .then(korisnik => {
+ 
+            if (!korisnik.valid) {
+                return res.status(401).json({
+                    message: "Ceka se odobrenje administratora za vasu registraciju."
+                });
+            }
+
+            fetchedUser = korisnik;
+            return bcrypt.compare(req.body.staraLozinka, korisnik.lozinka);
+        })
+        .then(result => {
+            if(!result) {
+                return res.status(401).json({
+                    message: "Neispravna lozinka. Da niste zaboravili?"
+                });
+            }
+
+            Korisnikk.updateOne({ korime : req.body.korime}, {lozinka : hash})
+            .then(korisnik => {
+                return res.status(200).json({message: "Uspesno promenjena lozinka."});
+            })
+            .catch(err=>{
+                return res.status(401).json({message:"Neuspela promena lozinke"});
+            });
+        
+    
+
+        })
+        .catch(err => {
+            return res.status(401).json({message:"Neuspela promena lozinke"});
+        });
+    });
+});
+
+
+router.post("/promenaLozinke/jmbg", (req,res,next) => {
+    Korisnikk.findOne({korime: req.body.korime, jmbg: req.body.jmbg})
+        .then(korisnik =>{
+            if (!korisnik) {
+                return res.status(401).json({
+                    message: "Ne postoji korisnik sa datim korisnickim imenom i JMBG."
+                });
+            }
+            res.status(200).json({
+                pitanje: korisnik.tajanstvenoPitanje,
+                odgovor: korisnik.tajanstveniOdgovor,
+                korime: korisnik.korime
+            });
+
+        })
+        .catch(err => {
+            return res.status(401).json({message:"Neuspeo zahtev."});
+        })   
+});
+
+
+router.post("/promenaZaboravljeneLozinke", (req,res,next) => {
+    bcrypt.hash(req.body.novaLozinka, 10).then(hash => {
+        Korisnikk.updateOne({ korime : req.body.korime}, {lozinka : hash})
+        .then(korisnik => {
+            return res.status(200).json({message: "Uspesno promenjena zaboravljena lozinka"});
+        }) 
+    });
+});
+
+router.post("/unaprediUSupervizora", (req,res,next) => {
+    Korisnikk.updateOne({ korime : req.body.korime}, {tip : "Supervizor"})
+        .then(korisnik => {
+            return res.status(200).json({message: "Takmicar uspesno postao supervizor kviza."});
+        })
+});
+
+
+router.get("/takmicari", (req,res,next) => {
+    Korisnikk.find({valid : true, tip : "Takmicar"})
+        .then( takmicari => {
+            res.status(200).json({
+                message: "Uspesno dohvatanje liste takmicara.",
+                takmicari: takmicari
+              });
+        })
+
+
 });
 
 

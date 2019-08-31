@@ -1,0 +1,28 @@
+<h3>Unesite podatke za oporavak lozinke</h3>
+
+<form [formGroup]="forma" name="forma" (ngSubmit)="submit()">
+
+      <mat-form-field>
+      <input matInput placeholder="Korisnicko ime" formControlName="korime">
+      <mat-error *ngIf="forma.get('korime').hasError('nemaKorime') && !forma.get('korime').hasError('required')">
+        Uneli ste nepostojeće korisničko ime.
+      </mat-error>
+      <mat-error *ngIf="forma.get('korime').hasError('required')">
+        Morate uneti <strong>korisničko ime</strong>
+      </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+      <input matInput type="text" placeholder="Vaš JMBG" formControlName="jmbg">
+      <mat-error *ngIf="forma.get('jmbg').hasError('neispravanJmbg') && !forma.get('jmbg').hasError('required')">
+        Neispravan JMBG.
+      </mat-error>
+      <mat-error *ngIf="forma.get('jmbg').hasError('required')">
+        Morate uneti Vaš <strong>JMBG</strong>
+      </mat-error>
+    </mat-form-field>
+
+    
+    <button mat-button type="submit">Zahtevaj novu lozinku</button>
+
+  </form>

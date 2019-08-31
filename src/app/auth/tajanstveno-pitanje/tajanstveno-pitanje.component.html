@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Oporavak lozinke</h1>
+<div mat-dialog-content>
+
+  <p><strong>{{podaci.pitanje}}</strong></p>
+
+
+  <p>Odgovor:</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="odgovor" name="odgovor">
+  </mat-form-field>
+
+
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Otkaži</button>
+  <button mat-button [mat-dialog-close]="podaci.odgovor" cdkFocusInitial (click)="onClick()">Potvrdi</button>
+</div>

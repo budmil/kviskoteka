@@ -4,7 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
-import {MatToolbarModule, MatButtonModule, MatExpansionModule, MatGridListModule, MatFormFieldModule, MatInputModule} from "@angular/material";
+import {MatToolbarModule, MatSnackBarModule, MatButtonModule, MatExpansionModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatDialogModule} from "@angular/material";
 
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -21,6 +21,12 @@ import { PromeniLozinkuComponent } from './auth/promeni-lozinku/promeni-lozinku.
 import { VesalaComponent } from './igre/vesala/vesala.component';
 import { AnagramComponent } from './igre/anagram/anagram.component';
 import { SimpleTimer } from 'ng2-simple-timer';
+import { ZaboravljenaLozinkaComponent } from './auth/zaboravljena-lozinka/zaboravljena-lozinka.component';
+import { TajanstvenoPitanjeComponent } from './auth/tajanstveno-pitanje/tajanstveno-pitanje.component';
+import { NovaLozinkaComponent } from './auth/nova-lozinka/nova-lozinka.component';
+import { BasNovaLozinkaComponent } from './auth/bas-nova-lozinka/bas-nova-lozinka.component';
+import { MojBrojComponent } from './igre/moj-broj/moj-broj.component';
+import { PlaviComponent } from './mod/plavi/plavi.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +41,13 @@ import { SimpleTimer } from 'ng2-simple-timer';
     LoginComponent,
     PromeniLozinkuComponent,
     VesalaComponent,
-    AnagramComponent
+    AnagramComponent,
+    ZaboravljenaLozinkaComponent,
+    TajanstvenoPitanjeComponent,
+    NovaLozinkaComponent,
+    BasNovaLozinkaComponent,
+    MojBrojComponent,
+    PlaviComponent
   ],
   imports: [
     BrowserModule,
@@ -49,6 +61,9 @@ import { SimpleTimer } from 'ng2-simple-timer';
     MatGridListModule,
     MatFormFieldModule,
     MatInputModule,
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    MatSnackBarModule,
     ReactiveFormsModule
   ],
   providers: [SimpleTimer],

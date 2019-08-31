@@ -71,9 +71,27 @@
     </tr>
 
     <tr>
+        <label>Tajanstveno pitanje</label>
+        <input type="text" formControlName="tajanstvenoPitanje" name="tajanstvenoPitanje">
+        <div *ngIf="regForma.get('tajanstvenoPitanje').hasError('required')">
+          😢 Obavezno!
+        </div>
+    </tr>
+
+    <tr>
+          <label>Tajanstveni odgovor</label>
+          <input type="text" formControlName="tajanstveniOdgovor"  name="tajanstveniOdgovor">
+          <div *ngIf="regForma.get('tajanstveniOdgovor').hasError('required')">
+            😢 Obavezno!
+          </div>
+    </tr>
+
+    <tr>
       <label>Profilna slika</label>
       <button mat-stroked-button type="button" (click)="izaberiFajl.click()">Izaberi sliku</button>
       <input type="file" #izaberiFajl (change)="izabranaSlika($event)">
+      <mat-spinner *ngIf="isLoading"></mat-spinner>
+
       <div class="image-preview" *ngIf="linkSlike !=='' && linkSlike && regForma.get('slika').valid">
           <img [src]="linkSlike" [alt]="regForma.value.naslovSlike">
       </div>

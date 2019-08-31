@@ -13,13 +13,16 @@ export class HeaderComponent implements OnInit {
   constructor(private authService : AuthService) { }
 
   ngOnInit() {
+   this.userIsAuthenticated = this.authService.getIsAuth();
+   this.authService.getAuthStatusListener().subscribe(isAuth => {
+     this.userIsAuthenticated = isAuth;
+   });
   }
 
 
 
   izlogujSe() {
     this.authService.izlogujSe();
-
   }
 
 }

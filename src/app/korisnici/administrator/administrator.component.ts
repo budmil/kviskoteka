@@ -10,7 +10,9 @@ import { Subscription } from 'rxjs';
 export class AdministratorComponent implements OnInit, OnDestroy {
 
   zahteviZaRegistraciju : Korisnik[] = [];
+  takmicari : Korisnik[] = [];
   private zahteviSubscription: Subscription;
+  private takmicariSubscription : Subscription;
 
   constructor(private authService : AuthService) { }
 
@@ -20,13 +22,24 @@ export class AdministratorComponent implements OnInit, OnDestroy {
       .subscribe((zahtevi : Korisnik[]) => {
           this.zahteviZaRegistraciju = zahtevi;
       });    
+
+    this.authService.dohvatiTakmicare();
+    this.takmicariSubscription = this.authService.getTakmicariUpdatedListener()
+      .subscribe((takmicari:Korisnik[]) => {
+        this.takmicari = takmicari;
+      });
   }
 
   ngOnDestroy() {
     this.zahteviSubscription.unsubscribe();
+    this.takmicariSubscription.unsubscribe();
   }
 
   odobriZahtev(korime: string) {
     this.authService.odobriZahtev(korime);
+  }
+
+  unaprediUSupervizora(korime: string) {
+    this.authService.unaprediUSupervizora(korime);
   }
 }

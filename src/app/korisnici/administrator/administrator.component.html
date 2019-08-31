@@ -1,3 +1,8 @@
+<br>
+<br>
+<p>Pristigli zahtevi za registraciju:</p>
+<hr>
+
 <mat-accordion multi="true" *ngIf="zahteviZaRegistraciju.length > 0">
 
   <mat-expansion-panel *ngFor="let zahtev of zahteviZaRegistraciju">
@@ -6,15 +11,15 @@
     {{zahtev.prezime}}
   </mat-expansion-panel-header>
 
-  <div class="profilna">
-    <img [src]="zahtev.linkDoSlike" alt="Profilna slika">
+    <div class="profilna" >
+     <img  [src]="zahtev.linkDoSlike" alt="Profilna slika">
+    </div>
     <label>Korisnicko ime: {{zahtev.korime}}</label>
     <label>Zanimanje: {{zahtev.zanimanje}}</label>
     <label>Pol: {{zahtev.pol}}</label>
     <label>Email: {{zahtev.email}}</label>
     <label>Jmbg: {{zahtev.jmbg}}</label>
 
-  </div>
 
   <mat-action-row>
     <button mat-button color="primary" (click)="odobriZahtev(zahtev.korime)">Prihvati</button>
@@ -29,3 +34,37 @@
 
 
 </mat-accordion> 
+
+<br>
+<br>
+Unapredi takmicara u supervizorsku privilegiju:
+<hr>
+<br>
+<br>
+
+<mat-accordion multi="true" *ngIf="takmicari.length > 0">
+
+    <mat-expansion-panel *ngFor="let takmicar of takmicari">
+    <mat-expansion-panel-header>
+      {{takmicar.ime}}
+      {{takmicar.prezime}}
+    </mat-expansion-panel-header>
+  
+      <div class="profilna">
+         <img [src]="takmicar.linkDoSlike" alt="Profilna slika">
+      </div>
+      <label>Korisnicko ime: {{takmicar.korime}}</label>
+      <label>Zanimanje: {{takmicar.zanimanje}}</label>
+      <label>Pol: {{takmicar.pol}}</label>
+      <label>Email: {{takmicar.email}}</label>
+      <label>Jmbg: {{takmicar.jmbg}}</label>
+  
+  
+    <mat-action-row>
+      <button mat-button color="primary" (click)="unaprediUSupervizora(takmicar.korime)">Unapredi u supervizora</button>
+    </mat-action-row>
+
+    </mat-expansion-panel>
+  
+  
+  </mat-accordion> 
