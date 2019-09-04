@@ -4,7 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
-import {MatToolbarModule, MatSnackBarModule, MatButtonModule, MatExpansionModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatDialogModule} from "@angular/material";
+import {MatToolbarModule, MatCardModule, MatTreeModule, MatSnackBarModule, MatButtonModule, MatExpansionModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatDialogModule} from "@angular/material";
 
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -27,6 +27,11 @@ import { NovaLozinkaComponent } from './auth/nova-lozinka/nova-lozinka.component
 import { BasNovaLozinkaComponent } from './auth/bas-nova-lozinka/bas-nova-lozinka.component';
 import { MojBrojComponent } from './igre/moj-broj/moj-broj.component';
 import { PlaviComponent } from './mod/plavi/plavi.component';
+import { CrveniComponent } from './mod/crveni/crveni.component';
+import { VesalaMultiComponent } from './vesala-multi/vesala-multi.component';
+import { SocketioService } from './socketio.service';
+import { GeografijaComponent } from './igre/geografija/geografija.component';
+import { PeharComponent } from './igre/pehar/pehar.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +52,11 @@ import { PlaviComponent } from './mod/plavi/plavi.component';
     NovaLozinkaComponent,
     BasNovaLozinkaComponent,
     MojBrojComponent,
-    PlaviComponent
+    PlaviComponent,
+    CrveniComponent,
+    VesalaMultiComponent,
+    GeografijaComponent,
+    PeharComponent
   ],
   imports: [
     BrowserModule,
@@ -64,6 +73,8 @@ import { PlaviComponent } from './mod/plavi/plavi.component';
     MatProgressSpinnerModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatTreeModule,
+    MatCardModule,
     ReactiveFormsModule
   ],
   providers: [SimpleTimer],

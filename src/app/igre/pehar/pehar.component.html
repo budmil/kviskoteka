@@ -1,0 +1,21 @@
+<p>pehar works!</p>
+
+
+
+
+
+    <div class="spoljasnji" *ngFor="let odgovor of odgovori; let i = index">  
+
+        <div class="unutrasnji" *ngFor="let odg of odgovor; let j = index">
+             <input matInput class="slova" type="text" name="odgovori[i][j]" (ngModel)="odgovori[i][j]" >
+        </div>
+
+    </div>
+
+    <button (click)="zavrsi()">Zavrsi</button>
+
+
+
+
+
+

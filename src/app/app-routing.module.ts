@@ -13,6 +13,11 @@ import { NovaLozinkaComponent } from './auth/nova-lozinka/nova-lozinka.component
 import { TajanstvenoPitanjeComponent } from './auth/tajanstveno-pitanje/tajanstveno-pitanje.component';
 import { BasNovaLozinkaComponent } from './auth/bas-nova-lozinka/bas-nova-lozinka.component';
 import { PlaviComponent } from './mod/plavi/plavi.component';
+import { CrveniComponent } from './mod/crveni/crveni.component';
+import { VesalaMultiComponent } from './vesala-multi/vesala-multi.component';
+import { MojBrojComponent } from './igre/moj-broj/moj-broj.component';
+import { GeografijaComponent } from './igre/geografija/geografija.component';
+import { PeharComponent } from './igre/pehar/pehar.component';
 
 const routes: Routes = [
   { path: "", component: PocetnaComponent},
@@ -25,8 +30,13 @@ const routes: Routes = [
   { path: "igradana", component:IgraDanaComponent},
   { path: "vesala", component:VesalaComponent},
   { path: "anagram", component:AnagramComponent},
+  { path: "mojbroj", component: MojBrojComponent},
+  { path: "geografija", component: GeografijaComponent},
+  { path: "pehar", component: PeharComponent},
   { path: "basNovaLozinka", component:BasNovaLozinkaComponent},
-  { path: "plavi", component: PlaviComponent}
+  { path: "plavi", component: PlaviComponent},
+  { path: "crveni", component: CrveniComponent},
+  { path: "vesalamulti", component: VesalaMultiComponent}
 
 
 

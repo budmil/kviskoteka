@@ -11,32 +11,20 @@ const server = http.createServer(app);
 
 server.listen(port);
 
-prviKontektovan = false;
-drugiKontektovan = false;
-prviID = null;
-drugiID = null;
-soba = 0;
-cnt = 0;
 
-const io = require('socket.io')(server);
+module.exports = server;
 
-io.on('connection', function (socket) {
-   socket.join("soba" + soba);
-   cnt++;
-   if (cnt == 2) {
-       cnt = 0;
-       soba++;
-   }
-    
-    socket.on('klik', function (data) {
 
-        for (var prop in socket.rooms) {
 
-            if (prop.substr(0,4) == "soba") {
-                io.to(prop).emit('podaci',  data );
-            }
-        }        
-            
-       
-    });
-  });
+
+
+
+//SOCKET IO 
+
+
+
+var io = require('socket.io')(server);
+
+file2 = require ('./backend/routes/file2')(io);
+
+ 

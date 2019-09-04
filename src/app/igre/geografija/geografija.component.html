@@ -1,0 +1,25 @@
+<h2>Zanimljiva geografija</h2>
+
+<form>
+
+    <mat-label class="tajmer"> <b>Popunite sto vise polja za  {{brojac}} sekundi. </b> </mat-label>
+    <mat-label *ngIf="brojac==0"> <b> Vreme isteklo! </b> </mat-label>
+
+
+    <mat-label> <b> Vase slovo je: {{slovo}} </b> </mat-label>
+
+
+    <div *ngFor="let oblast of oblasti; let i = index">
+        {{oblast}}
+        <div *ngFor="let bppo of brojPojmovaPoOblasti; let j = index">
+            <input type="text" name="name[i][j]" [(ngModel)]="unetiPojmovi[i][j]" >
+        </div>
+    </div>
+
+
+    <button mat-stroked-button color="accent" (click)="proveriOdgovore()" >Potvrdi</button>
+
+    
+   
+  
+</form>

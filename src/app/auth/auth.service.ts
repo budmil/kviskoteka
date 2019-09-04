@@ -14,7 +14,7 @@ export class AuthService {
   private isAuthenticated = false;
   private token : string;
   private tokenTimer : any;
-  private korime: string;
+  private korime: string; 
   private tip: string;
   private authStatusListener = new Subject<boolean>();
 

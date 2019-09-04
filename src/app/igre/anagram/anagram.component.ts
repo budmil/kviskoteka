@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {SimpleTimer} from 'ng2-simple-timer';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-anagram',
@@ -16,11 +17,11 @@ export class AnagramComponent implements OnInit {
   odgovor : string = "";
   anagram : {anagram:string; resenje:string} = {anagram:"", resenje:""};
 
-  constructor(private simpleTimer: SimpleTimer, private router:Router) { }
+  constructor(private simpleTimer: SimpleTimer, private router:Router, private http: HttpClient) { }
 
   ngOnInit() {
     this.brojac = 10;
-    this.anagram = this.dohvatiAnagram();
+    this.dohvatiAnagram();
     this.simpleTimer.newTimer('tajmer', 1, true);
     this.simpleTimer.subscribe('tajmer', () => {
       this.brojac--;
@@ -43,13 +44,22 @@ export class AnagramComponent implements OnInit {
   }
 
   dohvatiAnagram() {
-    let anagrami : {anagram:string; resenje:string}[] = [{anagram:"Radna skela",resenje:"Aleksandar"} , 
-                                                      {anagram: "Oblast s puno krvoloka!",resenje: "Balkansko poluostrvo"},
-                                                      {anagram:"Vraški Rus je pesnička legenda!",resenje:"Aleksandar Sergejevič Puškin"}, 
-                                                      {anagram:"Oni mi skršili vagu!",resenje:"Suvišni kilogrami"},
-                                                      {anagram:"Krasan je odmor", resenje:"Jadransko more"}];
 
-    return anagrami[Math.floor((Math.random()*1000)%anagrami.length)];
+    this.http.get<{zagonetka : string, resenje: string}>('http://localhost:3000/api/igre/anagram/dohvati')
+      .subscribe(res => {
+        console.log(res);
+        this.anagram = {anagram: res.zagonetka, resenje: res.resenje} 
+     });
+  
+
+    
+    // let anagrami : {anagram:string; resenje:string}[] = [{anagram:"Radna skela",resenje:"Aleksandar"} , 
+    //                                                   {anagram: "Oblast s puno krvoloka!",resenje: "Balkansko poluostrvo"},
+    //                                                   {anagram:"Vraški Rus je pesnička legenda!",resenje:"Aleksandar Sergejevič Puškin"}, 
+    //                                                   {anagram:"Oni mi skršili vagu!",resenje:"Suvišni kilogrami"},
+    //                                                   {anagram:"Krasan je odmor", resenje:"Jadransko more"}];
+
+    // return anagrami[Math.floor((Math.random()*1000)%anagrami.length)];
   }
 
   kraj(){

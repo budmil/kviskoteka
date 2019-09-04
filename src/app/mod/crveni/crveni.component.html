@@ -1,0 +1,42 @@
+<p>crveni works!</p>
+
+
+<mat-accordion multi="true" >
+
+    <mat-expansion-panel *ngFor="let takmicar of spremniTakmicari">
+    <mat-expansion-panel-header>
+      {{takmicar}}
+    </mat-expansion-panel-header>
+  
+  
+    <mat-action-row>
+      <button mat-button color="primary" (click)="igrajte(takmicar)" >Igrajte!</button>
+
+    </mat-action-row>
+
+    </mat-expansion-panel>
+  
+  
+  </mat-accordion>
+
+
+
+<br>
+
+<!--   
+
+<form *ngIf="!waitingRedPlayer" [formGroup]="forma" name="forma" (ngSubmit)="kliknuo()">
+
+
+
+    <input type="text" formControlName="tekst" name="tekst">
+
+
+    <input type="submit" value="Klik">
+
+    {{blabla}}
+
+  
+</form>
+
+-->

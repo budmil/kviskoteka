@@ -1,1 +1,41 @@
-<p>moj-broj works!</p>
+<h2>Moj broj</h2>
+
+<form>
+
+
+    <button *ngFor="let operator of operatori" (click)="dodajOperator(operator)">{{operator}}</button>
+
+    <button (click)="obrisi()">Obrisi</button>
+    <button (click)="obrisiSve()">Obrisi sve</button>
+    <br>
+    <br>
+    <button  name="jednocifreni1" (click)="dodajBroj('jednocifreni1')">{{jednocifreni1}} </button>
+    <button  name="jednocifreni2" (click)="dodajBroj('jednocifreni2')">{{jednocifreni2}}</button>
+    <button  name="jednocifreni3" (click)="dodajBroj('jednocifreni3')">{{jednocifreni3}}</button>
+    <button  name="jednocifreni4" (click)="dodajBroj('jednocifreni4')">{{jednocifreni4}}</button>
+    <button  name="dvocifreni1"   (click)="dodajBroj('dvocifreni1')">{{dvocifreni1}}</button>
+    <button  name="dvocifreni2"   (click)="dodajBroj('dvocifreni2')">{{dvocifreni2}}</button>
+    <br>
+    Trazeni broj: {{trazenibroj}}
+
+
+    
+    <br>
+    <hr>
+    <button (click)="stop()">Stop</button>
+    <br>
+    <button (click)="kraj()">Potvrdi</button>
+
+
+    {{izraz}}
+
+    <br>
+    <hr>
+    <br>
+    <div *ngIf="vasrezultat!=''">Vas rezultat: {{vasrezultat}}</div>
+
+    <mat-label class="tajmer"> <b> {{brojac}} </b> </mat-label>
+    <mat-label *ngIf="brojac==0"> <b> Vreme isteklo! </b> </mat-label>
+
+
+</form>
