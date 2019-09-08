@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { SimpleTimer } from 'ng2-simple-timer';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-moj-broj',
@@ -8,7 +9,7 @@ import { SimpleTimer } from 'ng2-simple-timer';
   styleUrls: ['./moj-broj.component.css']
 })
 export class MojBrojComponent implements OnInit {
-
+  brojacZaIzlaz: number;
   izraz : string = "";
   operatori = ["+","-", "*", "/","(",")"];
   vasrezultat = "";
@@ -20,6 +21,8 @@ export class MojBrojComponent implements OnInit {
 
   brojac = 60;
 
+  brojpoena : number;
+
   jednocifreni1 ;
   jednocifreni2 ;
   jednocifreni3 ;
@@ -27,10 +30,10 @@ export class MojBrojComponent implements OnInit {
   dvocifreni1 ;
   dvocifreni2 ;
 
-  constructor(private simpleTimer : SimpleTimer) { }
+  constructor(private simpleTimer : SimpleTimer, private router : Router) { }
 
   ngOnInit() { 
-    
+    this.brojpoena = 0;
     this.simpleTimer.newTimer('brojeviSeVrte', 0.05, true);
     this.simpleTimer.subscribe('brojeviSeVrte', () => {
       
@@ -100,8 +103,19 @@ export class MojBrojComponent implements OnInit {
   }
 
   kraj(){
-    var izracunato = eval(this.izraz);
-    this.vasrezultat = izracunato;
+    this.vasrezultat = eval(this.izraz);
+    if (this.vasrezultat == this.trazenibroj.toString()) this.brojpoena+=10;
+    this.brojacZaIzlaz = 3;
+    this.simpleTimer.newTimer('tajmerZaIzlaz', 1, true);
+    this.simpleTimer.subscribe('tajmerZaIzlaz', () => {
+      this.brojacZaIzlaz--;
+      if (this.brojacZaIzlaz==0) {
+        this.simpleTimer.delTimer('tajmerZaIzlaz');
+        localStorage.setItem("poeniMojbroj", this.brojpoena.toString());
+        this.router.navigate(["/vesala"]);
+      }
+    });
+
   }
 
 }

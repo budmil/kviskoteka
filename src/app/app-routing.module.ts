@@ -18,6 +18,7 @@ import { VesalaMultiComponent } from './vesala-multi/vesala-multi.component';
 import { MojBrojComponent } from './igre/moj-broj/moj-broj.component';
 import { GeografijaComponent } from './igre/geografija/geografija.component';
 import { PeharComponent } from './igre/pehar/pehar.component';
+import { RezultatComponent } from './igre/rezultat/rezultat.component';
 
 const routes: Routes = [
   { path: "", component: PocetnaComponent},
@@ -33,6 +34,7 @@ const routes: Routes = [
   { path: "mojbroj", component: MojBrojComponent},
   { path: "geografija", component: GeografijaComponent},
   { path: "pehar", component: PeharComponent},
+  { path: "rezultat", component: RezultatComponent},
   { path: "basNovaLozinka", component:BasNovaLozinkaComponent},
   { path: "plavi", component: PlaviComponent},
   { path: "crveni", component: CrveniComponent},

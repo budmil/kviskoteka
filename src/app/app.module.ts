@@ -4,7 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
-import {MatToolbarModule, MatCardModule, MatTreeModule, MatSnackBarModule, MatButtonModule, MatExpansionModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatDialogModule} from "@angular/material";
+import {MatToolbarModule, MatSortModule, MatCardModule, MatTreeModule, MatSnackBarModule, MatButtonModule, MatExpansionModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatDialogModule} from "@angular/material";
 
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -32,6 +32,7 @@ import { VesalaMultiComponent } from './vesala-multi/vesala-multi.component';
 import { SocketioService } from './socketio.service';
 import { GeografijaComponent } from './igre/geografija/geografija.component';
 import { PeharComponent } from './igre/pehar/pehar.component';
+import { RezultatComponent } from './igre/rezultat/rezultat.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { PeharComponent } from './igre/pehar/pehar.component';
     CrveniComponent,
     VesalaMultiComponent,
     GeografijaComponent,
-    PeharComponent
+    PeharComponent,
+    RezultatComponent
   ],
   imports: [
     BrowserModule,
@@ -73,6 +75,7 @@ import { PeharComponent } from './igre/pehar/pehar.component';
     MatProgressSpinnerModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatSortModule,
     MatTreeModule,
     MatCardModule,
     ReactiveFormsModule

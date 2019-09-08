@@ -92,6 +92,7 @@ router.post("/login",(req,res,next)=>{
             }
             const token = jwt.sign(
                 {korime: fetchedUser.korime},
+                
                 "tajni_kljuc_vau_vau_ne_mozes_me_provaliti",
                 {expiresIn: "1h"}
             );

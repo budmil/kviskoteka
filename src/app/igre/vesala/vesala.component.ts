@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
+import { Router } from '@angular/router';
+import { SimpleTimer } from 'ng2-simple-timer';
 
 @Component({
   selector: 'app-vesala',
@@ -20,6 +22,8 @@ import { trigger, state, transition, style, animate } from '@angular/animations'
 
 export class VesalaComponent implements OnInit {
 
+  brojacZaIzlaz: number;
+  brojpoena : number;
 
   azbuka = ['a','b','v','g','d','đ','e','ž','z','i','j','k','l','lj','m','n','nj','o','p','r','s','t','ć','u','f','h','c','č','dž','š'];
   slova : string[];
@@ -42,7 +46,11 @@ export class VesalaComponent implements OnInit {
   slikaPrazan = 'assets/images/cicaglisa_prazan.png';
 
 
+  constructor(private router: Router, private simpleTimer: SimpleTimer) {}
+
   ngOnInit() {
+    this.brojpoena = 0;
+
     this.numOfGuesses = 0;
     this.recZaPogadjanje = this.vratiRecZaPogadjanje();
     this.slova = this.recZaPogadjanje.split('');
@@ -70,6 +78,8 @@ export class VesalaComponent implements OnInit {
       this.counter = 0;
       this.enableAnimation = false;
       this.imageSource = '';
+      this.brojpoena += 10;
+      this.kraj();
     }
     if (bla==true) return;
     this.enableAnimation = true;
@@ -84,7 +94,7 @@ export class VesalaComponent implements OnInit {
       case 2: this.imageSource = this.slikaGlava; this.choice++; break;
       case 3: this.imageSource = this.slikaTrup; this.choice++; break;
       case 4: this.imageSource = this.slikaRuke; this.choice++; break;
-      case 5: this.imageSource = this.slikaCeo; this.obesen = true; this.choice = 1; break;
+      case 5: this.imageSource = this.slikaCeo; this.obesen = true; this.choice = 1; this.kraj(); break;
     }
   }
 
@@ -102,6 +112,19 @@ export class VesalaComponent implements OnInit {
       this.state = this.state === 'in' ? 'out' : 'in';
       this.counter++;
     }
+  }
+
+  kraj() {
+    this.brojacZaIzlaz = 3;
+    this.simpleTimer.newTimer('tajmerZaIzlaz', 1, true);
+    this.simpleTimer.subscribe('tajmerZaIzlaz', () => {
+      this.brojacZaIzlaz--;
+      if (this.brojacZaIzlaz==0) {
+        this.simpleTimer.delTimer('tajmerZaIzlaz');
+        localStorage.setItem("poeniVesala", this.brojpoena.toString());
+        this.router.navigate(["/geografija"]);
+      }
+    });
   }
   
   vratiRecZaPogadjanje() {

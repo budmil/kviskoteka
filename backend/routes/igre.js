@@ -2,6 +2,7 @@ const express = require("express");
 
 const Anagram = require("../models/anagram");
 const Pehar = require ("../models/pehar");
+const Geografija = require("../models/geografija");
 
 const router = express.Router();
 
@@ -64,6 +65,50 @@ router.post("/pehar/dodajPehar", (req,res,next) => {
     .catch(err => {
         res.status(500).json({
             error : err
+        });
+    });
+});
+
+
+
+router.get("/pehar/dohvatiPehar", (req,res,next) => {
+
+    Pehar.count().exec(function(err,count) {
+        var random = Math.floor(Math.random() * count);
+        Pehar.findOne().skip(random).exec(function(err,pehar) {
+            niz = Array();
+            niz.push({pitanje: pehar.gore9.pitanje, odgovor: pehar.gore9.odgovor});
+            niz.push({pitanje: pehar.gore8.pitanje, odgovor: pehar.gore8.odgovor});
+            niz.push({pitanje: pehar.gore7.pitanje, odgovor: pehar.gore7.odgovor});
+            niz.push({pitanje: pehar.gore6.pitanje, odgovor: pehar.gore6.odgovor});
+            niz.push({pitanje: pehar.gore5.pitanje, odgovor: pehar.gore5.odgovor});
+            niz.push({pitanje: pehar.gore4.pitanje, odgovor: pehar.gore4.odgovor});
+            niz.push({pitanje: pehar.goredole3.pitanje, odgovor: pehar.goredole3.odgovor});
+            niz.push({pitanje: pehar.dole4.pitanje, odgovor: pehar.dole4.odgovor});
+            niz.push({pitanje: pehar.dole5.pitanje, odgovor: pehar.dole5.odgovor});
+            niz.push({pitanje: pehar.dole6.pitanje, odgovor: pehar.dole6.odgovor});
+            niz.push({pitanje: pehar.dole7.pitanje, odgovor: pehar.dole7.odgovor});
+            niz.push({pitanje: pehar.dole8.pitanje, odgovor: pehar.dole8.odgovor});
+            niz.push({pitanje: pehar.dole9.pitanje, odgovor: pehar.dole9.odgovor});
+
+            res.status(201).json({
+                pehar: niz
+            });
+        });
+    });
+});
+
+
+router.post("/geografija/proveriPojam", (req,res,next) => {
+  
+    Geografija.findOne({slovo: req.body.slovo, kategorija: req.body.kategorija, termin: req.body.termin})
+
+    .then(result => {
+        if (result)  res.status(201).json({ imaUBazi : true }); else res.status(201).json({ imaUBazi : false });
+    })
+    .catch(err => {
+        res.status(500).json({
+            message : "Doslo je do greske pri radu sa serverom."
         });
     });
 });

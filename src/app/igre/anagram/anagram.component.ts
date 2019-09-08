@@ -12,6 +12,7 @@ export class AnagramComponent implements OnInit {
 
   brojacZaIzlaz: number;
   brojac : number;
+  brojpoena : number;
   tacanOdgovor = false;
   netacanOdgovor = false;
   odgovor : string = "";
@@ -20,6 +21,7 @@ export class AnagramComponent implements OnInit {
   constructor(private simpleTimer: SimpleTimer, private router:Router, private http: HttpClient) { }
 
   ngOnInit() {
+    this.brojpoena = 0;
     this.brojac = 10;
     this.dohvatiAnagram();
     this.simpleTimer.newTimer('tajmer', 1, true);
@@ -37,6 +39,7 @@ export class AnagramComponent implements OnInit {
   proveriOdgovor() {
     if (this.anagram.resenje == this.odgovor) {
       this.tacanOdgovor = true;
+      this.brojpoena += 10;
     } else {
       this.netacanOdgovor = true;
     }
@@ -69,7 +72,8 @@ export class AnagramComponent implements OnInit {
       this.brojacZaIzlaz--;
       if (this.brojacZaIzlaz==0) {
         this.simpleTimer.delTimer('tajmerZaIzlaz');
-        this.router.navigate(["/vesala"]);
+        localStorage.setItem("poeniAnagram", this.brojpoena.toString());
+        this.router.navigate(["/mojbroj"]);
       }
     });
 
