@@ -20,6 +20,8 @@ mongoose.connect("mongodb+srv://budmil:Mpof5aoEghx3a5we@clusterkviskoteka-0mizt.
 
 app.use(bodyParser.json());
 app.use("/profilneSlike", express.static(path.join("backend/profilneSlike")));
+app.use("/rebusi", express.static(path.join("backend/rebusi")));
+
 
 app.use((req,res,next) => {
 

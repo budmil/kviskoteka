@@ -22,7 +22,7 @@ export class BasNovaLozinkaComponent implements OnInit{
 
 
     this.forma = this.fb.group({
-      novaLozinka: ['', Validators.required],
+      novaLozinka: ['', [Validators.required, Validators.pattern]],
       potvrdaNoveLozinke: ['',[Validators.required,this.validirajLozinku.bind(this)]]
     }, 
     

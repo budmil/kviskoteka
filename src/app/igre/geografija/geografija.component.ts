@@ -33,7 +33,7 @@ export class GeografijaComponent implements OnInit {
 
   }
 
-  brojac = 10;
+  brojac = 120;
 
   ngOnInit() {
 

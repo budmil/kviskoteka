@@ -1,6 +1,12 @@
-<form class="form">
+<mat-spinner *ngIf="isLoading"></mat-spinner>
 
-        <mat-label> <b> {{anagram.anagram}} </b> </mat-label>
+<form class="form" *ngIf="!isLoading">
+
+        <mat-label *ngIf="igramAnagram"> <b> {{anagram.anagram}} </b> </mat-label>
+        <div class="slika">
+            <img *ngIf="!igramAnagram" [src]="anagram.anagram" alt="Rebus - greska pri konekciji">
+        </div>
+
 
         <mat-label> <b> Broj poena: {{brojpoena}} </b> </mat-label>
 
@@ -8,9 +14,10 @@
           <input matInput placeholder="Vaš odgovor" value="" [(ngModel)]="odgovor" name="odgovor">
         </mat-form-field>
 
-        <mat-label *ngIf="netacanOdgovor"> <b> Netačno! </b> </mat-label>
+        <mat-label *ngIf="netacanOdgovor"> <b> Netačno! Resenje je {{anagram.resenje}} </b> </mat-label>
 
         <mat-label *ngIf="tacanOdgovor"> <b> Bravo! Osvojili ste 5 poena! </b> </mat-label>
+
 
         <button mat-stroked-button color="accent" (click)="proveriOdgovor()" >Potvrdi</button>
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
-import { SocketioService } from '../socketio.service';
+import { SocketioService } from '../../socketio.service';
 
 @Component({
   selector: 'app-vesala-multi',

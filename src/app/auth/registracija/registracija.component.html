@@ -6,102 +6,128 @@
   <table>
 
     <tr>
-    <label>Ime</label>
-    <input type="text" formControlName="ime"  >
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="Ime" formControlName="ime">
+      </mat-form-field>
     </tr>
 
     <tr>
-    <label>Prezime</label>
-    <input type="text" formControlName="prezime" >
+      <mat-form-field>
+        <input matInput type="text" placeholder="Prezime" formControlName="prezime">
+      </mat-form-field>
     </tr>
 
     <tr>
-    <label>Email</label>
-    <input type="text" formControlName="email">
 
-
-  
-    <div *ngIf="regForma.get('email').hasError('emailZauzet')">
-      😢 Ovaj e-mail je vec registrovan!
-    </div>
-
-    <div *ngIf="regForma.get('email').hasError('email')">
-      😢 Unesite validan email!
-    </div>
+      <mat-form-field>
+        <input matInput type="text" placeholder="Email" formControlName="email">
+        <mat-error *ngIf="regForma.get('email').hasError('emailZauzet')">
+          Ovaj e-mail je vec registrovan!
+        </mat-error>
+        <mat-error *ngIf="regForma.get('email').hasError('email')">
+          Unesite validan email!
+        </mat-error>
+      </mat-form-field>
 
     </tr>
 
     <tr>
-    <label>Zanimanje</label>
-    <input type="text" formControlName="zanimanje" >  
+      <mat-form-field>
+        <input matInput type="text" placeholder="Zanimanje" formControlName="zanimanje">
+      </mat-form-field>
     </tr>
 
     <tr>
-    <label>Korisnicko ime</label>
-    <input type="text" formControlName="korime">
-    <div *ngIf="regForma.get('korime').hasError('korimeZauzeto')">
-      😢 Dato korisnicko ime je zauzeto!
-    </div>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="Korisničko ime" formControlName="korime">
+        <mat-error *ngIf="regForma.get('korime').hasError('korimeZauzeto')">
+          Dato korisničko ime je zauzezo!
+        </mat-error>
+
+      </mat-form-field>
+
     </tr>
 
     <tr>
-    <label>Lozinka</label>
-    <input type="password" formControlName="lozinka">
+
+      <mat-form-field>
+        <input matInput type="password" placeholder="Lozinka" formControlName="lozinka"
+          pattern="^(?=.{8,12}$)(?!.*(\S)\1{2})(?=.*[A-Z])(?=.*[a-z]{3})(?=.*\d)(?=.*[^a-zA-Z0-9])([a-zA-Z]\S*)$">
+        <mat-error *ngIf="regForma.get('lozinka').hasError('pattern')">
+          Mora veliko slovo,broj,znak,8-12 karaktera,bez ponavljanja 3 uzastopna.
+        </mat-error>
+      </mat-form-field>
+
     </tr>
 
     <tr>
-    <label>Ponovi lozinku</label>
-    <input  type="password" formControlName="potvrdaLozinke"  >
-    <div *ngIf="regForma.get('potvrdaLozinke').hasError('razliciteLozinke')">
-      😢 Lozinke se ne poklapaju!
-    </div>
+
+      <mat-form-field>
+        <input matInput type="password" placeholder="Ponovi lozinku" formControlName="potvrdaLozinke">
+        <mat-error *ngIf="regForma.get('potvrdaLozinke').hasError('razliciteLozinke')">
+          Lozinke se ne poklapaju!
+        </mat-error>
+      </mat-form-field>
+
+
+
     </tr>
 
     <tr>
-    <label>Pol</label>
-    <input type="text" formControlName="pol" >
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="Pol" formControlName="pol">
+      </mat-form-field>
+
     </tr>
 
     <tr>
-    <label>JMBG</label>
-    <input type="text" formControlName="jmbg" pattern="[0-9]{13}" name="jmbg">
-    <div *ngIf="((regForma.get('jmbg').hasError('neispravanJmbg') || regForma.get('jmbg').hasError('pattern'))&&regForma.get('jmbg').touched)">
-      😢 Nije dobar JMBG format!
-    </div>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="JMBG" formControlName="jmbg" pattern="[0-9]{13}">
+        <mat-error *ngIf="((regForma.get('jmbg').hasError('neispravanJmbg') || regForma.get('jmbg').hasError('pattern'))&&regForma.get('jmbg').touched)">
+          Unesite ispravan JMBG.
+        </mat-error>
+      </mat-form-field>
     </tr>
 
     <tr>
-        <label>Tajanstveno pitanje</label>
-        <input type="text" formControlName="tajanstvenoPitanje" name="tajanstvenoPitanje">
-        <div *ngIf="regForma.get('tajanstvenoPitanje').hasError('required')">
-          😢 Obavezno!
-        </div>
+        <mat-form-field>
+            <input matInput type="text" placeholder="Tajanstveno pitanje" formControlName="tajanstvenoPitanje">
+            <mat-error *ngIf="regForma.get('tajanstvenoPitanje').hasError('required')">
+              Ovo polje je obavezno.
+            </mat-error>
+          </mat-form-field>
     </tr>
 
     <tr>
-          <label>Tajanstveni odgovor</label>
-          <input type="text" formControlName="tajanstveniOdgovor"  name="tajanstveniOdgovor">
-          <div *ngIf="regForma.get('tajanstveniOdgovor').hasError('required')">
-            😢 Obavezno!
-          </div>
+        <mat-form-field>
+            <input matInput type="text" placeholder="Tajanstveni odgovor" formControlName="tajanstveniOdgovor">
+            <mat-error *ngIf="regForma.get('tajanstvenoPitanje').hasError('required')">
+              Ovo polje je obavezno.
+            </mat-error>
+          </mat-form-field>
     </tr>
 
     <tr>
-      <label>Profilna slika</label>
-      <button mat-stroked-button type="button" (click)="izaberiFajl.click()">Izaberi sliku</button>
+      <button mat-stroked-button type="button" (click)="izaberiFajl.click()">Izaberi profilnu sliku</button>
+    </tr>
+    <tr>
       <input type="file" #izaberiFajl (change)="izabranaSlika($event)">
       <mat-spinner *ngIf="isLoading"></mat-spinner>
 
       <div class="image-preview" *ngIf="linkSlike !=='' && linkSlike && regForma.get('slika').valid">
-          <img [src]="linkSlike" [alt]="regForma.value.naslovSlike">
+        <img [src]="linkSlike" [alt]="regForma.value.naslovSlike">
       </div>
     </tr>
 
   </table>
- 
 
-  <input type="submit" value="Registruj se">
 
-  
+  <button mat-button type="submit()" [disabled]="!regForma.valid">Registruj se</button>
+
+
+
 </form>
-

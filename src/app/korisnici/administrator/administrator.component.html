@@ -6,13 +6,13 @@
 <mat-accordion multi="true" *ngIf="zahteviZaRegistraciju.length > 0">
 
   <mat-expansion-panel *ngFor="let zahtev of zahteviZaRegistraciju">
-  <mat-expansion-panel-header>
-    {{zahtev.ime}}
-    {{zahtev.prezime}}
-  </mat-expansion-panel-header>
+    <mat-expansion-panel-header>
+      {{zahtev.ime}}
+      {{zahtev.prezime}}
+    </mat-expansion-panel-header>
 
-    <div class="profilna" >
-     <img  [src]="zahtev.linkDoSlike" alt="Profilna slika">
+    <div class="profilna">
+      <img [src]="zahtev.linkDoSlike" alt="Profilna slika">
     </div>
     <label>Korisnicko ime: {{zahtev.korime}}</label>
     <label>Zanimanje: {{zahtev.zanimanje}}</label>
@@ -21,10 +21,10 @@
     <label>Jmbg: {{zahtev.jmbg}}</label>
 
 
-  <mat-action-row>
-    <button mat-button color="primary" (click)="odobriZahtev(zahtev.korime)">Prihvati</button>
-    <button mat-button color="warn">Odbij</button>
-  </mat-action-row>
+    <mat-action-row>
+      <button mat-button color="primary" (click)="odobriZahtev(zahtev.korime)">Prihvati</button>
+      <button mat-button color="warn" (click)="odbijZahtev(zahtev.korime)">Odbij</button>
+    </mat-action-row>
 
   </mat-expansion-panel>
 
@@ -33,7 +33,7 @@
 
 
 
-</mat-accordion> 
+</mat-accordion>
 
 <br>
 <br>
@@ -44,27 +44,130 @@ Unapredi takmicara u supervizorsku privilegiju:
 
 <mat-accordion multi="true" *ngIf="takmicari.length > 0">
 
-    <mat-expansion-panel *ngFor="let takmicar of takmicari">
+  <mat-expansion-panel *ngFor="let takmicar of takmicari">
     <mat-expansion-panel-header>
       {{takmicar.ime}}
       {{takmicar.prezime}}
     </mat-expansion-panel-header>
-  
-      <div class="profilna">
-         <img [src]="takmicar.linkDoSlike" alt="Profilna slika">
-      </div>
-      <label>Korisnicko ime: {{takmicar.korime}}</label>
-      <label>Zanimanje: {{takmicar.zanimanje}}</label>
-      <label>Pol: {{takmicar.pol}}</label>
-      <label>Email: {{takmicar.email}}</label>
-      <label>Jmbg: {{takmicar.jmbg}}</label>
-  
-  
+
+    <div class="profilna">
+      <img [src]="takmicar.linkDoSlike" alt="Profilna slika">
+    </div>
+    <label>Korisnicko ime: {{takmicar.korime}}</label>
+    <label>Zanimanje: {{takmicar.zanimanje}}</label>
+    <label>Pol: {{takmicar.pol}}</label>
+    <label>Email: {{takmicar.email}}</label>
+    <label>Jmbg: {{takmicar.jmbg}}</label>
+
+
     <mat-action-row>
       <button mat-button color="primary" (click)="unaprediUSupervizora(takmicar.korime)">Unapredi u supervizora</button>
     </mat-action-row>
 
-    </mat-expansion-panel>
-  
-  
-  </mat-accordion> 
+  </mat-expansion-panel>
+
+
+</mat-accordion>
+
+
+
+
+
+<br>
+<br>
+<h2>Igra dana</h2>
+<br>
+
+Definisi igru dana:
+<form (submit)="potvrdi()" #forma="ngForm">
+  <table>
+    <tr>
+      <td>Za datum:</td>
+      <td>
+
+        <mat-form-field class="example-full-width">
+          <input matInput [min]="minDate" [matDatepicker]="picker" placeholder="Izaberi datum" [(ngModel)]="datum"
+            required name="datumpolje">
+
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr>
+      <td>Vešala:</td>
+      <td>
+        <mat-form-field>
+          <mat-label>Izaberi reč za Vešala:</mat-label>
+          <mat-select [(ngModel)]="izabranoVesaloId" name="vesalopolje" required>
+            <mat-option *ngFor="let vesalo of vesala" [value]="vesalo._id">{{vesalo.rec}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </td>
+
+    </tr>
+
+    <tr>
+      <td>Pehar:</td>
+      <td>
+
+
+        <mat-form-field>
+          <mat-label>Izaberi Pehar:</mat-label>
+          <mat-select [(ngModel)]="izabraniPeharId" name="peharpolje" required>
+            <mat-option *ngFor="let pehar of pehari" [value]="pehar._id">{{pehar.gore9.pitanje}} =
+              {{pehar.gore9.odgovor}}</mat-option>
+
+          </mat-select>
+        </mat-form-field>
+
+
+      </td>
+
+    </tr>
+
+    <tr>
+      <td><label id="example-radio-group-label">Anagram ili rebus:</label>
+        <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+          [(ngModel)]="anagramilirebus" name="anagramilirebuspolje" required>
+          <mat-radio-button class="example-radio-button" value="anagram">
+            Anagram
+          </mat-radio-button>
+          <mat-radio-button class="example-radio-button" value="rebus">
+            Rebus
+          </mat-radio-button>
+        </mat-radio-group>
+      </td>
+
+      <td *ngIf="anagramilirebus == 'anagram'">
+        <mat-form-field>
+          <mat-label>Izaberi Anagram:</mat-label>
+          <mat-select [(ngModel)]="izabraniAnagramId" name="anagrampolje" required>
+            <mat-option *ngFor="let anagram of anagrami" [value]="anagram._id">{{anagram.zagonetka}}</mat-option>
+
+          </mat-select>
+        </mat-form-field>
+      </td>
+
+      <td *ngIf="anagramilirebus == 'rebus'">
+        <mat-form-field>
+          <mat-label>Izaberi Rebus:</mat-label>
+          <mat-select [(ngModel)]="izabraniRebusId" name="rebuspolje" required>
+            <mat-option *ngFor="let rebus of rebusi" [value]="rebus._id">
+            {{rebus.resenje}}
+             
+            </mat-option>
+
+          </mat-select>
+        </mat-form-field>
+      </td>
+
+    </tr>
+
+    <td>
+      <button mat-button type="submit" [disabled]="!forma.valid">Potvrdi</button>
+    </td>
+  </table>
+</form>

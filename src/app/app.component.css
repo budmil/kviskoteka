@@ -4,3 +4,8 @@ app-header {
     right: 0;
 
 }
+
+app-footer{
+    height: 30px;
+    margin-top: -50px;
+}

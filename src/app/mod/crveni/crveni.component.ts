@@ -24,6 +24,7 @@ export class CrveniComponent implements OnInit, OnDestroy{
 
   ngOnInit() {
     this.korime = localStorage.getItem('korime');
+    localStorage.setItem("boja", "crveni");
 
 
     //this.socket = io("http://localhost:3000",{query: {tip: "crveni", takmicar: this.korime}});
@@ -44,7 +45,7 @@ export class CrveniComponent implements OnInit, OnDestroy{
   igrajte (korime : string){
 
     this.socketioService.igrajKazeCrveni(this.korime,korime);
-    this.router.navigate(["/vesalamulti"]);
+    this.router.navigate(["/anagrammulti"]);
   }
 
   ngOnDestroy() {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { Router } from '@angular/router';
 import { SimpleTimer } from 'ng2-simple-timer';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-vesala',
@@ -46,19 +47,14 @@ export class VesalaComponent implements OnInit {
   slikaPrazan = 'assets/images/cicaglisa_prazan.png';
 
 
-  constructor(private router: Router, private simpleTimer: SimpleTimer) {}
+  constructor(private router: Router, private simpleTimer: SimpleTimer, private http: HttpClient) {}
 
   ngOnInit() {
     this.brojpoena = 0;
 
     this.numOfGuesses = 0;
-    this.recZaPogadjanje = this.vratiRecZaPogadjanje();
-    this.slova = this.recZaPogadjanje.split('');
-    this.usloviZaPrikaz = new Array(this.recZaPogadjanje.length);
-    for (let i = 0; i < this.recZaPogadjanje.length; i++) {
-      this.usloviZaPrikaz[i]=false;
-    }
-    this.imageSource = this.slikaPrazan;
+    this.vratiRecZaPogadjanje();
+ 
   }
 
 
@@ -128,7 +124,29 @@ export class VesalaComponent implements OnInit {
   }
   
   vratiRecZaPogadjanje() {
-    let reci: string[] = ["krava", "trava", "zmaj", "covek", "automobil", "kuca", "racunar", "matematika"];
-    return reci[Math.floor((Math.random()*1000)%reci.length)];
+    
+     this.http.get<{ igraDana: any }>('http://localhost:3000/api/igre/igradana/dohvatiIgruDana')
+     .subscribe(res => {
+       this.http.post<{ rec: string }>('http://localhost:3000/api/igre/igradana/dohvatiVesalo', {vesaloId:res.igraDana.vesala})
+         .subscribe(res => {
+           console.log(res.rec);
+          this.recZaPogadjanje =  res.rec;
+          this.slova = this.recZaPogadjanje.split('');
+          this.usloviZaPrikaz = new Array(this.recZaPogadjanje.length);
+          for (let i = 0; i < this.recZaPogadjanje.length; i++) {
+            this.usloviZaPrikaz[i]=false;
+          }
+          this.imageSource = this.slikaPrazan;
+         });
+
+     });
+
+
+
+
   }
+
+
+
+  
 }

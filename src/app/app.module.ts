@@ -1,10 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
-import {MatToolbarModule, MatSortModule, MatCardModule, MatTreeModule, MatSnackBarModule, MatButtonModule, MatExpansionModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatDialogModule} from "@angular/material";
+import {MatToolbarModule, MatSelectModule, MatRadioModule, MatDatepickerModule, MatSortModule, MatCardModule, MatTreeModule, MatSnackBarModule, MatButtonModule, MatExpansionModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatDialogModule, MatNativeDateModule} from "@angular/material";
 
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -23,16 +23,19 @@ import { AnagramComponent } from './igre/anagram/anagram.component';
 import { SimpleTimer } from 'ng2-simple-timer';
 import { ZaboravljenaLozinkaComponent } from './auth/zaboravljena-lozinka/zaboravljena-lozinka.component';
 import { TajanstvenoPitanjeComponent } from './auth/tajanstveno-pitanje/tajanstveno-pitanje.component';
-import { NovaLozinkaComponent } from './auth/nova-lozinka/nova-lozinka.component';
 import { BasNovaLozinkaComponent } from './auth/bas-nova-lozinka/bas-nova-lozinka.component';
 import { MojBrojComponent } from './igre/moj-broj/moj-broj.component';
 import { PlaviComponent } from './mod/plavi/plavi.component';
 import { CrveniComponent } from './mod/crveni/crveni.component';
-import { VesalaMultiComponent } from './vesala-multi/vesala-multi.component';
+import { VesalaMultiComponent } from './multi-igre/vesala-multi/vesala-multi.component';
 import { SocketioService } from './socketio.service';
 import { GeografijaComponent } from './igre/geografija/geografija.component';
 import { PeharComponent } from './igre/pehar/pehar.component';
 import { RezultatComponent } from './igre/rezultat/rezultat.component';
+import { ErrorInterceptor } from './error-interceptor';
+import { FooterComponent } from './pocetna/footer/footer.component';
+import { MojbrojMultiComponent } from './multi-igre/mojbroj-multi/mojbroj-multi.component';
+import { AnagramMultiComponent } from './multi-igre/anagram-multi/anagram-multi.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +53,6 @@ import { RezultatComponent } from './igre/rezultat/rezultat.component';
     AnagramComponent,
     ZaboravljenaLozinkaComponent,
     TajanstvenoPitanjeComponent,
-    NovaLozinkaComponent,
     BasNovaLozinkaComponent,
     MojBrojComponent,
     PlaviComponent,
@@ -58,7 +60,10 @@ import { RezultatComponent } from './igre/rezultat/rezultat.component';
     VesalaMultiComponent,
     GeografijaComponent,
     PeharComponent,
-    RezultatComponent
+    RezultatComponent,
+    FooterComponent,
+    MojbrojMultiComponent,
+    AnagramMultiComponent
   ],
   imports: [
     BrowserModule,
@@ -78,9 +83,16 @@ import { RezultatComponent } from './igre/rezultat/rezultat.component';
     MatSortModule,
     MatTreeModule,
     MatCardModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatRadioModule,
+    MatSelectModule,
     ReactiveFormsModule
   ],
-  providers: [SimpleTimer],
-  bootstrap: [AppComponent]
+  providers: [
+    SimpleTimer, 
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

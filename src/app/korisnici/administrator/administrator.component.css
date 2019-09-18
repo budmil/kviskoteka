@@ -1,10 +1,21 @@
 .profilna {
     width: 100%;
   }
+
   
 .profilna img {
     width: 100px;
     height: 100px;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  }
+
+  .example-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+  }
+  
+  .example-radio-button {
+    margin: 5px;
   }
   

@@ -91,8 +91,8 @@ router.post("/login",(req,res,next)=>{
                 });
             }
             const token = jwt.sign(
-                {korime: fetchedUser.korime},
-                
+                {korime: fetchedUser.korime,
+                tipKorisnika: fetchedUser.tip},
                 "tajni_kljuc_vau_vau_ne_mozes_me_provaliti",
                 {expiresIn: "1h"}
             );
@@ -153,6 +153,13 @@ router.post("/odobriZahtev", (req,res,next) => {
     Korisnikk.updateOne({ korime : req.body.korime}, {valid : true})
         .then(korisnik => {
             return res.status(200).json({message: "Takmicar uspesno postao ucesnik kviza."});
+        })
+});
+
+router.post("/odbijZahtev", (req,res,next)=>{
+    Korisnikk.deleteOne({korime: req.body.korime})
+        .then(korisnik => {
+            return res.status(200).json({message: "Odbijen zahtev korisniku: " + korisnik.korime })
         })
 });
 

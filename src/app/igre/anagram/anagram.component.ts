@@ -10,6 +10,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AnagramComponent implements OnInit {
 
+  isLoading : Boolean = true;
+  igramAnagram : Boolean;
   brojacZaIzlaz: number;
   brojac : number;
   brojpoena : number;
@@ -22,8 +24,8 @@ export class AnagramComponent implements OnInit {
 
   ngOnInit() {
     this.brojpoena = 0;
-    this.brojac = 10;
-    this.dohvatiAnagram();
+    this.brojac = 30;
+    this.dohvatiAnagramIliRebus();
     this.simpleTimer.newTimer('tajmer', 1, true);
     this.simpleTimer.subscribe('tajmer', () => {
       this.brojac--;
@@ -32,8 +34,6 @@ export class AnagramComponent implements OnInit {
         this.kraj();
       }
     });
-
-
   }
 
   proveriOdgovor() {
@@ -46,23 +46,27 @@ export class AnagramComponent implements OnInit {
     this.kraj();
   }
 
-  dohvatiAnagram() {
+  dohvatiAnagramIliRebus() {
 
-    this.http.get<{zagonetka : string, resenje: string}>('http://localhost:3000/api/igre/anagram/dohvati')
-      .subscribe(res => {
-        console.log(res);
-        this.anagram = {anagram: res.zagonetka, resenje: res.resenje} 
+     this.http.get<{ igraDana: any }>('http://localhost:3000/api/igre/igradana/dohvatiIgruDana')
+     .subscribe(res => {
+       if (res.igraDana.anagramilirebus == "anagram") { //anagram
+        this.igramAnagram = true;
+        this.http.post<{zagonetka : string, resenje: string}>('http://localhost:3000/api/igre/igradana/dohvatiAnagram', {anagramId:res.igraDana.anagram})
+        .subscribe(res => {
+          this.anagram = {anagram: res.zagonetka, resenje: res.resenje} 
+        });
+       } else {  //rebus
+        this.igramAnagram = false;
+        this.http.post<{zagonetka : string, resenje: string}>('http://localhost:3000/api/igre/igradana/dohvatiRebus', {rebusId:res.igraDana.rebus})
+        .subscribe(res => {
+          this.anagram = {anagram: res.zagonetka, resenje: res.resenje} 
+        });
+       }
+ 
+
      });
-  
-
-    
-    // let anagrami : {anagram:string; resenje:string}[] = [{anagram:"Radna skela",resenje:"Aleksandar"} , 
-    //                                                   {anagram: "Oblast s puno krvoloka!",resenje: "Balkansko poluostrvo"},
-    //                                                   {anagram:"Vraški Rus je pesnička legenda!",resenje:"Aleksandar Sergejevič Puškin"}, 
-    //                                                   {anagram:"Oni mi skršili vagu!",resenje:"Suvišni kilogrami"},
-    //                                                   {anagram:"Krasan je odmor", resenje:"Jadransko more"}];
-
-    // return anagrami[Math.floor((Math.random()*1000)%anagrami.length)];
+     this.isLoading = false;
   }
 
   kraj(){

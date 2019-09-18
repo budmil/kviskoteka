@@ -16,30 +16,30 @@ export class PeharComponent implements OnInit {
   brojac: number;
   k: number;
 
-  pitanje :string;
-  odgovor :string;
-  pehar: {pitanje: string, odgovor: string}[];
+  pitanje: string;
+  odgovor: string;
+  pehar: { pitanje: string, odgovor: string }[];
 
   odgovori: string[][];
   constructor(private simpleTimer: SimpleTimer, private router: Router, private http: HttpClient) {
     this.k = 0;
-   this.odgovori = [];
+    this.odgovori = [];
 
-        this.odgovori[0] = new Array<string>(9);
-        this.odgovori[1] = new Array<string>(8);
-        this.odgovori[2] = new Array<string>(7);
-        this.odgovori[3] = new Array<string>(6);
-        this.odgovori[4] = new Array<string>(5);
-        this.odgovori[5] = new Array<string>(4);
-        this.odgovori[6] = new Array<string>(3);
-        this.odgovori[7] = new Array<string>(4);
-        this.odgovori[8] = new Array<string>(5);
-        this.odgovori[9] = new Array<string>(6);
-        this.odgovori[10] = new Array<string>(7);
-        this.odgovori[11] = new Array<string>(8);
-        this.odgovori[12] = new Array<string>(9);
+    this.odgovori[0] = new Array<string>(9);
+    this.odgovori[1] = new Array<string>(8);
+    this.odgovori[2] = new Array<string>(7);
+    this.odgovori[3] = new Array<string>(6);
+    this.odgovori[4] = new Array<string>(5);
+    this.odgovori[5] = new Array<string>(4);
+    this.odgovori[6] = new Array<string>(3);
+    this.odgovori[7] = new Array<string>(4);
+    this.odgovori[8] = new Array<string>(5);
+    this.odgovori[9] = new Array<string>(6);
+    this.odgovori[10] = new Array<string>(7);
+    this.odgovori[11] = new Array<string>(8);
+    this.odgovori[12] = new Array<string>(9);
 
-   }
+  }
 
 
   ngOnInit() {
@@ -51,7 +51,7 @@ export class PeharComponent implements OnInit {
     this.simpleTimer.newTimer('tajmer', 1, true);
     this.simpleTimer.subscribe('tajmer', () => {
       this.brojac--;
-      if (this.brojac==0) {
+      if (this.brojac == 0) {
         this.simpleTimer.delTimer('tajmer');
         //this.proveri();//moras potvrdis dugme, pre nego sto istekne vreme, inace nula poena
       }
@@ -59,20 +59,20 @@ export class PeharComponent implements OnInit {
 
   }
 
-  proveri(odgovor : string, i : string) {
-    var stringOdgovor = odgovor.toString().split(',').join("") 
-    if (this.odgovor == stringOdgovor) this.brojpoena+=2;
+  proveri(odgovor: string, i: string) {
+    var stringOdgovor = odgovor.toString().split(',').join("")
+    if (this.odgovor == stringOdgovor) this.brojpoena += 2;
     this.odgovori[i] = this.odgovor.split("");
     this.sledecePitanje();
   }
 
 
-  kraj(){
+  kraj() {
     this.brojacZaIzlaz = 3;
     this.simpleTimer.newTimer('tajmerZaIzlaz', 1, true);
     this.simpleTimer.subscribe('tajmerZaIzlaz', () => {
       this.brojacZaIzlaz--;
-      if (this.brojacZaIzlaz==0) {
+      if (this.brojacZaIzlaz == 0) {
         this.simpleTimer.delTimer('tajmerZaIzlaz');
         localStorage.setItem("poeniPehar", this.brojpoena.toString());
         this.router.navigate(["/rezultat"]);
@@ -82,20 +82,28 @@ export class PeharComponent implements OnInit {
 
 
   dohvatiPehar() {
-    
-    this.http.get<{pehar: {pitanje: string, odgovor: string}[]}>('http://localhost:3000/api/igre/pehar/dohvatiPehar')
+
+    this.http.get<{ igraDana: any }>('http://localhost:3000/api/igre/igradana/dohvatiIgruDana')
       .subscribe(res => {
-        this.pehar = res.pehar;
-        this.sledecePitanje();
+        console.log(res.igraDana);
+        this.http.post<{ pehar: any }>('http://localhost:3000/api/igre/igradana/dohvatiPehar', {peharId:res.igraDana.pehar})
+          .subscribe(res => {
+            this.pehar = res.pehar;
+            this.sledecePitanje();
+          });
+
       });
 
   }
 
   sledecePitanje() {
-    this.odgovor = this.pehar[this.k].odgovor;
-    this.pitanje = this.pehar[this.k].pitanje;
-    if (this.k==13) this.kraj();
+    if (this.k != 13) {
+      this.odgovor = this.pehar[this.k].odgovor;
+      this.pitanje = this.pehar[this.k].pitanje;
+    }
     this.k++;
+    console.log(this.k);
+    if (this.k == 14) this.kraj();
   }
 
   customTrackBy(index: number, obj: any): any {

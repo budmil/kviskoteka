@@ -17,7 +17,7 @@ export class PlaviComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.korime = localStorage.getItem('korime');
-
+    localStorage.setItem("boja", "plavi");
     this.socketioService.kontektujMe("plavi",this.korime);
   
     this.socketioService.igraPocinje();

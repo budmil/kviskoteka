@@ -19,3 +19,13 @@
     background: #000
   }
   
+  .slika {
+    width: 100%;
+  }
+
+  
+.slika img {
+    width: 350px;
+    height: 200px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  }

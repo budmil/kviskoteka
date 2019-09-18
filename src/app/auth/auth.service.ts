@@ -25,6 +25,10 @@ export class AuthService {
     return this.isAuthenticated;
   }
 
+  getTip() {
+    return this.tip;
+  }
+
   getAuthStatusListener() {
     return this.authStatusListener.asObservable();
   }
@@ -89,7 +93,7 @@ export class AuthService {
           this.authStatusListener.next(true);
           const currentTime = new Date();
           const expirationDate = new Date (currentTime.getTime() + expiresInDuration*1000);
-          this.saveAuthData(token, expirationDate, this.korime);
+          this.saveAuthData(token, expirationDate, this.korime, this.tip);
           if (response.tip == "Takmicar") {
             this.router.navigate(["/takmicar"]);
           }
@@ -130,6 +134,7 @@ export class AuthService {
       this.token = authInformation.token;
       this.isAuthenticated = true;
       this.korime = authInformation.korime;
+      this.tip = authInformation.tip;
       this.setAuthTimer(expiresIn / 1000);
       this.authStatusListener.next(true);
     }
@@ -142,29 +147,33 @@ export class AuthService {
     },duration*1000);
   }
 
-  private saveAuthData(token: string, expirationDate: Date, korime: string) {
+  private saveAuthData(token: string, expirationDate: Date, korime: string, tip: string) {
     localStorage.setItem("token", token);
     localStorage.setItem("expiration", expirationDate.toISOString());
     localStorage.setItem("korime", korime);
+    localStorage.setItem("tip", tip );
   }
 
   private clearAuthData() {
     localStorage.removeItem("token");
     localStorage.removeItem("expiration");
     localStorage.removeItem("korime");
+    localStorage.removeItem("tip");
   }
 
   private getAuthData() {
     const token = localStorage.getItem("token");
     const expirationDate = localStorage.getItem("expiration");
     const korime = localStorage.getItem("korime");
+    const tip = localStorage.getItem("tip");
     if (!token || !expirationDate) {
       return;
     }
     return {
       token: token,
       expirationDate: new Date(expirationDate),
-      korime: korime
+      korime: korime,
+      tip: tip
     }
   }
 
@@ -198,6 +207,16 @@ export class AuthService {
   odobriZahtev(korime : string) {
     this.http.post<{message: string}>(
       "http://localhost:3000/api/korisnici/odobriZahtev",
+      {korime:korime}
+    )
+    .subscribe(res => {
+      this.dohvatiZahteve();
+    });
+  }
+
+  odbijZahtev(korime: string) {
+    this.http.post<{message: string}>(
+      "http://localhost:3000/api/korisnici/odbijZahtev",
       {korime:korime}
     )
     .subscribe(res => {

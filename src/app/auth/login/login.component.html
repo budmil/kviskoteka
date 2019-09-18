@@ -5,18 +5,22 @@
     <table>
   
       <tr>
-      <label>Ime</label>
-      <input type="text" [(ngModel)]="korime_login" name="korime_login">
+
+          <mat-form-field>
+              <input matInput type="text" placeholder="Korisničko ime" [(ngModel)]="korime_login" name="korime_login">
+            </mat-form-field>
       </tr>
   
       <tr>
-      <label>Lozinka</label>
-      <input type="password" [(ngModel)]="lozinka_login" name="lozinka_login">
+
+          <mat-form-field>
+              <input matInput type="text" placeholder="Lozinka" [(ngModel)]="lozinka_login" name="lozinka_login">
+            </mat-form-field>
       </tr>
   
     </table>
    
   
-    <input type="submit" value="Uloguj se">
+    <button mat-button type="submit" > Uloguj se</button>
     
   </form>

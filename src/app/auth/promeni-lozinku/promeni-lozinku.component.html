@@ -21,9 +21,9 @@
     </mat-form-field>
 
       <mat-form-field>
-      <input matInput type="password" placeholder="Nova lozinka" formControlName="novaLozinka" pattern="">
+      <input matInput type="password" placeholder="Nova lozinka" formControlName="novaLozinka" pattern="^(?=.{8,12}$)(?!.*(\S)\1{2})(?=.*[A-Z])(?=.*[a-z]{3})(?=.*\d)(?=.*[^a-zA-Z0-9])([a-zA-Z]\S*)$">
       <mat-error *ngIf="forma.get('novaLozinka').hasError('pattern') && !forma.get('novaLozinka').hasError('required')">
-        Lozinka se mora sastojati iz toga i toga. 
+        Lozinka mora imati veliko slovo, broj, specijalan znak, 8-12 karaktera i bez ponavljanja 3 uzastopna!
       </mat-error>
       <mat-error *ngIf="forma.get('novaLozinka').hasError('required')">
         Morate uneti <strong>novu lozinku</strong>

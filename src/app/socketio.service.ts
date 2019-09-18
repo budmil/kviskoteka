@@ -9,33 +9,33 @@ import { Observable, Subject } from 'rxjs';
 })
 export class SocketioService {
 
-  private socket : any;
+  private socket: any;
 
 
-  constructor(private router : Router) { }
+  constructor(private router: Router) { }
 
 
-  kontektujMe(bojaTakmicara : string, imeTakmicara : string) {
+  kontektujMe(bojaTakmicara: string, imeTakmicara: string) {
     console.log("konekktuj jme");
-    this.socket = io("http://localhost:3000", {query: {tip: bojaTakmicara, takmicar: imeTakmicara}});
+    this.socket = io("http://localhost:3000", { query: { tip: bojaTakmicara, takmicar: imeTakmicara } });
   }
 
   igraPocinje() {
     console.log('igra pocinje');
     console.log(this.socket);
-    this.socket.on("igra_pocinje", data =>{
-      this.router.navigate(["/vesalamulti"]);
+    this.socket.on("igra_pocinje", data => {
+      this.router.navigate(["/anagrammulti"]);
     });
   }
 
 
-   obrisiTakmicara(bojaTakmicara: string, imeTakmicara : string) {
-      //   console.log('a');
-  //   this.socket.emit("obrisiTakmicara",{tip: bojaTakmicara, takmicar: imeTakmicara});
-  this.socket.disconnect();
-   }
+  obrisiTakmicara(bojaTakmicara: string, imeTakmicara: string) {
+    //   console.log('a');
+    //   this.socket.emit("obrisiTakmicara",{tip: bojaTakmicara, takmicar: imeTakmicara});
+    this.socket.disconnect();
+  }
 
-  noviPlaviTakmicarSeKonektovao() : Observable<any>{
+  noviPlaviTakmicarSeKonektovao(): Observable<any> {
     let ret = new Subject<any>();
     this.socket.on("noviPlaviTakmicar", data => {
       ret.next(data);
@@ -43,20 +43,20 @@ export class SocketioService {
     return ret.asObservable();
   }
 
-  igrajKazeCrveni(crveni : string, plavi : string) {
-    this.socket.emit("igraj", {crveni : crveni, plavi: plavi});
+  igrajKazeCrveni(crveni: string, plavi: string) {
+    this.socket.emit("igraj", { crveni: crveni, plavi: plavi });
   }
 
   /////////////////vesala///////////////////////////
-  
-  vratiRecZaPogadjanje() :Observable<any> {
+
+  vratiRecZaPogadjanje(): Observable<any> {
     let ret = new Subject<any>();
     console.log('vrati rec za pogadjanje');
     console.log(this.socket);
-     this.socket.emit('pogodak');
-     this.socket.on("recZaPogadjanje", data=>{
-       ret.next(data);
-     });
+    this.socket.emit('pogodak');
+    this.socket.on("recZaPogadjanje", data => {
+      ret.next(data);
+    });
     return ret.asObservable();
   }
 
@@ -66,9 +66,52 @@ export class SocketioService {
     console.log("ZAVRSIO");
     let ret = new Subject<any>();
     this.socket.emit('pogodio', pogodio);
-    this.socket.on('rezultat',rezultat => {
+    this.socket.on('rezultat', rezultat => {
       ret.next(rezultat);
       console.log(rezultat);
+      if (rezultat.naRedu == "plavi") this.router.navigate(["/vesalamulti"]); else this.router.navigate(["/takmicar"]);      
+    });
+    return ret.asObservable();
+  }
+
+
+
+
+  /////////////////////mojbroj////////////////////////
+
+  vratiPocetniBroj(): Observable<any> {
+    console.log("usao u service");
+    console.log("this.socket");
+    let ret = new Subject<any>();
+    this.socket.emit('mojbroj/vratiPocetniBroj');
+    this.socket.on("mojbroj/pocetniBroj", data => {
+      console.log("sacekao event u servicu");
+      ret.next(data);
+    });
+    return ret.asObservable();
+  }
+
+  dodajBroj(koji : String, broj: any) {
+    this.socket.emit('mojbroj/dodajBroj', {koji: koji, broj: broj});
+  }
+
+  cekamBroj(): Observable<any>{
+    let ret = new Subject<any>();
+    this.socket.on("mojbroj/dodatBroj", data => {
+      ret.next(data);
+    });
+    return ret.asObservable();
+  }
+
+
+
+  //////////////////////////////////////anagram////////////////////////////////////////////
+
+  dohvatiAnagram(): Observable<any> {
+    let ret = new Subject<any>();
+    this.socket.emit('anagram/dohvatiAnagram');
+    this.socket.on("anagram/vracamAnagram", data => {
+      ret.next(data);
     });
     return ret.asObservable();
   }
