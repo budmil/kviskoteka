@@ -86,7 +86,7 @@ Definisi igru dana:
       <td>
 
         <mat-form-field class="example-full-width">
-          <input matInput [min]="minDate" [matDatepicker]="picker" placeholder="Izaberi datum" [(ngModel)]="datum"
+          <input matInput [min]="minDate" [matDatepickerFilter]="myFilter" [matDatepicker]="picker" placeholder="Izaberi datum" [(ngModel)]="datum" (dateChange)="izabranDatum()"
             required name="datumpolje">
 
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -167,7 +167,10 @@ Definisi igru dana:
     </tr>
 
     <td>
-      <button mat-button type="submit" [disabled]="!forma.valid">Potvrdi</button>
+      <button mat-button type="submit" [disabled]="!forma.valid" *ngIf="!omoguciAzuriranje">Potvrdi</button>
+      <button mat-button (click)="azuriraj()" [disabled]="!forma.valid" *ngIf="omoguciAzuriranje">Azuriraj</button>
+
     </td>
+
   </table>
 </form>

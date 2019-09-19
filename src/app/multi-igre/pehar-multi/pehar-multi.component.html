@@ -7,11 +7,11 @@ Pomoć: {{pitanje}}
     <div class="spoljasnji" *ngFor="let odgovor of odgovori; let i = index">  
 
         <div class="unutrasnji" *ngFor="let odg of odgovor; let j = index; trackBy: customTrackBy">
-             <input maxlength="1" matInput class="slova" type="text"  name="odgovori[i][j]" [(ngModel)]="odgovori[i][j]" (keyup)="keytab(i, j)">
+             <input [ngStyle]="{'background-color': boje[i]}" maxlength="1" matInput class="slova" type="text"  name="odgovori[i][j]" [(ngModel)]="odgovori[i][j]" (keyup)="keytab(i, j)">
         </div>
 
         <div class="dugme">
-            <button mat-button [disabled]="k==14" *ngIf="i==(k-1)" (click)="proveri(odgovor,i)">Proveri</button>
+            <button mat-button [disabled]="!mojRed" *ngIf="i==(k-1)" (click)="proveri(odgovor,i)">Proveri</button>
         </div>
        
 

@@ -1,25 +1,32 @@
+<mat-card>
 <h2>Zanimljiva geografija</h2>
 Vasi poeni u ovoj igri: {{brojpoena}}
+
+
 <form>
 
-    <mat-label class="tajmer"> <b>Popunite sto vise polja za  {{brojac}} sekundi. </b> </mat-label>
+    <mat-label class="tajmer"> <b>Popunite sto vise polja za {{brojac}} sekundi. </b> </mat-label>
     <mat-label *ngIf="brojac==0"> <b> Vreme isteklo! </b> </mat-label>
 
 
-    <mat-label> <b> Vase slovo je: {{slovo}} </b> </mat-label>
+    <mat-label> <b> Na slovo na slovo: {{slovo}}</b> </mat-label>
+
+        <mat-tab-group>
+            <div *ngFor="let oblast of oblasti; let i = index">
+                <mat-tab label="{{oblast}}">
+                    <div *ngFor="let bppo of brojPojmovaPoOblasti; let j = index">
+                        <mat-form-field>
+                            <input matInput type="text" placeholder="{{oblast}}" name="name[i][j]" [(ngModel)]="unetiPojmovi[i][j]">
+                        </mat-form-field>
+                    </div>
+                </mat-tab>
+            </div>
+        </mat-tab-group>
 
 
-    <div *ngFor="let oblast of oblasti; let i = index">
-        {{oblast}}
-        <div *ngFor="let bppo of brojPojmovaPoOblasti; let j = index">
-            <input type="text" name="name[i][j]" [(ngModel)]="unetiPojmovi[i][j]" >
-        </div>
-    </div>
+    <button mat-stroked-button color="accent" (click)="proveriOdgovore()">Potvrdi</button>
 
 
-    <button mat-stroked-button color="accent" (click)="proveriOdgovore()" >Potvrdi</button>
 
-    
-   
-  
 </form>
+</mat-card>

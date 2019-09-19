@@ -1,4 +1,5 @@
 const Anagram = require("../models/anagram");
+const Pehar = require("../models/pehar");
 
 brojSobe = 0;
 var redSpremnihTakmicara = new Map();
@@ -11,7 +12,11 @@ var plavipobedio = false;
 var brojKontektovanihMojBroj = 0;
 var brojKontektovanihAnagram = 0;
 var naReduMojBroj = "plavi";
-
+var naReduAnagram = "plavi";
+var brojKontektovanihPehar = 0;
+var naReduPehar = "plavi";
+var pehar = null;
+var indeksPehar = 0;
 exports = module.exports = function (io) {
     io.on('connection', function (_socket) {
         //console.log('pre');
@@ -113,17 +118,17 @@ exports = module.exports = function (io) {
         ////////////////////////////mojbroj/////////////////////////////////////////////////////////////////////////////
 
         socket.on('mojbroj/vratiPocetniBroj', function (data) {
-            console.log('mojbroj vrati');
+            console.log('mojbroj ' + naReduMojBroj);
             if (brojKontektovanihMojBroj == 0) brojKontektovanihMojBroj++; else {
-                console.log('mojbroj else');
                 brojKontektovanihMojBroj = 0;
                 for (var prop in socket.rooms) {
                     if (prop.substr(0, 4) == "soba") {
                         var broj = Math.floor((Math.random() * 1000) % 999) + 1;
                         io.to(prop).emit("mojbroj/pocetniBroj", { trazeniBroj: broj, naRedu: naReduMojBroj });
-                        naReduMojBroj = "crveni";
                     }
                 }
+                naReduMojBroj = "crveni";
+
             }
         });
 
@@ -140,23 +145,117 @@ exports = module.exports = function (io) {
         socket.on('anagram/dohvatiAnagram', function (data) {
             console.log("dohvati Anagram");
             if (brojKontektovanihAnagram == 0) {
+                console.log(brojKontektovanihAnagram);
                 brojKontektovanihAnagram++;
             } else {
+                brojKontektovanihAnagram = 0;
                 Anagram.count().exec(function (err, count) {
                     var random = Math.floor(Math.random() * count);
                     Anagram.findOne().skip(random).exec(function (err, anagram) {
-                        console.log(anagram);
                         for (var prop in socket.rooms) {
                             if (prop.substr(0, 4) == "soba") {
-                                io.to(prop).emit("anagram/vracamAnagram", { anagram: anagram.zagonetka, resenje: anagram.resenje });
+                                console.log(naReduAnagram);
+                                io.to(prop).emit("anagram/vracamAnagram", { anagram: anagram.zagonetka, resenje: anagram.resenje, naRedu: naReduAnagram });
                             }
                         }
-
+                        naReduAnagram = "crveni";
                     });
                 });
 
             }
         });
+
+        socket.on('anagram/zavrsioAnagram', function (data) {
+            console.log('zavrsioAnagram');
+            naReduAnagram = "plavi";
+
+            if (brojKontektovanihAnagram == 0) {
+                brojKontektovanihAnagram++;
+            } else {
+                brojKontektovanihAnagram = 0;
+                for (var prop in socket.rooms) {
+                    if (prop.substr(0, 4) == "soba") {
+                        io.to(prop).emit("anagram/mozesDaljeAnagram");
+                    }
+                }
+
+            }
+        });
+
+
+        ///////////////////////////////////pehar/////////////////////////////////////////
+
+        socket.on('pehar/dohvatiPehar', function (data) {
+          //  if (brojKontektovanihPehar == 0) {
+          //      brojKontektovanihPehar++;
+          //  } else {
+            //    brojKontektovanihPehar = 0;
+                if (pehar == null) {
+                    console.log("PEHARCINA");
+                    Pehar.count().exec(function (err, count) {
+                        var random = Math.floor(Math.random() * count);
+                        Pehar.findOne().skip(random).exec(function (err, p) {
+                            niz = Array();
+                            niz.push({ pitanje: p.gore9.pitanje, odgovor: p.gore9.odgovor });
+                            niz.push({ pitanje: p.gore8.pitanje, odgovor: p.gore8.odgovor });
+                            niz.push({ pitanje: p.gore7.pitanje, odgovor: p.gore7.odgovor });
+                            niz.push({ pitanje: p.gore6.pitanje, odgovor: p.gore6.odgovor });
+                            niz.push({ pitanje: p.gore5.pitanje, odgovor: p.gore5.odgovor });
+                            niz.push({ pitanje: p.gore4.pitanje, odgovor: p.gore4.odgovor });
+                            niz.push({ pitanje: p.goredole3.pitanje, odgovor: p.goredole3.odgovor });
+                            niz.push({ pitanje: p.dole4.pitanje, odgovor: p.dole4.odgovor });
+                            niz.push({ pitanje: p.dole5.pitanje, odgovor: p.dole5.odgovor });
+                            niz.push({ pitanje: p.dole6.pitanje, odgovor: p.dole6.odgovor });
+                            niz.push({ pitanje: p.dole7.pitanje, odgovor: p.dole7.odgovor });
+                            niz.push({ pitanje: p.dole8.pitanje, odgovor: p.dole8.odgovor });
+                            niz.push({ pitanje: p.dole9.pitanje, odgovor: p.dole9.odgovor });
+                            pehar = niz;
+
+                            for (var prop in socket.rooms) {
+                                if (prop.substr(0, 4) == "soba") {
+                                    io.to(prop).emit("pehar/vracamPehar", { pitanje: pehar[indeksPehar].pitanje, odgovor: "a", naRedu: naReduPehar });
+                                }
+                            }
+                        });
+                    });
+                } else {
+                    
+                    if (data.odgovor == pehar[indeksPehar].odgovor) {
+                        for (var prop in socket.rooms) {
+                            if (prop.substr(0, 4) == "soba") {
+                                io.to(prop).emit("pehar/vracamPehar", { pitanje: pehar[indeksPehar+1].pitanje, odgovor: pehar[indeksPehar].odgovor, naRedu: data.boja });
+                            }
+                        }
+                        indeksPehar++;
+                    } else {
+                        if (data.boja == naReduPehar) { //daj drugom sansu da pogodi
+                            for (var prop in socket.rooms) {
+                                if (prop.substr(0, 4) == "soba") {
+                                    io.to(prop).emit("pehar/vracamPehar", { pitanje: pehar[indeksPehar].pitanje, odgovor: "a", naRedu: naReduPehar });
+                                }
+                            }
+                        } else { //vratim im odgovor, da ne pogadjaju u beskonacnost
+                            for (var prop in socket.rooms) {
+                                if (prop.substr(0, 4) == "soba") {
+                                    io.to(prop).emit("pehar/vracamPehar", { pitanje: pehar[indeksPehar+1].pitanje, odgovor: pehar[indeksPehar].odgovor, naRedu: naReduPehar });
+                                }
+                            }
+                            indeksPehar++;
+                        }
+                       
+                    }               
+                }
+                if (indeksPehar == 12) { //kraj
+                    indeksPehar = 0;
+                    naReduPehar = "crveni";
+                    pehar = null;
+                   // io.to(prop).emit("pehar/vracamPehar", { pitanje: pehar[indeksPehar+1].pitanje, odgovor: pehar[indeksPehar].odgovor, naRedu: naReduPehar });
+                }
+           // }
+        });
+
+
+
 
     });
 }

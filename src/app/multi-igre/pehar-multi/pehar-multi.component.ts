@@ -3,26 +3,29 @@ import { SimpleTimer } from 'ng2-simple-timer';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-
+import { SocketioService } from 'src/app/socketio.service';
 @Component({
-  selector: 'app-pehar',
-  templateUrl: './pehar.component.html',
-  styleUrls: ['./pehar.component.css']
+  selector: 'app-pehar-multi',
+  templateUrl: './pehar-multi.component.html',
+  styleUrls: ['./pehar-multi.component.css']
 })
-export class PeharComponent implements OnInit {
+export class PeharMultiComponent implements OnInit {
 
   brojacZaIzlaz: number;
   brojpoena: number;
   brojac: number;
   k: number;
 
+  mojRed : Boolean;
+
   pitanje: string;
   odgovor: string;
   pehar: { pitanje: string, odgovor: string }[];
 
   odgovori: string[][];
-  constructor(private simpleTimer: SimpleTimer, private router: Router, private http: HttpClient) {
-    this.k = 0;
+  boje = new Array<string>(13);
+  constructor(private simpleTimer: SimpleTimer, private router: Router, private socketioService : SocketioService) {
+    this.k = 1;
     this.odgovori = [];
 
     this.odgovori[0] = new Array<string>(9);
@@ -39,12 +42,17 @@ export class PeharComponent implements OnInit {
     this.odgovori[11] = new Array<string>(8);
     this.odgovori[12] = new Array<string>(9);
 
+
+    for (let b = 0; b < 13; b++) {
+      this.boje[b] = "#0074d9";
+    }
+
   }
 
 
   ngOnInit() {
 
-    this.dohvatiPehar();
+    this.proveri("a",localStorage.getItem("boja"));
 
     this.brojpoena = 0;
     this.brojac = 20;
@@ -53,23 +61,60 @@ export class PeharComponent implements OnInit {
       this.brojac--;
       if (this.brojac == 0) {
         this.simpleTimer.delTimer('tajmer');
+        this.proveri("a","e");
+        this.brojac = 20;
         //this.proveri();//moras potvrdis dugme, pre nego sto istekne vreme, inace nula poena
       }
     });
 
   }
 
-  proveri(odgovor: string, i: string) {
-    console.log("proveri");
+  // proveri(odgovor: string, i: string) {
+  //   var stringOdgovor = odgovor.toString().split(',').join("")
+  //   if (this.odgovor == stringOdgovor) {
+  //     if (localStorage.getItem("boja") == "plavi") this.boje[i] = "blue"; else this.boje[i] = "red";
+  //     this.brojpoena += 2;
+  //   }
+
+  //   this.odgovori[i] = this.odgovor.split("");
+  //   this.sledecePitanje();
+  // }
+
+
+  proveri(odgovor : string, i: string) {
     console.log(odgovor);
     console.log(i);
-    var stringOdgovor = odgovor.toString().split(',').join("")
-    if (this.odgovor == stringOdgovor) this.brojpoena += 2;
-    this.odgovori[i] = this.odgovor.split("");
-    this.sledecePitanje();
+    if (odgovor != "a") odgovor = odgovor.toString().split(',').join("");
+    this.socketioService.dohvatiPehar(odgovor, localStorage.getItem("boja")).subscribe(data => {
+
+      this.pitanje = data.pitanje;
+      if (data.odgovor != "a") {
+        if (data.odgovor == odgovor) {
+         if(data.naRedu == "plavi") this.boje[i] = "blue"; else this.boje[i] = "red";
+          //this.brojpoena += 2;
+        } 
+        this.odgovori[i] = data.odgovor.split("");
+        this.k++;
+      }
+  
+      if(data.naRedu == localStorage.getItem("boja")) {
+        this.mojRed = true;
+      } else {
+        this.mojRed = false;
+      }
+
+
+    });
+
+
+    // if (this.k != 13) {
+    //   this.odgovor = this.pehar[this.k].odgovor;
+    //   this.pitanje = this.pehar[this.k].pitanje;
+    // }
+    if (this.k == 14) this.kraj();
   }
 
-
+  
   kraj() {
     this.brojacZaIzlaz = 3;
     this.simpleTimer.newTimer('tajmerZaIzlaz', 1, true);
@@ -83,31 +128,6 @@ export class PeharComponent implements OnInit {
     });
   }
 
-
-  dohvatiPehar() {
-
-    this.http.get<{ igraDana: any }>('http://localhost:3000/api/igre/igradana/dohvatiIgruDana')
-      .subscribe(res => {
-        //console.log(res.igraDana);
-        this.http.post<{ pehar: any }>('http://localhost:3000/api/igre/igradana/dohvatiPehar', { peharId: res.igraDana.pehar })
-          .subscribe(res => {
-            this.pehar = res.pehar;
-            this.sledecePitanje();
-          });
-
-      });
-
-  }
-
-  sledecePitanje() {
-    if (this.k != 13) {
-      this.odgovor = this.pehar[this.k].odgovor;
-      this.pitanje = this.pehar[this.k].pitanje;
-    }
-    this.k++;
-    //console.log(this.k);
-    if (this.k == 14) this.kraj();
-  }
 
   customTrackBy(index: number, obj: any): any {
     return index;
@@ -124,8 +144,9 @@ export class PeharComponent implements OnInit {
 
     let nextInput = document.getElementById("mat-input-" + indeksElementa);
 
-    if (nextInput != null)  {
-      nextInput.focus();   
+    if (nextInput != null) {
+      nextInput.focus();
     }
   }
+
 }

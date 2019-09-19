@@ -30,16 +30,19 @@ export class MojBrojComponent implements OnInit {
   dvocifreni1;
   dvocifreni2;
 
-  jednocifreni1clicked = false;
-  jednocifreni2clicked = false;
-  jednocifreni3clicked = false;
-  jednocifreni4clicked = false;
-  dvocifreni1clicked = false;
-  dvocifreni2clicked = false;
+ prikaziVreme : Boolean= false;
+  potvrdiclicked = true;
+  jednocifreni1clicked = true;
+  jednocifreni2clicked = true;
+  jednocifreni3clicked = true;
+  jednocifreni4clicked = true;
+  dvocifreni1clicked = true;
+  dvocifreni2clicked = true;
 
   constructor(private simpleTimer: SimpleTimer, private router: Router) { }
 
   ngOnInit() {
+    this.trazenibroj = Math.floor((Math.random() * 1000) % 999) + 1;
     this.brojpoena = 0;
     this.simpleTimer.newTimer('brojeviSeVrte', 0.05, true);
     this.simpleTimer.subscribe('brojeviSeVrte', () => {
@@ -50,9 +53,8 @@ export class MojBrojComponent implements OnInit {
       if (this.counter < 4) this.jednocifreni4 = this.opseg1[Math.floor((Math.random() * 1000) % this.opseg1.length)];
       if (this.counter < 5) this.dvocifreni1 = this.opseg2[Math.floor((Math.random() * 1000) % this.opseg2.length)];
       if (this.counter < 6) this.dvocifreni2 = this.opseg3[Math.floor((Math.random() * 1000) % this.opseg3.length)];
-      if (this.counter < 7) this.trazenibroj = Math.floor((Math.random() * 1000) % 999) + 1;
 
-      if (this.counter == 7) this.simpleTimer.delTimer('brojeviSeVrte');
+      if (this.counter == 6) this.simpleTimer.delTimer('brojeviSeVrte');
 
     });
 
@@ -65,9 +67,6 @@ export class MojBrojComponent implements OnInit {
     this.izraz += operator;
   }
 
-  // obrisi(){
-  //  this.izraz = this.izraz.slice(0,this.izraz.length-1);
-  // }
 
   obrisiSve() {
     this.izraz = "";
@@ -99,23 +98,34 @@ export class MojBrojComponent implements OnInit {
       case 3: this.jednocifreni3 = this.opseg1[Math.floor((Math.random() * 1000) % this.opseg1.length)]; break;
       case 4: this.jednocifreni4 = this.opseg1[Math.floor((Math.random() * 1000) % this.opseg1.length)]; break;
       case 5: this.dvocifreni1 = this.opseg2[Math.floor((Math.random() * 1000) % this.opseg2.length)]; break;
-      case 6: this.dvocifreni2 = this.opseg3[Math.floor((Math.random() * 1000) % this.opseg3.length)]; break;
-      case 7: {
-        this.trazenibroj = Math.floor((Math.random() * 1000) % 999) + 1;
-        this.simpleTimer.newTimer('tajmer', 1, true);
-        this.simpleTimer.subscribe('tajmer', () => {
-          this.brojac--;
-          if (this.brojac == 0) {
-            this.simpleTimer.delTimer('tajmer');
-            this.kraj();
-          }
-        });
-        break;
-      }
+      case 6:
+        {
+        this.dvocifreni2 = this.opseg3[Math.floor((Math.random() * 1000) % this.opseg3.length)];
+          this.simpleTimer.newTimer('tajmer', 1, true);
+          this.simpleTimer.subscribe('tajmer', () => {
+            this.brojac--;
+            if (this.brojac == 0) {
+              this.simpleTimer.delTimer('tajmer');
+              this.kraj();
+            }
+          });
+          this.potvrdiclicked = false;
+          this.jednocifreni1clicked = false;
+          this.jednocifreni2clicked = false;
+          this.jednocifreni3clicked = false;
+          this.jednocifreni4clicked = false;
+          this.dvocifreni1clicked = false;
+          this.dvocifreni2clicked = false;
+          this.prikaziVreme = true;
+          break;
+        }
     }
   }
 
   kraj() {
+    this.simpleTimer.unsubscribe("tajmer");
+    this.simpleTimer.delTimer("tajmer");
+    this.prikaziVreme = false;
     this.vasrezultat = eval(this.izraz);
     if (this.vasrezultat == this.trazenibroj.toString()) this.brojpoena += 10;
     this.brojacZaIzlaz = 3;

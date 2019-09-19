@@ -7,6 +7,7 @@ const Korisnik = require("./models/korisnikk");
 
 const korisniciRoutes = require("./routes/korisnici");
 const igreRoutes = require("./routes/igre");
+const ranglisteRoutes = require("./routes/rangliste");
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use((req,res,next) => {
 
 app.use("/api/korisnici", korisniciRoutes);
 app.use("/api/igre", igreRoutes);
+app.use("/api/rangliste", ranglisteRoutes);
 
 
 module.exports = app;

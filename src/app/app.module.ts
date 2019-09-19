@@ -4,7 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
-import {MatToolbarModule, MatSelectModule, MatRadioModule, MatDatepickerModule, MatSortModule, MatCardModule, MatTreeModule, MatSnackBarModule, MatButtonModule, MatExpansionModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatDialogModule, MatNativeDateModule} from "@angular/material";
+import {MatToolbarModule, MatTableModule, MatSelectModule, MatRadioModule, MatDatepickerModule, MatSortModule, MatCardModule, MatTreeModule, MatSnackBarModule, MatButtonModule, MatExpansionModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatDialogModule, MatNativeDateModule, MatTabsModule} from "@angular/material";
 
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -36,6 +36,7 @@ import { ErrorInterceptor } from './error-interceptor';
 import { FooterComponent } from './pocetna/footer/footer.component';
 import { MojbrojMultiComponent } from './multi-igre/mojbroj-multi/mojbroj-multi.component';
 import { AnagramMultiComponent } from './multi-igre/anagram-multi/anagram-multi.component';
+import { PeharMultiComponent } from './multi-igre/pehar-multi/pehar-multi.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { AnagramMultiComponent } from './multi-igre/anagram-multi/anagram-multi.
     RezultatComponent,
     FooterComponent,
     MojbrojMultiComponent,
-    AnagramMultiComponent
+    AnagramMultiComponent,
+    PeharMultiComponent
   ],
   imports: [
     BrowserModule,
@@ -87,6 +89,8 @@ import { AnagramMultiComponent } from './multi-igre/anagram-multi/anagram-multi.
     MatNativeDateModule,
     MatRadioModule,
     MatSelectModule,
+    MatTableModule,
+    MatTabsModule,
     ReactiveFormsModule
   ],
   providers: [

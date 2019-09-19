@@ -69,7 +69,7 @@ export class SocketioService {
     this.socket.on('rezultat', rezultat => {
       ret.next(rezultat);
       console.log(rezultat);
-      if (rezultat.naRedu == "plavi") this.router.navigate(["/vesalamulti"]); else this.router.navigate(["/takmicar"]);      
+      if (rezultat.naRedu == "plavi") this.router.navigate(["/vesalamulti"]); else this.router.navigate(["/peharmulti"]);
     });
     return ret.asObservable();
   }
@@ -86,16 +86,17 @@ export class SocketioService {
     this.socket.emit('mojbroj/vratiPocetniBroj');
     this.socket.on("mojbroj/pocetniBroj", data => {
       console.log("sacekao event u servicu");
+      console.log(data);
       ret.next(data);
     });
     return ret.asObservable();
   }
 
-  dodajBroj(koji : String, broj: any) {
-    this.socket.emit('mojbroj/dodajBroj', {koji: koji, broj: broj});
+  dodajBroj(koji: String, broj: any) {
+    this.socket.emit('mojbroj/dodajBroj', { koji: koji, broj: broj });
   }
 
-  cekamBroj(): Observable<any>{
+  cekamBroj(): Observable<any> {
     let ret = new Subject<any>();
     this.socket.on("mojbroj/dodatBroj", data => {
       ret.next(data);
@@ -104,13 +105,42 @@ export class SocketioService {
   }
 
 
+  zavrsioMojbroj() {
+    this.socket.emit('anagram/zavrsioAnagram');
+    this.socket.on("anagram/mozesDaljeAnagram", data => {
+      this.router.navigate(['/vesalamulti']);
+    });
+  }
 
   //////////////////////////////////////anagram////////////////////////////////////////////
 
   dohvatiAnagram(): Observable<any> {
+    console.log("dohvati anagram service");
     let ret = new Subject<any>();
     this.socket.emit('anagram/dohvatiAnagram');
     this.socket.on("anagram/vracamAnagram", data => {
+      ret.next(data);
+    });
+    return ret.asObservable();
+  }
+
+
+  zavrsioAnagram() {
+    console.log('zavrsio anagram service');
+    this.socket.emit('anagram/zavrsioAnagram');
+    this.socket.on("anagram/mozesDaljeAnagram", data => {
+      this.router.navigate(['/mojbrojmulti']);
+    });
+  }
+
+  //////////////////////////////////////////pehar//////////////////////////////////////////////
+
+
+
+  dohvatiPehar(odgovor:string,boja:string): Observable<any> {
+    let ret = new Subject<any>();
+    this.socket.emit('pehar/dohvatiPehar', {odgovor: odgovor, boja: boja});
+    this.socket.on("pehar/vracamPehar", data => {
       ret.next(data);
     });
     return ret.asObservable();

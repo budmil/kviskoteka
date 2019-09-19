@@ -1,8 +1,27 @@
-
-<a mat-fab routerLink="/igradana" >Igra dana</a>
+<a mat-fab routerLink="/igradana">Igra dana</a>
 
 <a mat-fab routerLink="/plavi" color="blue">Budi plavi takmicar</a>
 
 <a mat-fab routerLink="/crveni" color="red">Budi crveni takmicar</a>
+<br>
+<br>
+Rezultati današnje Igre dana:
 
-<a mat-fab color="primary">Vidi highscore</a>
+<table class="tabelaDana">
+
+    <tr>
+        <th> Rang </th>
+        <th> Takmičar </th>
+        <th> Poeni </th>
+
+    </tr>
+
+    <tr *ngFor="let element of rangTabelaDanas; let i = index">
+        <td *ngIf="!(i>9) || korime==element.takmicar"> {{i+1}}. </td>
+        <td *ngIf="!(i>9) || korime==element.takmicar"> {{element.takmicar}} </td>
+        <td *ngIf="!(i>9) || korime==element.takmicar"> {{element.poeniUkupno}} </td>
+
+    </tr>
+
+
+</table>

@@ -1,1 +1,6 @@
-<a mat-fab routerLink="/anagram" >Zapocni igru</a>
+
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+
+<a mat-fab routerLink="/anagram" *ngIf="!igraoDanas && !isLoading" >Zapocni igru</a>
+
+<mat-label *ngIf="igraoDanas && !isLoading">Takmičar {{korime}} danas je već odigrao igru dana. Igru dana moguće je igrati jednom dnevno. Vratite se sutra, ili igrajte sa nekim! :) </mat-label>

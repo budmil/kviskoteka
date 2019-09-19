@@ -1,4 +1,6 @@
-<form class="form">
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+
+<form class="form" *ngIf="!isLoading">
 
         <mat-label> <b> {{anagram.anagram}} </b> </mat-label>
 
@@ -16,7 +18,7 @@
 
         
 
-        <mat-label class="tajmer"> <b> {{brojac}} </b> </mat-label>
+        <mat-label class="tajmer" *ngIf="prikaziVreme"> <b> {{brojac}} </b> </mat-label>
         <mat-label *ngIf="brojac==0"> <b> Vreme isteklo! </b> </mat-label>
 
 

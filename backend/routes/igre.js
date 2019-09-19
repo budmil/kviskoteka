@@ -5,8 +5,9 @@ const Anagram = require("../models/anagram");
 const Pehar = require("../models/pehar");
 const Geografija = require("../models/geografija");
 const Vesala = require("../models/vesala");
-const IgraDana = require("../models/igradana");
+const Igradana = require("../models/igradana");
 const Rebus = require("../models/rebus");
+const Poeni = require("../models/poeni");
 
 const router = express.Router();
 
@@ -18,12 +19,12 @@ const MIME_TYPE_MAP = {
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb("","backend/rebusi");
+        cb("", "backend/rebusi");
     },
     filename: (req, file, cb) => {
         const ime = file.originalname.toLowerCase().split(' ').join('-');
         const ekstenzija = MIME_TYPE_MAP[file.mimetype];
-        cb(null,ime+'.'+ekstenzija);
+        cb(null, ime + '.' + ekstenzija);
     }
 });
 
@@ -60,7 +61,7 @@ router.get("/anagram/dohvati", (req, res, next) => {
 
 
 
-router.post("/rebus/dodajRebus",  multer({storage: storage}).single("slika"), (req, res, next) => {
+router.post("/rebus/dodajRebus", multer({ storage: storage }).single("slika"), (req, res, next) => {
     const url = req.protocol + '://' + req.get("host");
 
     const rebus = new Rebus({
@@ -203,7 +204,7 @@ router.get("/admin/dovuciRebuse", (req, res, next) => {
 });
 
 router.post("/admin/igraDana", (req, res, next) => {
-    var igradana = new IgraDana({
+    var igradana = new Igradana({
         vesala: req.body.vesala,
         pehar: req.body.pehar,
         anagram: req.body.anagram,
@@ -229,7 +230,7 @@ router.post("/admin/igraDana", (req, res, next) => {
 
 
 router.get("/igradana/dohvatiIgruDana", (req, res, next) => {
-    IgraDana.findOne({ datum: new Date().toDateString() })
+    Igradana.findOne({ datum: new Date().toDateString() })
         .then(igrica => {
             console.log("igra dana: ");
             console.log(igrica);
@@ -312,7 +313,99 @@ router.post("/igradana/dohvatiRebus", (req, res, next) => {
 
 });
 
+router.post("/igradana/poeni", (req, res, next) => {
+    var poeni = new Poeni({
+        poeniAnagram: req.body.poeniAnagram,
+        poeniMojbroj: req.body.poeniMojbroj,
+        poeniVesala: req.body.poeniVesala,
+        poeniGeografija: req.body.poeniGeografija,
+        poeniPehar: req.body.poeniPehar,
+        poeniUkupno: req.body.poeniUkupno,
+        datum: new Date().toDateString(),
+        takmicar: req.body.takmicar
+    });
+    poeni.save()
+        .then(result => {
+            res.status(201).json({
+                message: "Uspesno sacuvani poeni igre dana"
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
 
+});
+
+
+
+router.get("/admin/nekoDanasIgrao", (req, res, next) => {
+    Poeni.findOne({ datum: new Date().toDateString() })
+        .then(poeni => {
+
+            if (!poeni) {
+                res.status(201).json({
+                    nekoDanasIgrao: false
+                });
+            } else {
+
+                res.status(201).json({
+                    nekoDanasIgrao: true
+                })
+            }
+        });
+});
+
+
+
+router.post("/admin/dovuciIgruDana", (req, res, next) => {
+    console.log('dovuciIgruDana');
+    Igradana.findOne({ datum: req.body.datum })
+        .then(igradana => {
+            // console.log('igradana');
+            //  console.log(igradana);
+            if (!igradana) {
+                console.log('neeeeeeeeeeeeee');
+                res.status(201).json({
+                    igradana: null
+                });
+            } else {
+
+                res.status(201).json({
+                    igradana: igradana
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+
+
+
+router.post("/admin/azurirajIgruDana", (req, res, next) => {
+    Igradana.updateOne({ datum: req.body.datum }, {
+        vesala: req.body.vesala,
+        pehar: req.body.pehar,
+        anagram: req.body.anagram,
+        rebus: req.body.rebus, anagramilirebus: req.body.anagramilirebus
+    })
+        .then(result => {
+            res.status(201).json({
+                message: "Uspesno azurirana igra dana za " + req.body.datum
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+
+});
 
 
 module.exports = router;

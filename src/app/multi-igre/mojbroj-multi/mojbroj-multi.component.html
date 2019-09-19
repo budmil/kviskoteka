@@ -1,8 +1,11 @@
 <h2>Moj broj</h2>
+<mat-spinner *ngIf="isLoading"></mat-spinner>
 
+<mat-card *ngIf="!isLoading">
 Broj poena u ovoj igri: {{brojpoena}}
 
-<form>
+
+<form >
 
 
     <button *ngFor="let operator of operatori" (click)="dodajOperator(operator)">{{operator}}</button>
@@ -25,7 +28,7 @@ Broj poena u ovoj igri: {{brojpoena}}
     <hr>
     <button (click)="stop()" [disabled]="!myTurn">Stop</button>
     <br>
-    <button (click)="kraj()">Potvrdi</button>
+    <button (click)="kraj()" *ngIf="!potvrdiclicked">Potvrdi</button>
 
 
     {{izraz}}
@@ -40,3 +43,5 @@ Broj poena u ovoj igri: {{brojpoena}}
 
 
 </form>
+
+</mat-card>

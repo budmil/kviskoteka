@@ -23,9 +23,9 @@ Broj poena u ovoj igri: {{brojpoena}}
     
     <br>
     <hr>
-    <button (click)="stop()">Stop</button>
+    <button (click)="stop()" *ngIf="potvrdiclicked">Stop</button>
     <br>
-    <button (click)="kraj()">Potvrdi</button>
+    <button (click)="kraj()" *ngIf="!potvrdiclicked">Potvrdi</button>
 
 
     {{izraz}}
@@ -35,7 +35,7 @@ Broj poena u ovoj igri: {{brojpoena}}
     <br>
     <div *ngIf="vasrezultat!=''">Vas rezultat: {{vasrezultat}}</div>
 
-    <mat-label class="tajmer"> <b> {{brojac}} </b> </mat-label>
+    <mat-label class="tajmer" *ngIf="prikaziVreme"> <b> {{brojac}} </b> </mat-label>
     <mat-label *ngIf="brojac==0"> <b> Vreme isteklo! </b> </mat-label>
 
 

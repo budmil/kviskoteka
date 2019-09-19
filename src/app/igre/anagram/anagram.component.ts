@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AnagramComponent implements OnInit {
 
+  prikaziVreme : Boolean = true;
   isLoading : Boolean = true;
   igramAnagram : Boolean;
   brojacZaIzlaz: number;
@@ -70,6 +71,9 @@ export class AnagramComponent implements OnInit {
   }
 
   kraj(){
+    this.simpleTimer.unsubscribe("tajmer");
+    this.simpleTimer.delTimer("tajmer");
+    this.prikaziVreme = false;
     this.brojacZaIzlaz = 3;
     this.simpleTimer.newTimer('tajmerZaIzlaz', 1, true);
     this.simpleTimer.subscribe('tajmerZaIzlaz', () => {

@@ -1,0 +1,30 @@
+.slova {
+    height: 40px;
+    width: 40px;
+    border-radius: 80px;
+    margin-bottom: 30px;
+    float: left;
+    margin-right: 20px;
+    border-radius: 5px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 40px; 
+    color: whitesmoke;
+    text-shadow: 5px;
+  
+  }
+
+  .spoljasnji{
+    text-align: center;
+
+  }
+
+
+  .unutrasnji {
+    display: inline-block;
+  }
+
+  .dugme{
+    position: absolute;
+    top: 200px;
+  }

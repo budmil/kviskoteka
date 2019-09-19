@@ -23,7 +23,7 @@
 
         
 
-        <mat-label class="tajmer"> <b> {{brojac}} </b> </mat-label>
+        <mat-label class="tajmer" *ngIf="prikaziVreme"> <b> {{brojac}} </b> </mat-label>
         <mat-label *ngIf="brojac==0"> <b> Vreme isteklo! </b> </mat-label>
 
 

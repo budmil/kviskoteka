@@ -22,6 +22,7 @@ import { AdminovGuard } from './auth/admin.guard';
 import { SupervizorGuard } from './auth/supervizor.guard';
 import { MojbrojMultiComponent } from './multi-igre/mojbroj-multi/mojbroj-multi.component';
 import { AnagramMultiComponent } from './multi-igre/anagram-multi/anagram-multi.component';
+import { PeharMultiComponent } from './multi-igre/pehar-multi/pehar-multi.component';
 
 const routes: Routes = [
   { path: "", component: PocetnaComponent },
@@ -43,7 +44,8 @@ const routes: Routes = [
   { path: "crveni", component: CrveniComponent },
   { path: "anagrammulti", component: AnagramMultiComponent },
   { path: "vesalamulti", component: VesalaMultiComponent },
-  { path: "mojbrojmulti", component: MojbrojMultiComponent }
+  { path: "mojbrojmulti", component: MojbrojMultiComponent },
+  { path: "peharmulti", component: PeharMultiComponent }
 
 
 
