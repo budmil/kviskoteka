@@ -147,7 +147,7 @@ router.post("/geografija/proveriPojam", (req, res, next) => {
     Geografija.findOne({ slovo: req.body.slovo, kategorija: req.body.kategorija, termin: req.body.termin })
 
         .then(result => {
-            if (result) res.status(201).json({ imaUBazi: true }); else res.status(201).json({ imaUBazi: false });
+            if (result) res.status(201).json({ imaUBazi: true, _i: req.body._i, _j: req.body._j }); else res.status(201).json({ imaUBazi: false , _i: req.body._i, _j: req.body._j });
         })
         .catch(err => {
             res.status(500).json({
@@ -155,8 +155,6 @@ router.post("/geografija/proveriPojam", (req, res, next) => {
             });
         });
 });
-
-
 
 
 router.get("/vesala/dohvati", (req, res, next) => {

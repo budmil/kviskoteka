@@ -293,3 +293,43 @@
 
   </mat-accordion>
 </form>
+
+
+
+
+
+
+<br>
+<br>
+<!---------------------------GEOGRAFIJA---------------------------------->
+
+
+<mat-accordion multi="true">
+
+  <mat-expansion-panel *ngFor="let pojam of tabelaNepostojecihPojmovaGeografija">
+    <mat-expansion-panel-header>
+
+      <label> Termin: {{pojam.termin}}</label>
+    </mat-expansion-panel-header>
+
+    <label>
+      Kategorija: {{pojam.kategorija}}
+    </label>
+    <label>
+      Slovo: {{pojam.slovo}}
+    </label>
+
+
+    <mat-action-row>
+      <button mat-button color="primary" (click)="odobriPojam(pojam)">Prihvati</button>
+      <button mat-button color="warn" (click)="odbijPojam(pojam)">Odbij</button>
+    </mat-action-row>
+
+  </mat-expansion-panel>
+
+
+
+
+
+
+</mat-accordion>

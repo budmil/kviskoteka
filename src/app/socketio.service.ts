@@ -129,7 +129,7 @@ export class SocketioService {
     console.log('zavrsio anagram service');
     this.socket.emit('anagram/zavrsioAnagram');
     this.socket.on("anagram/mozesDaljeAnagram", data => {
-      this.router.navigate(['/mojbrojmulti']);
+      this.router.navigate(['/geografijamulti']);
     });
   }
 
@@ -168,4 +168,65 @@ export class SocketioService {
       this.router.navigate(['/rezultatmulti']);
     });
   }
+
+
+
+  //////////////////////////////////////////GEOGRAFIJA////////////////////////////////////////
+
+  saljiSupervizoru(pojam : any) {
+    this.socket.emit('geografija/zaSupervizora', {pojam: pojam});
+  }
+
+  primiOdSupervizora() : Observable<any> {
+    let ret = new Subject<any>();
+    this.socket.on("geografija/vracamProverenPojam", data => {
+      ret.next(data);
+    });
+    return ret.asObservable();
+  }
+
+
+  vratiSlovoZaGeografiju() : Observable<any>{
+    let ret = new Subject<any>();
+    this.socket.emit('geografija/vratiSlovo');
+
+    this.socket.on("geografija/pocetnoSlovo", data => {
+      console.log('servis slovo: ' );
+      console.log(data);
+      ret.next(data);
+    });
+    return ret.asObservable();
+  }
+ 
+
+  dajSansuDrugom(unetiPojmovi : any) : Observable<any>{
+    console.log("SERVIS DAJ SANSU DRUGOM");
+    let ret = new Subject<any>();
+    this.socket.emit('geografija/dajSansuDrugom', {unetiPojmovi:unetiPojmovi});
+    this.socket.on("geografija/zavrsio", data => {
+      ret.next(data);
+    });
+    return ret.asObservable();
+  }
+
+  cekamSansu() : Observable<any> {
+    let ret = new Subject<any>();
+    this.socket.on("geografija/dobijamSansu", data => {
+      ret.next(data);
+    });
+    return ret.asObservable();
+  }
+
+  javljamDaSamZavrsio(){
+    this.socket.emit('geografija/javljamDaSamZavrsio');
+  }
+
+  zavrsioGeografiju() {
+    this.socket.emit('geografija/zavrsioGeografiju');
+    this.socket.on("geografija/mozesDaljeGeografija", data => {
+      this.router.navigate(['/rezultatmulti']);
+    });
+  }
+
+
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import io from 'socket.io-client';
+
 
 @Component({
   selector: 'app-supervizor',
@@ -12,9 +14,31 @@ export class SupervizorComponent implements OnInit {
 
   rebusForma: FormGroup;
   linkSlike: String = "";
+
+  private socket: any;
+  private tabelaNepostojecihPojmovaGeografija :
+  {
+    slovo: string,
+     kategorija: string, 
+     termin: string,
+      _i:any, 
+      _j: any   
+  } [] 
+  = new Array();
+
+
+
   constructor(private http: HttpClient, private fb: FormBuilder) { }
 
   ngOnInit() {
+
+    this.socket = io("http://localhost:3000", { query: { supervizor: "supervizor" } });
+    this.socket.on("zaSupervizora", pojam => {
+      this.tabelaNepostojecihPojmovaGeografija.push(pojam.pojam.pojam);
+      console.log(pojam);
+    });
+
+
     this.rebusForma = this.fb.group({
       slika: ['', [Validators.required]],
       rebusResenje: ['']
@@ -106,6 +130,18 @@ export class SupervizorComponent implements OnInit {
         alert(responseData.message);
       });
   }
+
+
+//////////////////////////////GEOGRAFIJA//////////////////////////////////
+
+odobriPojam(pojam: any) {
+  this.socket.emit("supervizor/vracamProverenPojam", {pojam: pojam, odobravam: true});
+ // this.tabelaNepostojecihPojmovaGeografija.filte
+}
+
+odbijPojam(pojam: any) {
+  this.socket.emit("supervizor/vracamProverenPojam", {pojam: pojam, odobravam: false});
+}
 
 
 }

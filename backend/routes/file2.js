@@ -25,28 +25,43 @@ exports = module.exports = function (io) {
     io.on('connection', function (_socket) {
         //console.log('pre');
         // console.log(mapa_takmicara_i_socketa.keys());
-        var socket;
-        if (mapa_takmicara_i_socketa.has(_socket.handshake.query.takmicar)) {
-            socket = mapa_takmicara_i_socketa.get(_socket.handshake.query.takmicar);
-            let keys = Array.from(redSpremnihTakmicara.keys());
-            io.emit('noviPlaviTakmicar', keys);
-            // console.log("if");
-        } else {
-            //  console.log("else");
-            mapa_takmicara_i_socketa.set(_socket.handshake.query.takmicar, _socket);
+        var socket = _socket;
 
-            if (_socket.handshake.query.tip == "plavi") {
-                redSpremnihTakmicara.set(_socket.handshake.query.takmicar, _socket.handshake.query.takmicar);
+        if (!_socket.handshake.query.supervizor) {
+
+
+            if (mapa_takmicara_i_socketa.has(_socket.handshake.query.takmicar)) {
+                socket = mapa_takmicara_i_socketa.get(_socket.handshake.query.takmicar);
                 let keys = Array.from(redSpremnihTakmicara.keys());
                 io.emit('noviPlaviTakmicar', keys);
+                // console.log("if");
             } else {
-                let keys = Array.from(redSpremnihTakmicara.keys())
-                io.emit('noviPlaviTakmicar', keys);
+                //  console.log("else");
+                mapa_takmicara_i_socketa.set(_socket.handshake.query.takmicar, _socket);
+
+                if (_socket.handshake.query.tip == "plavi") {
+                    redSpremnihTakmicara.set(_socket.handshake.query.takmicar, _socket.handshake.query.takmicar);
+                    let keys = Array.from(redSpremnihTakmicara.keys());
+                    io.emit('noviPlaviTakmicar', keys);
+                } else {
+                    let keys = Array.from(redSpremnihTakmicara.keys())
+                    io.emit('noviPlaviTakmicar', keys);
+                }
+                socket = _socket;
             }
-            socket = _socket;
         }
         // console.log('posle');
         // console.log(mapa_takmicara_i_socketa.keys());
+
+        socket.on('geografija/zaSupervizora', pojam => {
+            io.emit("zaSupervizora", { pojam: pojam });
+        });
+
+        socket.on('supervizor/vracamProverenPojam', data => {
+            console.log("supervizor vracammmmm");
+            console.log(data);
+            io.emit('geografija/vracamProverenPojam', { data: data })
+        });
 
         socket.on('igraj', data => {
             mapa_takmicara_i_socketa.get(data.crveni).join("soba" + brojSobe);
@@ -190,17 +205,17 @@ exports = module.exports = function (io) {
             var otkrijResenje = false;
             console.log(data.boja);
             console.log(data.i);
-            
-             if (data.tacno) {
+
+            if (data.tacno) {
                 for (var prop in socket.rooms) {
                     if (prop.substr(0, 4) == "soba") {
-                        io.to(prop).emit("pehar/naReduJe", { naRedu: data.boja, tacno: data.tacno, i: data.i, otkrijResenje: otkrijResenje});
+                        io.to(prop).emit("pehar/naReduJe", { naRedu: data.boja, tacno: data.tacno, i: data.i, otkrijResenje: otkrijResenje });
                     }
                 }
             } else {
                 console.log(brojPromasajaPehar[data.i]);
                 brojPromasajaPehar[data.i]++;
-                if (brojPromasajaPehar[data.i]==2) otkrijResenje = true;
+                if (brojPromasajaPehar[data.i] == 2) otkrijResenje = true;
                 var naRedu;
                 if (data.boja == "crveni") naRedu = "plavi"; else naRedu = "crveni";
                 for (var prop in socket.rooms) {
@@ -252,7 +267,7 @@ exports = module.exports = function (io) {
         });
 
 
-        
+
         socket.on('pehar/zavrsioPehar', function (data) {
             naReduPehar = "plavi";
 
@@ -263,6 +278,62 @@ exports = module.exports = function (io) {
                 for (var prop in socket.rooms) {
                     if (prop.substr(0, 4) == "soba") {
                         io.to(prop).emit("pehar/mozesDaljePehar");
+                    }
+                }
+
+            }
+        });
+
+
+        //////////////////////////////geografija////////////////////////////////////
+
+
+        socket.on('geografija/vratiSlovo', function (data) {
+            if (brojKontektovanihMojBroj == 0) brojKontektovanihMojBroj++; else {
+                brojKontektovanihMojBroj = 0;
+                var azbuka = ['a', 'b', 'v', 'g', 'd', 'đ', 'e', 'ž', 'z', 'i', 'j', 'k', 'l', 'lj', 'm', 'n', 'nj', 'o', 'p', 'r', 's', 't', 'ć', 'u', 'f', 'h', 'c', 'č', 'dž', 'š'];
+                var random = azbuka[Math.floor((Math.random() * 30) % 30)];
+
+                for (var prop in socket.rooms) {
+                    if (prop.substr(0, 4) == "soba") {
+                        io.to(prop).emit("geografija/pocetnoSlovo", { slovo: random, naRedu: naReduMojBroj });
+                    }
+                }
+                naReduMojBroj = "crveni";
+
+            }
+        });
+
+
+
+        socket.on('geografija/dajSansuDrugom', function (data) {
+            for (var prop in socket.rooms) {
+                if (prop.substr(0, 4) == "soba") {
+                    io.to(prop).emit("geografija/dobijamSansu", { unetiPojmovi: data.unetiPojmovi });
+                }
+            }
+        });
+
+
+        socket.on('geografija/javljamDaSamZavrsio', function (data) {
+            for (var prop in socket.rooms) {
+                if (prop.substr(0, 4) == "soba") {
+                    io.to(prop).emit("geografija/zavrsio");
+                }
+            }
+        });
+
+
+        socket.on('geografija/zavrsioGeografiju', function (data) {
+            naReduMojBroj = "plavi";
+
+            if (brojKontektovanihMojBroj == 0) {
+                brojKontektovanihMojBroj++;
+            } else {
+                brojKontektovanihMojBroj = 0;
+                for (var prop in socket.rooms) {
+                    if (prop.substr(0, 4) == "soba") {
+                        io.to(prop).emit("geografija/mozesDaljeGeografija");
                     }
                 }
 
