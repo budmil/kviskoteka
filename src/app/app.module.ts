@@ -4,7 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
-import {MatToolbarModule, MatTableModule, MatSelectModule, MatRadioModule, MatDatepickerModule, MatSortModule, MatCardModule, MatTreeModule, MatSnackBarModule, MatButtonModule, MatExpansionModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatDialogModule, MatNativeDateModule, MatTabsModule} from "@angular/material";
+import {MatToolbarModule, MatMenuModule, MatTableModule, MatSelectModule, MatRadioModule, MatDatepickerModule, MatSortModule, MatCardModule, MatTreeModule, MatSnackBarModule, MatButtonModule, MatExpansionModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatDialogModule, MatNativeDateModule, MatTabsModule, MatIconModule} from "@angular/material";
 
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -37,6 +37,10 @@ import { FooterComponent } from './pocetna/footer/footer.component';
 import { MojbrojMultiComponent } from './multi-igre/mojbroj-multi/mojbroj-multi.component';
 import { AnagramMultiComponent } from './multi-igre/anagram-multi/anagram-multi.component';
 import { PeharMultiComponent } from './multi-igre/pehar-multi/pehar-multi.component';
+import { MojspinerComponent } from './mojspiner/mojspiner.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import { RezultatmultiComponent } from './multi-igre/rezultatmulti/rezultatmulti.component';
+import { GeografijamultiComponent } from './multi-igre/geografijamulti/geografijamulti.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +69,10 @@ import { PeharMultiComponent } from './multi-igre/pehar-multi/pehar-multi.compon
     FooterComponent,
     MojbrojMultiComponent,
     AnagramMultiComponent,
-    PeharMultiComponent
+    PeharMultiComponent,
+    MojspinerComponent,
+    RezultatmultiComponent,
+    GeografijamultiComponent
   ],
   imports: [
     BrowserModule,
@@ -91,7 +98,10 @@ import { PeharMultiComponent } from './multi-igre/pehar-multi/pehar-multi.compon
     MatSelectModule,
     MatTableModule,
     MatTabsModule,
-    ReactiveFormsModule
+    MatMenuModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    FlexLayoutModule
   ],
   providers: [
     SimpleTimer, 

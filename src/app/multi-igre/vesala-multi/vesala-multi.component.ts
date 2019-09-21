@@ -4,8 +4,8 @@ import { SocketioService } from '../../socketio.service';
 
 @Component({
   selector: 'app-vesala-multi',
-  templateUrl: './vesala-multi.component.html',
-  styleUrls: ['./vesala-multi.component.css'],
+  templateUrl: '../../igre/vesala/vesala.component.html',
+  styleUrls: ['../../igre/vesala/vesala.component.css'],
   animations: [
     trigger('fade', [
       state('in', style({ 'opacity': '1' })),

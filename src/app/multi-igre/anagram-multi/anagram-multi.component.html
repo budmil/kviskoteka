@@ -7,7 +7,8 @@
         <mat-label> <b> Broj poena: {{brojpoena}} </b> </mat-label>
 
         <mat-form-field class="input" >
-          <input matInput placeholder="Vaš odgovor" value="" [(ngModel)]="odgovor" name="odgovor">
+          <input matInput placeholder="Vaš odgovor" value="" [(ngModel)]="odgovor" name="odgovor"  pattern="^[a-zA-Z\s]*$"> 
+          <mat-error *ngIf="!odgovor.errors?.pattern">Samo slova koristite!</mat-error>
         </mat-form-field>
 
         <mat-label *ngIf="netacanOdgovor"> <b> Netačno! </b> </mat-label>

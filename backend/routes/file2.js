@@ -15,8 +15,12 @@ var naReduMojBroj = "plavi";
 var naReduAnagram = "plavi";
 var brojKontektovanihPehar = 0;
 var naReduPehar = "plavi";
-var pehar = null;
-var indeksPehar = 0;
+
+var brojPromasajaPehar = new Array(13);
+for (let iii = 0; iii < 13; iii++) {
+    brojPromasajaPehar[iii] = 0;
+}
+
 exports = module.exports = function (io) {
     io.on('connection', function (_socket) {
         //console.log('pre');
@@ -110,8 +114,6 @@ exports = module.exports = function (io) {
                     io.to(soba).emit("rezultat", { plavi: 0, crveni: 0, naRedu: naReduMojBroj });
                 }
                 naReduMojBroj = "crveni";
-
-
             }
         });
 
@@ -166,7 +168,6 @@ exports = module.exports = function (io) {
         });
 
         socket.on('anagram/zavrsioAnagram', function (data) {
-            console.log('zavrsioAnagram');
             naReduAnagram = "plavi";
 
             if (brojKontektovanihAnagram == 0) {
@@ -185,76 +186,88 @@ exports = module.exports = function (io) {
 
         ///////////////////////////////////pehar/////////////////////////////////////////
 
-        socket.on('pehar/dohvatiPehar', function (data) {
-          //  if (brojKontektovanihPehar == 0) {
-          //      brojKontektovanihPehar++;
-          //  } else {
-            //    brojKontektovanihPehar = 0;
-                if (pehar == null) {
-                    console.log("PEHARCINA");
-                    Pehar.count().exec(function (err, count) {
-                        var random = Math.floor(Math.random() * count);
-                        Pehar.findOne().skip(random).exec(function (err, p) {
-                            niz = Array();
-                            niz.push({ pitanje: p.gore9.pitanje, odgovor: p.gore9.odgovor });
-                            niz.push({ pitanje: p.gore8.pitanje, odgovor: p.gore8.odgovor });
-                            niz.push({ pitanje: p.gore7.pitanje, odgovor: p.gore7.odgovor });
-                            niz.push({ pitanje: p.gore6.pitanje, odgovor: p.gore6.odgovor });
-                            niz.push({ pitanje: p.gore5.pitanje, odgovor: p.gore5.odgovor });
-                            niz.push({ pitanje: p.gore4.pitanje, odgovor: p.gore4.odgovor });
-                            niz.push({ pitanje: p.goredole3.pitanje, odgovor: p.goredole3.odgovor });
-                            niz.push({ pitanje: p.dole4.pitanje, odgovor: p.dole4.odgovor });
-                            niz.push({ pitanje: p.dole5.pitanje, odgovor: p.dole5.odgovor });
-                            niz.push({ pitanje: p.dole6.pitanje, odgovor: p.dole6.odgovor });
-                            niz.push({ pitanje: p.dole7.pitanje, odgovor: p.dole7.odgovor });
-                            niz.push({ pitanje: p.dole8.pitanje, odgovor: p.dole8.odgovor });
-                            niz.push({ pitanje: p.dole9.pitanje, odgovor: p.dole9.odgovor });
-                            pehar = niz;
+        socket.on('pehar/proveriPehar', function (data) {
+            var otkrijResenje = false;
+            console.log(data.boja);
+            console.log(data.i);
+            
+             if (data.tacno) {
+                for (var prop in socket.rooms) {
+                    if (prop.substr(0, 4) == "soba") {
+                        io.to(prop).emit("pehar/naReduJe", { naRedu: data.boja, tacno: data.tacno, i: data.i, otkrijResenje: otkrijResenje});
+                    }
+                }
+            } else {
+                console.log(brojPromasajaPehar[data.i]);
+                brojPromasajaPehar[data.i]++;
+                if (brojPromasajaPehar[data.i]==2) otkrijResenje = true;
+                var naRedu;
+                if (data.boja == "crveni") naRedu = "plavi"; else naRedu = "crveni";
+                for (var prop in socket.rooms) {
+                    if (prop.substr(0, 4) == "soba") {
+                        io.to(prop).emit("pehar/naReduJe", { naRedu: naRedu, tacno: data.tacno, i: data.i, otkrijResenje: otkrijResenje });
+                    }
+                }
 
-                            for (var prop in socket.rooms) {
-                                if (prop.substr(0, 4) == "soba") {
-                                    io.to(prop).emit("pehar/vracamPehar", { pitanje: pehar[indeksPehar].pitanje, odgovor: "a", naRedu: naReduPehar });
-                                }
-                            }
-                        });
-                    });
-                } else {
-                    
-                    if (data.odgovor == pehar[indeksPehar].odgovor) {
+
+            }
+        });
+
+        socket.on('pehar/dohvatiPehar', function (data) {
+            for (let ii = 0; ii < 13; ii++) {
+                brojPromasajaPehar[ii] = 0;
+            }
+            if (brojKontektovanihPehar == 0) {
+                brojKontektovanihPehar++;
+            } else {
+                brojKontektovanihPehar = 0;
+                Pehar.count().exec(function (err, count) {
+                    var random = Math.floor(Math.random() * count);
+                    Pehar.findOne().skip(random).exec(function (err, p) {
+                        niz = Array();
+                        niz.push({ pitanje: p.gore9.pitanje, odgovor: p.gore9.odgovor });
+                        niz.push({ pitanje: p.gore8.pitanje, odgovor: p.gore8.odgovor });
+                        niz.push({ pitanje: p.gore7.pitanje, odgovor: p.gore7.odgovor });
+                        niz.push({ pitanje: p.gore6.pitanje, odgovor: p.gore6.odgovor });
+                        niz.push({ pitanje: p.gore5.pitanje, odgovor: p.gore5.odgovor });
+                        niz.push({ pitanje: p.gore4.pitanje, odgovor: p.gore4.odgovor });
+                        niz.push({ pitanje: p.goredole3.pitanje, odgovor: p.goredole3.odgovor });
+                        niz.push({ pitanje: p.dole4.pitanje, odgovor: p.dole4.odgovor });
+                        niz.push({ pitanje: p.dole5.pitanje, odgovor: p.dole5.odgovor });
+                        niz.push({ pitanje: p.dole6.pitanje, odgovor: p.dole6.odgovor });
+                        niz.push({ pitanje: p.dole7.pitanje, odgovor: p.dole7.odgovor });
+                        niz.push({ pitanje: p.dole8.pitanje, odgovor: p.dole8.odgovor });
+                        niz.push({ pitanje: p.dole9.pitanje, odgovor: p.dole9.odgovor });
+
                         for (var prop in socket.rooms) {
                             if (prop.substr(0, 4) == "soba") {
-                                io.to(prop).emit("pehar/vracamPehar", { pitanje: pehar[indeksPehar+1].pitanje, odgovor: pehar[indeksPehar].odgovor, naRedu: data.boja });
+                                io.to(prop).emit("pehar/vracamPehar", { pehar: niz, naRedu: naReduPehar });
                             }
                         }
-                        indeksPehar++;
-                    } else {
-                        if (data.boja == naReduPehar) { //daj drugom sansu da pogodi
-                            for (var prop in socket.rooms) {
-                                if (prop.substr(0, 4) == "soba") {
-                                    io.to(prop).emit("pehar/vracamPehar", { pitanje: pehar[indeksPehar].pitanje, odgovor: "a", naRedu: naReduPehar });
-                                }
-                            }
-                        } else { //vratim im odgovor, da ne pogadjaju u beskonacnost
-                            for (var prop in socket.rooms) {
-                                if (prop.substr(0, 4) == "soba") {
-                                    io.to(prop).emit("pehar/vracamPehar", { pitanje: pehar[indeksPehar+1].pitanje, odgovor: pehar[indeksPehar].odgovor, naRedu: naReduPehar });
-                                }
-                            }
-                            indeksPehar++;
-                        }
-                       
-                    }               
-                }
-                if (indeksPehar == 12) { //kraj
-                    indeksPehar = 0;
-                    naReduPehar = "crveni";
-                    pehar = null;
-                   // io.to(prop).emit("pehar/vracamPehar", { pitanje: pehar[indeksPehar+1].pitanje, odgovor: pehar[indeksPehar].odgovor, naRedu: naReduPehar });
-                }
-           // }
+                        naReduPehar = "crveni";
+                    });
+                });
+
+            }
         });
 
 
+        
+        socket.on('pehar/zavrsioPehar', function (data) {
+            naReduPehar = "plavi";
+
+            if (brojKontektovanihPehar == 0) {
+                brojKontektovanihPehar++;
+            } else {
+                brojKontektovanihPehar = 0;
+                for (var prop in socket.rooms) {
+                    if (prop.substr(0, 4) == "soba") {
+                        io.to(prop).emit("pehar/mozesDaljePehar");
+                    }
+                }
+
+            }
+        });
 
 
     });

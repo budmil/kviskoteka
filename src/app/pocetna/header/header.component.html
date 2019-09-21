@@ -1,16 +1,54 @@
 <mat-toolbar color="primary">
   <span>
-    <a routerLink="/">Kviskoteka</a>
+    <a routerLink="/">Kviskoteka <img src="assets/images/kvisko_footer.png" alt="Kvisko!" style="width:35px; height:30px"></a>
+    
   </span>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item color="primary" (click)="izlogujSe()" *ngIf="userIsAuthenticated">
+        <mat-icon>directions_run</mat-icon>
+        <span>Izloguj se</span>
+      </button>
+
+
+      <a mat-menu-item color="primary" routerLink="/promeniLozinku" *ngIf="!userIsAuthenticated" >
+         <mat-icon>security</mat-icon>
+         <span>Promeni lozinku</span>
+      </a>
+
+      <a mat-menu-item color="primary" routerLink="/takmicar" *ngIf="userIsAuthenticated && jeTakmicar" >
+        <mat-icon>person_outline</mat-icon>
+        <span>Takmičar</span>
+     </a>
+
+     <a mat-menu-item color="primary" routerLink="/supervizor" *ngIf="userIsAuthenticated && jeSupervizor" >
+      <mat-icon>person_outline</mat-icon>
+      <span>Supervizor</span>
+   </a>
+
+   <a mat-menu-item color="primary" routerLink="/admin" *ngIf="userIsAuthenticated && jeAdmin" >
+    <mat-icon>person_outline</mat-icon>
+    <span>Administrator</span>
+ </a>
+
+ <a mat-menu-item color="primary" routerLink="/" *ngIf="userIsAuthenticated" >
+  <mat-icon>home</mat-icon>
+  <span>Početna</span>
+</a>
+
+    </mat-menu>
+
+
   <span class="spacer"></span>
   <ul>
-    <li *ngIf="userIsAuthenticated">
-      <a mat-button color="primary" routerLink="/" routerLinkActive="mat-accent">Pocetna</a>
-    </li>
 
-    <li *ngIf="userIsAuthenticated">
 
-      <button mat-raised-button color="primary" (click)="izlogujSe()">Izloguj se</button>
+
+    <li>
+        
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Meni">
+      <mat-icon>more_vert</mat-icon>
+    </button>
     </li>
   </ul>
 </mat-toolbar>

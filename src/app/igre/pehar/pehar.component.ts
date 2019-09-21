@@ -43,17 +43,18 @@ export class PeharComponent implements OnInit {
 
 
   ngOnInit() {
-
+    //window.location.reload();
+    console.log("ngoninit");
     this.dohvatiPehar();
 
     this.brojpoena = 0;
-    this.brojac = 20;
+    this.brojac = 10;
     this.simpleTimer.newTimer('tajmer', 1, true);
     this.simpleTimer.subscribe('tajmer', () => {
       this.brojac--;
       if (this.brojac == 0) {
-        this.simpleTimer.delTimer('tajmer');
-        //this.proveri();//moras potvrdis dugme, pre nego sto istekne vreme, inace nula poena
+        this.odgovori[this.k-1] = this.odgovor.split("");
+        this.sledecePitanje();
       }
     });
 
@@ -100,6 +101,7 @@ export class PeharComponent implements OnInit {
   }
 
   sledecePitanje() {
+    this.brojac = 10;
     if (this.k != 13) {
       this.odgovor = this.pehar[this.k].odgovor;
       this.pitanje = this.pehar[this.k].pitanje;
@@ -114,15 +116,15 @@ export class PeharComponent implements OnInit {
   }
 
 
-  keytab(i, j) {
-    var indeksElementa = 0;
-    for (let k = 1; k <= i; k++) {
-      if (k <= 6) indeksElementa += (10 - k);
-      if (k > 6) indeksElementa += (k - 4);
-    }
-    indeksElementa = indeksElementa + j + 1;
-
-    let nextInput = document.getElementById("mat-input-" + indeksElementa);
+  keytab(event, i, j) {
+    // var indeksElementa = 0;
+    // for (let k = 1; k <= i; k++) {
+    //   if (k <= 6) indeksElementa += (10 - k);
+    //   if (k > 6) indeksElementa += (k - 4);
+    // }
+    // indeksElementa = indeksElementa + j + 1;s
+    let bla = eval (j+1);
+    let nextInput = document.getElementById("mat-input-"+i+bla);
 
     if (nextInput != null)  {
       nextInput.focus();   

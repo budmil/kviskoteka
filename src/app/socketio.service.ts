@@ -137,12 +137,35 @@ export class SocketioService {
 
 
 
-  dohvatiPehar(odgovor:string,boja:string): Observable<any> {
+  dohvatiPehar(): Observable<any> {
     let ret = new Subject<any>();
-    this.socket.emit('pehar/dohvatiPehar', {odgovor: odgovor, boja: boja});
+    this.socket.emit('pehar/dohvatiPehar');
     this.socket.on("pehar/vracamPehar", data => {
       ret.next(data);
     });
     return ret.asObservable();
+  }
+
+
+  proveriPehar(tacno: Boolean, boja : string, i: string){
+    this.socket.emit('pehar/proveriPehar', {tacno: tacno, boja: boja, i: i});
+  }
+
+
+  naRedu(): Observable<any> {
+    let ret = new Subject<any>();
+    this.socket.on("pehar/naReduJe", data => {
+      ret.next(data);
+    });
+    return ret.asObservable();
+
+  }
+
+
+  zavrsioPehar() {
+    this.socket.emit('pehar/zavrsioPehar');
+    this.socket.on("pehar/mozesDaljePehar", data => {
+      this.router.navigate(['/rezultatmulti']);
+    });
   }
 }

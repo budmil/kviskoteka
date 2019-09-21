@@ -10,12 +10,27 @@ export class HeaderComponent implements OnInit {
 
   userIsAuthenticated = true;
 
+  jeTakmicar = false;
+  jeAdmin = false;
+  jeSupervizor = false;
+
   constructor(private authService : AuthService) { }
 
   ngOnInit() {
+
    this.userIsAuthenticated = this.authService.getIsAuth();
    this.authService.getAuthStatusListener().subscribe(isAuth => {
      this.userIsAuthenticated = isAuth;
+   });
+
+   this.authService.getTipKorisnikaListener().subscribe(tip => {
+    switch(tip) {
+      case "takmicar": this.jeTakmicar = true; this.jeAdmin = false; this.jeSupervizor = false; break;
+      case "admin": this.jeTakmicar = false; this.jeAdmin = true; this.jeSupervizor = false; break;
+      case "supervizor": this.jeTakmicar = false; this.jeAdmin = false; this.jeSupervizor = true; break;
+      case "niko": this.jeTakmicar = false; this.jeAdmin = false; this.jeSupervizor = false; break;
+      default: this.jeTakmicar = false; this.jeAdmin = false; this.jeSupervizor = false; break;
+    }
    });
   }
 

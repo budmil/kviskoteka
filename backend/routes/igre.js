@@ -321,7 +321,7 @@ router.post("/igradana/poeni", (req, res, next) => {
         poeniGeografija: req.body.poeniGeografija,
         poeniPehar: req.body.poeniPehar,
         poeniUkupno: req.body.poeniUkupno,
-        datum: new Date().toDateString(),
+        datum: new Date(),
         takmicar: req.body.takmicar
     });
     poeni.save()
@@ -341,7 +341,12 @@ router.post("/igradana/poeni", (req, res, next) => {
 
 
 router.get("/admin/nekoDanasIgrao", (req, res, next) => {
-    Poeni.findOne({ datum: new Date().toDateString() })
+    Poeni.findOne({
+        datum: {
+            $gte: new Date(new Date().setHours(00, 00, 00)),
+            $lt: new Date(new Date().setHours(23, 59, 59))
+        }
+    })
         .then(poeni => {
 
             if (!poeni) {
@@ -360,13 +365,9 @@ router.get("/admin/nekoDanasIgrao", (req, res, next) => {
 
 
 router.post("/admin/dovuciIgruDana", (req, res, next) => {
-    console.log('dovuciIgruDana');
     Igradana.findOne({ datum: req.body.datum })
         .then(igradana => {
-            // console.log('igradana');
-            //  console.log(igradana);
             if (!igradana) {
-                console.log('neeeeeeeeeeeeee');
                 res.status(201).json({
                     igradana: null
                 });

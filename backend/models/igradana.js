@@ -8,7 +8,7 @@ const igradanaSchema = mongoose.Schema({
     pehar : {type: mongoose.Schema.Types.ObjectId},
     anagram: {type: mongoose.Schema.Types.ObjectId},
     rebus: { type: mongoose.Schema.Types.ObjectId},
-    datum: { type: String },
+    datum: { type: Date },
     anagramilirebus: {type: String}
     
 });

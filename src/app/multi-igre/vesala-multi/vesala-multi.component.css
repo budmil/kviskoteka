@@ -1,7 +1,7 @@
 .slova {
     height: 40px;
     width: 40px;
-    background-color: #0074d9;
+    background-color: #0aaaab;
     border-radius: 80px;
     margin-bottom: 30px;
     float: left;
@@ -19,7 +19,7 @@
   .azbuka{
         height: 30px;
         width: 30px;
-        background-color: #0074d9;
+        background-color: #0aaaab;
         border-radius: 80px;
         margin-bottom: 30px;
         float: left;
@@ -36,7 +36,6 @@
 
  
   mat-grid-tile {
-    background-color: #0aaaab;
     display: flex;
     justify-content: center;
     align-items: center;

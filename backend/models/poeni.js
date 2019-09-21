@@ -8,7 +8,7 @@ const poeniSchema = mongoose.Schema({
     poeniGeografija: { type: String },
     poeniPehar: { type: String },
     poeniUkupno: { type: String },
-    datum: { type: String },
+    datum: { type: Date },
     takmicar : {type: String}
 
 });

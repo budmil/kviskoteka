@@ -1,13 +1,16 @@
 <h2>Pehar</h2>
 Vasi poeni u ovoj igri: {{brojpoena}}
-
+<br>
 Pomoć: {{pitanje}}
+<br>
+VREME {{brojac}}
+<br>
 
 
     <div class="spoljasnji" *ngFor="let odgovor of odgovori; let i = index">  
 
         <div class="unutrasnji" *ngFor="let odg of odgovor; let j = index; trackBy: customTrackBy">
-             <input maxlength="1" matInput class="slova" type="text"  name="odgovori[i][j]" [(ngModel)]="odgovori[i][j]" (keyup)="keytab(i, j)">
+             <input maxlength="1" id="mat-input-{{i}}{{j}}"  class="slova" type="text"  name="odgovori[i][j]" [(ngModel)]="odgovori[i][j]" (keyup)="keytab($event, i, j)">
         </div>
 
         <div class="dugme">

@@ -1,8 +1,68 @@
-.klasa{
+
+
+
+/* #login {
+    float:left;
+    margin-left: 100px;
+    margin-top: 40px;
+}
+
+#registracija {
+    float: right;
+    margin-right: 100px;
+    margin-top: 40px;
+} */
+
+
+
+
+
+app-login{
+    margin-top: 0;
+}
+
+#kvisko img{
+    width: 200px;
+    height: 175px;
+
+
+ 
+}
+
+#kvisko{
     text-align: center;
+    display: inline-block;
+
 }
 
-app-login, app-registracija, app-promeni-lozinku{
-display:inline-block;
-}
 
+.tabela {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .tabela td, .tabela th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .tabelatr:nth-child(even){background-color: #424242;}
+  
+  .tabela tr:hover {background-color: #303030;}
+  
+  .tabela th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #C2185B;
+    color: #ddd;
+  }
+
+  #tabela1{
+    margin-top: 100px;
+  }
+
+  #tabela2{
+    margin-top:50px;
+  }

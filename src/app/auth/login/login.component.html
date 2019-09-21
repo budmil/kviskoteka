@@ -1,5 +1,3 @@
-<h4>Uloguj se: </h4>
-<br>
 <form name="login" (ngSubmit)="login()">
 
     <table>
@@ -20,7 +18,11 @@
   
     </table>
    
-  
-    <button mat-button type="submit" > Uloguj se</button>
-    
+      <button mat-button type="submit"  > Uloguj se</button>
+
+
   </form>
+
+  <div>
+    <a mat-stroked-button routerLink="/zaboravljenaLozinka" >Zaboravili ste lozinku?</a>
+  </div>

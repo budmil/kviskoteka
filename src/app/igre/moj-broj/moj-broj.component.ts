@@ -30,7 +30,7 @@ export class MojBrojComponent implements OnInit {
   dvocifreni1;
   dvocifreni2;
 
- prikaziVreme : Boolean= false;
+  prikaziVreme: Boolean = false;
   potvrdiclicked = true;
   jednocifreni1clicked = true;
   jednocifreni2clicked = true;
@@ -100,7 +100,7 @@ export class MojBrojComponent implements OnInit {
       case 5: this.dvocifreni1 = this.opseg2[Math.floor((Math.random() * 1000) % this.opseg2.length)]; break;
       case 6:
         {
-        this.dvocifreni2 = this.opseg3[Math.floor((Math.random() * 1000) % this.opseg3.length)];
+          this.dvocifreni2 = this.opseg3[Math.floor((Math.random() * 1000) % this.opseg3.length)];
           this.simpleTimer.newTimer('tajmer', 1, true);
           this.simpleTimer.subscribe('tajmer', () => {
             this.brojac--;
@@ -126,7 +126,13 @@ export class MojBrojComponent implements OnInit {
     this.simpleTimer.unsubscribe("tajmer");
     this.simpleTimer.delTimer("tajmer");
     this.prikaziVreme = false;
-    this.vasrezultat = eval(this.izraz);
+    try {
+      this.vasrezultat = eval(this.izraz);
+    }
+    catch (e) {
+      console.log(e);
+      console.log("rez: " + this.vasrezultat);
+    }
     if (this.vasrezultat == this.trazenibroj.toString()) this.brojpoena += 10;
     this.brojacZaIzlaz = 3;
     this.simpleTimer.newTimer('tajmerZaIzlaz', 1, true);

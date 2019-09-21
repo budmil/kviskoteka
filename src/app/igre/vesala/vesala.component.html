@@ -1,10 +1,9 @@
 <h2>Vesala</h2>
 Broj poena u ovoj igri: {{brojpoena}}
 
-<mat-grid-list cols="2">
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="32px" fxLayoutAlign="space-around center">
 
-    <mat-grid-tile [colspan]="1" [rowspan]="1" class="levo">
-        <div class="bla">
+        <div class="bla1">
         <div>
             <div class="slova" *ngFor="let slovo of slova; index as i">
 
@@ -18,13 +17,11 @@ Broj poena u ovoj igri: {{brojpoena}}
 
         </div>
 </div>
-    </mat-grid-tile>
 
 
 
-    <mat-grid-tile [colspan]="1" [rowspan]="1">
 
-        <div>
+        <div class="bla2">
 
             <button class="azbuka" *ngFor="let slovo of azbuka" (click)="proveri(slovo)">{{slovo}}</button>
 
@@ -38,7 +35,6 @@ Broj poena u ovoj igri: {{brojpoena}}
 
         </div>
 
-    </mat-grid-tile>
 
 
-</mat-grid-list>
+</div>

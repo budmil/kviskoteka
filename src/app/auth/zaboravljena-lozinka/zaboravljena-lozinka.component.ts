@@ -72,7 +72,7 @@ export class ZaboravljenaLozinkaComponent implements OnInit {
       if (ostatak==0 && kontrolnaCifra!=0) return {neispravanJmbg:true};
       if (ostatak<=11 && ostatak>=1 && kontrolnaCifra!=razlika) return {neispravanJmbg:true};
       if (kontrolnaCifra != razlika) return {neispravanJmbg:true};
-      return {neispravanJmbg:false};
+      return false;
   }
   }
 

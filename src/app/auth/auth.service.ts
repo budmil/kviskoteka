@@ -17,6 +17,7 @@ export class AuthService {
   private korime: string; 
   private tip: string;
   private authStatusListener = new Subject<boolean>();
+  private tipKorisnikaListener = new Subject<string>();
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -31,6 +32,10 @@ export class AuthService {
 
   getAuthStatusListener() {
     return this.authStatusListener.asObservable();
+  }
+
+  getTipKorisnikaListener() {
+    return this.tipKorisnikaListener.asObservable();
   }
 
 
@@ -95,12 +100,15 @@ export class AuthService {
           const expirationDate = new Date (currentTime.getTime() + expiresInDuration*1000);
           this.saveAuthData(token, expirationDate, this.korime, this.tip);
           if (response.tip == "Takmicar") {
+            this.tipKorisnikaListener.next("takmicar");
             this.router.navigate(["/takmicar"]);
           }
           if (response.tip == "Supervizor") {
+            this.tipKorisnikaListener.next("supervizor");
             this.router.navigate(["/supervizor"]);
           }
           if (response.tip == "Admin") {
+            this.tipKorisnikaListener.next("admin");
             this.router.navigate(["/admin"]);
           }
         }
@@ -120,6 +128,7 @@ export class AuthService {
     this.tip = null;
     clearTimeout(this.tokenTimer);
     this.clearAuthData();
+    this.tipKorisnikaListener.next("logout");
     this.router.navigate(["/"]);
   }
 

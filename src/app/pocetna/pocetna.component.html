@@ -1,21 +1,66 @@
-<div class="klasa">
 
 
-        <br>
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="32px" fxLayoutAlign="space-around center">
 
-        <app-login></app-login>
-        
-        <br>
-        
-        <app-registracija></app-registracija>
-        
-        
-        <br>
-        
-        <app-promeni-lozinku></app-promeni-lozinku>
+        <div id="login" *ngIf="!isAuthenticated">
+                <app-login></app-login>
+
+        </div>
+
+        <div id="kvisko">
+                <img src="assets/images/kvisko_footer.png" alt="Kvisko!">
+
+                <div id="tabela1">Top 3 ovog meseca:
+                        <table class="tabela">
+
+                                <tr>
+                                        <th> Rang </th>
+                                        <th> Takmičar </th>
+                                        <th> Poeni </th>
+
+                                </tr>
+
+                                <tr *ngFor="let element of najbolji30; let i = index">
+                                        <td *ngIf="!(i>2) || korime==element.takmicar"> {{i+1}}. </td>
+                                        <td *ngIf="!(i>2) || korime==element.takmicar"> {{element.takmicar}} </td>
+                                        <td *ngIf="!(i>2) || korime==element.takmicar"> {{element.poeniUkupno}} </td>
+
+                                </tr>
 
 
+                        </table>
+
+
+                </div>
+
+
+
+                <div id="tabela2"> Top 3 prethodnih 20 dana:
+                        <table class="tabela">
+
+                                <tr>
+                                        <th> Rang </th>
+                                        <th> Takmičar </th>
+                                        <th> Poeni </th>
+
+                                </tr>
+
+                                <tr *ngFor="let element of najbolji20; let i = index">
+                                        <td *ngIf="!(i>2) || korime==element.takmicar"> {{i+1}}. </td>
+                                        <td *ngIf="!(i>2) || korime==element.takmicar"> {{element.takmicar}} </td>
+                                        <td *ngIf="!(i>2) || korime==element.takmicar"> {{element.poeniUkupno}} </td>
+
+                                </tr>
+
+
+                        </table>
+                </div>
+        </div>
+
+
+        <div id="registracija" *ngIf="!isAuthenticated">
+                <app-registracija></app-registracija>
+
+        </div>
 
 </div>
-
-

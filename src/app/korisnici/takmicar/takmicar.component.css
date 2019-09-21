@@ -16,14 +16,14 @@ a {
     padding: 8px;
   }
   
-  .tabelaDana tr:nth-child(even){background-color: #f2f2f2;}
+  .tabelaDana tr:nth-child(even){background-color: #424242;}
   
-  .tabelaDana tr:hover {background-color: #ddd;}
+  .tabelaDana tr:hover {background-color: #303030;}
   
   .tabelaDana th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: #4CAF50;
-    color: white;
+    background-color: #C2185B;
+    color: #ddd;
   }

@@ -23,6 +23,9 @@ import { SupervizorGuard } from './auth/supervizor.guard';
 import { MojbrojMultiComponent } from './multi-igre/mojbroj-multi/mojbroj-multi.component';
 import { AnagramMultiComponent } from './multi-igre/anagram-multi/anagram-multi.component';
 import { PeharMultiComponent } from './multi-igre/pehar-multi/pehar-multi.component';
+import { PromeniLozinkuComponent } from './auth/promeni-lozinku/promeni-lozinku.component';
+import { RezultatmultiComponent } from './multi-igre/rezultatmulti/rezultatmulti.component';
+import { GeografijamultiComponent } from './multi-igre/geografijamulti/geografijamulti.component';
 
 const routes: Routes = [
   { path: "", component: PocetnaComponent },
@@ -31,7 +34,6 @@ const routes: Routes = [
   { path: "admin", component: AdministratorComponent, canActivate: [AuthGuard, AdminovGuard] },
   { path: "zaboravljenaLozinka", component: ZaboravljenaLozinkaComponent },
   { path: "tajanstvenoPitanje", component: TajanstvenoPitanjeComponent },
-  //{ path: "novaLozinka", component: NovaLozinkaComponent},
   { path: "igradana", component: IgraDanaComponent },
   { path: "vesala", component: VesalaComponent },
   { path: "anagram", component: AnagramComponent },
@@ -40,12 +42,15 @@ const routes: Routes = [
   { path: "pehar", component: PeharComponent },
   { path: "rezultat", component: RezultatComponent },
   { path: "basNovaLozinka", component: BasNovaLozinkaComponent },
+  {path: "promeniLozinku", component: PromeniLozinkuComponent},
   { path: "plavi", component: PlaviComponent },
   { path: "crveni", component: CrveniComponent },
   { path: "anagrammulti", component: AnagramMultiComponent },
   { path: "vesalamulti", component: VesalaMultiComponent },
   { path: "mojbrojmulti", component: MojbrojMultiComponent },
-  { path: "peharmulti", component: PeharMultiComponent }
+  { path: "peharmulti", component: PeharMultiComponent },
+  { path: "geografijamulti", component: GeografijamultiComponent},
+  { path: "rezultatmulti", component: RezultatmultiComponent}
 
 
 

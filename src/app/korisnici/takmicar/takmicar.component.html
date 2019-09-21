@@ -1,27 +1,38 @@
-<a mat-fab routerLink="/igradana">Igra dana</a>
 
-<a mat-fab routerLink="/plavi" color="blue">Budi plavi takmicar</a>
 
-<a mat-fab routerLink="/crveni" color="red">Budi crveni takmicar</a>
+<a mat-raised-button routerLink="/plavi" style="background-color: #0074d9; margin: 22px">Multiplayer plavi</a>
+
+<a mat-raised-button routerLink="/igradana" color="primary" >Igra dana</a>
+
+
+<a mat-raised-button routerLink="/crveni" style="background-color: #DC143C; margin:22px">Multiplayer crveni</a>
+
 <br>
 <br>
-Rezultati današnje Igre dana:
 
-<table class="tabelaDana">
+<mat-card *ngIf="!rangTabelaDanas.length">
+    <mat-label>Danas još uvek niko nije odigrao igru dana. Budi 1!</mat-label>
+</mat-card>
 
-    <tr>
-        <th> Rang </th>
-        <th> Takmičar </th>
-        <th> Poeni </th>
+<mat-card *ngIf="rangTabelaDanas.length">
+   <div style="margin-bottom: 14px">Rezultati današnje Igre dana: </div>
 
-    </tr>
+    <table class="tabelaDana">
 
-    <tr *ngFor="let element of rangTabelaDanas; let i = index">
-        <td *ngIf="!(i>9) || korime==element.takmicar"> {{i+1}}. </td>
-        <td *ngIf="!(i>9) || korime==element.takmicar"> {{element.takmicar}} </td>
-        <td *ngIf="!(i>9) || korime==element.takmicar"> {{element.poeniUkupno}} </td>
+        <tr>
+            <th> Rang </th>
+            <th> Takmičar </th>
+            <th> Poeni </th>
 
-    </tr>
+        </tr>
+
+        <tr *ngFor="let element of rangTabelaDanas; let i = index">
+            <td *ngIf="!(i>9) || korime==element.takmicar"> {{i+1}}. </td>
+            <td *ngIf="!(i>9) || korime==element.takmicar"> {{element.takmicar}} </td>
+            <td *ngIf="!(i>9) || korime==element.takmicar"> {{element.poeniUkupno}} </td>
+
+        </tr>
 
 
-</table>
+    </table>
+</mat-card>
