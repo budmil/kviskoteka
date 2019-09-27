@@ -5,17 +5,17 @@ Broj poena u ovoj igri: {{brojpoena}}
 <form>
 
 
-    <button *ngFor="let operator of operatori" (click)="dodajOperator(operator)">{{operator}}</button>
+    <button class="dugme" *ngFor="let operator of operatori" (click)="dodajOperator(operator)">{{operator}}</button>
 
-    <button (click)="obrisiSve()">Obrisi</button>
+    <button class="dugme1" (click)="obrisiSve()">Obrisi</button>
     <br>
     <br>
-    <button  name="jednocifreni1" (click)="dodajBroj('jednocifreni1')" [disabled] = "jednocifreni1clicked">{{jednocifreni1}} </button>
-    <button  name="jednocifreni2" (click)="dodajBroj('jednocifreni2')" [disabled] = "jednocifreni2clicked">{{jednocifreni2}}</button>
-    <button  name="jednocifreni3" (click)="dodajBroj('jednocifreni3')" [disabled] = "jednocifreni3clicked">{{jednocifreni3}}</button>
-    <button  name="jednocifreni4" (click)="dodajBroj('jednocifreni4')" [disabled] = "jednocifreni4clicked">{{jednocifreni4}}</button>
-    <button  name="dvocifreni1"   (click)="dodajBroj('dvocifreni1')" [disabled] = "dvocifreni1clicked">{{dvocifreni1}}</button>
-    <button  name="dvocifreni2"   (click)="dodajBroj('dvocifreni2')" [disabled] = "dvocifreni2clicked">{{dvocifreni2}}</button>
+    <button class="dugme" name="jednocifreni1" (click)="dodajBroj('jednocifreni1')" [disabled] = "jednocifreni1clicked">{{jednocifreni1}} </button>
+    <button class="dugme" name="jednocifreni2" (click)="dodajBroj('jednocifreni2')" [disabled] = "jednocifreni2clicked">{{jednocifreni2}}</button>
+    <button class="dugme" name="jednocifreni3" (click)="dodajBroj('jednocifreni3')" [disabled] = "jednocifreni3clicked">{{jednocifreni3}}</button>
+    <button class="dugme" name="jednocifreni4" (click)="dodajBroj('jednocifreni4')" [disabled] = "jednocifreni4clicked">{{jednocifreni4}}</button>
+    <button class="dugme" name="dvocifreni1"   (click)="dodajBroj('dvocifreni1')" [disabled] = "dvocifreni1clicked">{{dvocifreni1}}</button>
+    <button class="dugme" name="dvocifreni2"   (click)="dodajBroj('dvocifreni2')" [disabled] = "dvocifreni2clicked">{{dvocifreni2}}</button>
     <br>
     Trazeni broj: {{trazenibroj}}
 
@@ -23,9 +23,9 @@ Broj poena u ovoj igri: {{brojpoena}}
     
     <br>
     <hr>
-    <button (click)="stop()" *ngIf="potvrdiclicked">Stop</button>
+    <button class="dugme1" (click)="stop()" *ngIf="potvrdiclicked">Stop</button>
     <br>
-    <button (click)="kraj()" *ngIf="!potvrdiclicked">Potvrdi</button>
+    <button class="dugme1" (click)="kraj()" *ngIf="!potvrdiclicked">Potvrdi</button>
 
 
     {{izraz}}

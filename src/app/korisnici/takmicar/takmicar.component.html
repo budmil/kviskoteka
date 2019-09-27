@@ -7,14 +7,13 @@
 
 <a mat-raised-button routerLink="/crveni" style="background-color: #DC143C; margin:22px">Multiplayer crveni</a>
 
-<br>
-<br>
 
-<mat-card *ngIf="!rangTabelaDanas.length">
+<div style="margin-top: 60px">
+<mat-card *ngIf="!rangTabelaDanas.length" style="width: 30%; margin-top: 20px; margin:auto">
     <mat-label>Danas još uvek niko nije odigrao igru dana. Budi 1!</mat-label>
 </mat-card>
 
-<mat-card *ngIf="rangTabelaDanas.length">
+<mat-card *ngIf="rangTabelaDanas.length" style="width: 30%; margin-top: 20px; margin:auto; width:fit-content;">
    <div style="margin-bottom: 14px">Rezultati današnje Igre dana: </div>
 
     <table class="tabelaDana">
@@ -36,3 +35,33 @@
 
     </table>
 </mat-card>
+</div>
+<div style="margin-top: 70px">
+<mat-card *ngIf="!rangTabelaMulti.length" style="width: 30%; margin-top:20px; margin:auto">
+        <mat-label>Već 7 dana bez Multiplayer igre? Odigraj danas!</mat-label>
+    </mat-card>
+
+
+<mat-card *ngIf="rangTabelaMulti.length" style="width:fit-content; margin-top: 20px;margin:auto">
+        <div style="margin-bottom: 14px">Tvoj Multiplayer rang u prethodnih 7 dana:
+            </div>
+<table class="tabelaDana" >
+
+        <tr>
+            <th> Datum </th>
+            <th> Protivnik </th>
+            <th> Moji poeni </th>
+            <th> Protivnikovi poeni </th>
+        </tr>
+
+        <tr *ngFor="let element of rangTabelaMulti; let i = index">
+            <td > {{element.datum}}</td>
+            <td > {{element.protivnik}} </td>
+            <td > {{element.poeniJa}} </td>
+            <td > {{element.poeniProtivnik}} </td>
+        </tr>
+
+
+    </table>
+</mat-card>
+</div>

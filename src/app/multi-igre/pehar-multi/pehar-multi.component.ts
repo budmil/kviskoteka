@@ -15,7 +15,7 @@ import { Observable, Subscription } from 'rxjs';
 export class PeharMultiComponent implements OnInit {
 
   brojacZaIzlaz: number;
-  brojpoena: number;
+  brojpoena: number = 0;
   brojac: number;
   k: number;
   naRedu: string;
@@ -56,11 +56,10 @@ export class PeharMultiComponent implements OnInit {
 
 
     for (let b = 0; b < 13; b++) {
-      this.boje[b] = "#0074d9";
+      this.boje[b] = "#0aaaab";
     }
 
     this.dohvatiPehar();
-    this.brojpoena = 0;
     this.brojac = 20;
     this.simpleTimer.newTimer('tajmer', 1, true);
     this.simpleTimer.subscribe('tajmer', () => {
@@ -79,7 +78,7 @@ export class PeharMultiComponent implements OnInit {
     var stringOdgovor = odgovor.toString().split(',').join("");
     if (this.odgovor == stringOdgovor) {
       this.socketioService.proveriPehar(true, localStorage.getItem("boja"), i);
-      if (localStorage.getItem("boja") == "plavi") this.boje[i] = "blue"; else this.boje[i] = "red";
+      if (localStorage.getItem("boja") == "plavi") this.boje[i] = "#0074d9"; else this.boje[i] = "#DC143C";
       this.brojpoena += 2;
       this.odgovori[i] = this.odgovor.split("");
 
@@ -88,7 +87,6 @@ export class PeharMultiComponent implements OnInit {
     }
 
   }
-
 
 
 
@@ -111,7 +109,7 @@ export class PeharMultiComponent implements OnInit {
               this.mojRed = false;
             }
             if (data.tacno) {
-              if (data.naRedu == "crveni") this.boje[data.i] = "red"; else this.boje[data.i] = "blue";
+              if (data.naRedu == "crveni") this.boje[data.i] = "#DC143C"; else this.boje[data.i] = "#0074d9";
               this.odgovori[data.i] = this.odgovor.split("");
               this.sledecePitanje();
             } else {
@@ -135,16 +133,14 @@ export class PeharMultiComponent implements OnInit {
   }
 
   kraj() {
+    this.simpleTimer.delTimer('tajmer');
     this.brojacZaIzlaz = 3;
     this.simpleTimer.newTimer('tajmerZaIzlaz', 1, true);
     this.simpleTimer.subscribe('tajmerZaIzlaz', () => {
       this.brojacZaIzlaz--;
       if (this.brojacZaIzlaz == 0) {
         this.simpleTimer.delTimer('tajmerZaIzlaz');
-        localStorage.setItem("poeniPehar", this.brojpoena.toString());
         if (this.naRedu == "plavi") {
-          this.simpleTimer.delTimer('tajmer');
-          this.brojpoena = 0;
           this.brojac = 20;
           this.k = 0;
           this.pitanje = "";
@@ -168,6 +164,7 @@ export class PeharMultiComponent implements OnInit {
           this.odgovori[12] = new Array<string>(9);
           this.ngOnInit();
         } else {
+          localStorage.setItem("poeniPehar", this.brojpoena.toString());
           this.socketioService.zavrsioPehar();
         }
       }

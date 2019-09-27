@@ -5,6 +5,9 @@ const multer = require("multer");
 
 const Korisnikk = require("../models/korisnikk");
 
+const checkAuth = require("../middleware/check-auth-admin");
+
+
 const router = express.Router();
 
 const MIME_TYPE_MAP = {
@@ -233,15 +236,16 @@ router.post("/promenaZaboravljeneLozinke", (req,res,next) => {
     });
 });
 
-router.post("/unaprediUSupervizora", (req,res,next) => {
+router.post("/unaprediUSupervizora", checkAuth, (req,res,next) => {
     Korisnikk.updateOne({ korime : req.body.korime}, {tip : "Supervizor"})
         .then(korisnik => {
-            return res.status(200).json({message: "Takmicar uspesno postao supervizor kviza."});
+            console.log(req.body.korime);
+            return res.status(200).json({korime: req.body.korime, korisnik: korisnik, message: "Takmicar uspesno postao supervizor kviza."});
         })
 });
 
 
-router.get("/takmicari", (req,res,next) => {
+router.get("/takmicari", checkAuth, (req,res,next) => {
     Korisnikk.find({valid : true, tip : "Takmicar"})
         .then( takmicari => {
             res.status(200).json({

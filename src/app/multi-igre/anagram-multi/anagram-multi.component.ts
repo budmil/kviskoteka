@@ -3,6 +3,7 @@ import { SimpleTimer } from 'ng2-simple-timer';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { SocketioService } from 'src/app/socketio.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-anagram-multi',
@@ -12,12 +13,13 @@ import { SocketioService } from 'src/app/socketio.service';
 })
 export class AnagramMultiComponent implements OnInit {
 
+
   prikaziVreme = true;
   isLoading = true;
   naRedu: string;
   brojacZaIzlaz: number;
   brojac: number;
-  brojpoena: number;
+  brojpoena: number = 0;
   tacanOdgovor = false;
   netacanOdgovor = false;
   odgovor: string = "";
@@ -25,12 +27,13 @@ export class AnagramMultiComponent implements OnInit {
   constructor(private simpleTimer: SimpleTimer, private router: Router, private http: HttpClient, private socketioService: SocketioService) {
   }
 
-  ngOnInit() {
+  dohvatiAnagramSubscription : Subscription;
 
+  ngOnInit() {
+    this.prikaziVreme = true;
     console.log(this.anagram);
-    this.brojpoena = 0;
     this.brojac = 30;
-    this.socketioService.dohvatiAnagram().subscribe(res => {
+    this.dohvatiAnagramSubscription = this.socketioService.dohvatiAnagram().subscribe(res => {
       this.anagram = { anagram: res.anagram, resenje: res.resenje };
       this.naRedu = res.naRedu;
       this.isLoading = false;
@@ -39,32 +42,38 @@ export class AnagramMultiComponent implements OnInit {
       this.simpleTimer.newTimer("tajmer", 1);
       this.simpleTimer.subscribe("tajmer", () => {
         this.brojac--;
-        console.log(this.brojac);
         if (this.brojac == 0) {
           //this.simpleTimer.delTimer(this.tajmer);
-          this.kraj();
+          this.proveriOdgovor();
         }
       });
     });
 
 
   }
-
+  sracunajPoeneSubscription : Subscription;
   proveriOdgovor() {
    // this.simpleTimer.delTimer(this.tajmer);
     if (this.anagram.resenje == this.odgovor) {
       this.tacanOdgovor = true;
-      this.brojpoena += 10;
+     // this.brojpoena += 10;
     } else {
       this.netacanOdgovor = true;
     }
-    this.kraj();
+    this.sracunajPoeneSubscription = this.socketioService.sracunajPoeneAnagram(this.tacanOdgovor)
+    .subscribe(ret => {
+      console.log(ret);
+      if (localStorage.getItem("boja") == "plavi") this.brojpoena+=ret.plavi; else this.brojpoena+=ret.crveni;
+      this.kraj();
+    });
   }
 
   kraj() {
+    this.sracunajPoeneSubscription.unsubscribe();
+    this.dohvatiAnagramSubscription.unsubscribe();
     this.simpleTimer.unsubscribe("tajmer");
     this.simpleTimer.delTimer("tajmer");
-    this.prikaziVreme = false;;
+    this.prikaziVreme = false;
 
     this.brojacZaIzlaz = 1;
     this.simpleTimer.newTimer('tajmerZaIzlaz', 1, true);
@@ -72,9 +81,9 @@ export class AnagramMultiComponent implements OnInit {
       this.brojacZaIzlaz--;
       if (this.brojacZaIzlaz == 0) {
         this.simpleTimer.delTimer('tajmerZaIzlaz');
-        localStorage.setItem("poeniAnagram", this.brojpoena.toString());
         this.isLoading = true;
         if (this.naRedu == "plavi") {
+
           console.log('na redu plavi');
           this.odgovor = "";
           this.tacanOdgovor = false;
@@ -82,8 +91,9 @@ export class AnagramMultiComponent implements OnInit {
           this.anagram = { anagram: "", resenje: "" };
           this.ngOnInit();
         } else {
-          console.log('na redu crveni');
 
+          console.log('na redu crveni');
+          localStorage.setItem("poeniAnagram",this.brojpoena.toString());
           this.socketioService.zavrsioAnagram();
         }
       }

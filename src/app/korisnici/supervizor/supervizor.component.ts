@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import io from 'socket.io-client';
+import { MatSnackBar } from '@angular/material';
 
 
 @Component({
@@ -16,19 +17,19 @@ export class SupervizorComponent implements OnInit {
   linkSlike: String = "";
 
   private socket: any;
-  private tabelaNepostojecihPojmovaGeografija :
-  {
-    slovo: string,
-     kategorija: string, 
-     termin: string,
-      _i:any, 
-      _j: any   
-  } [] 
-  = new Array();
+  private tabelaNepostojecihPojmovaGeografija:
+    {
+      slovo: string,
+      kategorija: string,
+      termin: string,
+      _i: any,
+      _j: any
+    }[]
+    = new Array();
 
 
 
-  constructor(private http: HttpClient, private fb: FormBuilder) { }
+  constructor(private http: HttpClient, private fb: FormBuilder, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
 
@@ -56,7 +57,9 @@ export class SupervizorComponent implements OnInit {
 
     this.http.post<{ message: string }>('http://localhost:3000/api/igre/anagram/dodajAnagram', { zagonetka: this.zagonetka, resenje: this.resenje })
       .subscribe(responseData => {
-        alert(responseData.message);
+        this.snackBar.open( responseData.message, "" ,{
+          duration: 3000
+        });
       }
       );
   }
@@ -97,7 +100,9 @@ export class SupervizorComponent implements OnInit {
       dole9: { pitanje: this.dole9pitanje, odgovor: this.dole9odgovor }
     })
       .subscribe(responseData => {
-        alert(responseData.message);
+        this.snackBar.open( responseData.message, "" ,{
+          duration: 3000
+        });
       }
       );
   }
@@ -127,21 +132,53 @@ export class SupervizorComponent implements OnInit {
 
     this.http.post<{ message: string }>('http://localhost:3000/api/igre/rebus/dodajRebus', podaci)
       .subscribe(responseData => {
-        alert(responseData.message);
+        this.snackBar.open( responseData.message, "" ,{
+          duration: 3000
+        });  
       });
   }
 
 
-//////////////////////////////GEOGRAFIJA//////////////////////////////////
+  //////////////////////////////GEOGRAFIJA//////////////////////////////////
 
-odobriPojam(pojam: any) {
-  this.socket.emit("supervizor/vracamProverenPojam", {pojam: pojam, odobravam: true});
- // this.tabelaNepostojecihPojmovaGeografija.filte
-}
+  slovo: string;
+  kategorija: string;
+  termin: string;
 
-odbijPojam(pojam: any) {
-  this.socket.emit("supervizor/vracamProverenPojam", {pojam: pojam, odobravam: false});
-}
+  dodajGeografiju() {
+    this.http.post<{ message: string }>('http://localhost:3000/api/igre/geografija/dodajGeografiju', { slovo: this.slovo, kategorija: this.kategorija, termin: this.termin })
+      .subscribe(responseData => {
+        this.snackBar.open( responseData.message, "" ,{
+          duration: 3000
+        });
+      }
+      );
+  }
+
+
+
+
+
+  odobriPojam(pojam: any) {
+    this.socket.emit("supervizor/vracamProverenPojam", { pojam: pojam, odobravam: true });
+    this.tabelaNepostojecihPojmovaGeografija = this.tabelaNepostojecihPojmovaGeografija.filter(pojamm =>
+      (pojamm.termin != pojam.termin || pojamm.kategorija != pojam.kategorija || pojamm.slovo != pojam.slovo)
+    );
+    this.http.post<{ message: string }>('http://localhost:3000/api/igre/geografija/dodajGeografiju', { slovo: pojam.slovo, kategorija: pojam.kategorija, termin: pojam.termin })
+      .subscribe(responseData => {
+        this.snackBar.open( responseData.message, "" ,{
+          duration: 3000
+        });
+      }
+      );
+  }
+
+  odbijPojam(pojam: any) {
+    this.socket.emit("supervizor/vracamProverenPojam", { pojam: pojam, odobravam: false });
+    this.tabelaNepostojecihPojmovaGeografija = this.tabelaNepostojecihPojmovaGeografija.filter(pojamm =>
+      (pojamm.termin != pojam.termin || pojamm.kategorija != pojam.kategorija || pojamm.slovo != pojam.slovo)
+    );
+  }
 
 
 }

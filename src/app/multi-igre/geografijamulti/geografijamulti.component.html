@@ -1,1 +1,34 @@
-<p>geografijamulti works!</p>
+<h2>Zanimljiva geografija</h2>
+Vasi poeni u ovoj igri: {{brojpoena}}
+
+
+<form>
+
+    <mat-label class="tajmer"> <b>Popunite sto vise polja za {{brojac}} sekundi. </b> </mat-label>
+    <mat-label *ngIf="brojac==0"> <b> Vreme isteklo! </b> </mat-label>
+
+
+    <mat-label> <b> Na slovo na slovo: {{slovo}}</b> </mat-label>
+
+        <mat-tab-group>
+            <div *ngFor="let oblast of oblasti; let i = index">
+                <mat-tab label="{{oblast}}">
+                    <div *ngFor="let bppo of brojPojmovaPoOblasti; let j = index">
+                        <mat-form-field>
+                            <input matInput type="text" placeholder="{{oblast}}" name="name{{i}}{{j}}" [(ngModel)]="unetiPojmovi[i][j]" [disabled]="onemoguciUnos[i][j] || prikazujFlegove">
+                        </mat-form-field>
+                        <mat-icon *ngIf="cekamSupervizora[i][j] && prikazujFlegove">hourglass_empty</mat-icon>
+                        <mat-icon *ngIf="tacanPojam[i][j] && !cekamSupervizora[i][j] && prikazujFlegove">done</mat-icon>
+                        <mat-icon *ngIf="!tacanPojam[i][j] && !cekamSupervizora[i][j] && prikazujFlegove">cancel</mat-icon>
+
+                    </div>
+                </mat-tab>
+            </div>
+        </mat-tab-group>
+
+
+    <button mat-stroked-button color="accent" (click)="proveriOdgovore()" [disabled]="prikazujFlegove">Potvrdi</button>
+
+
+
+</form>

@@ -1,0 +1,13 @@
+
+  .dugme1 {
+    height: 120px;
+    width: fit-content;
+    background-color: #C2185B;
+    border-radius: 5px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 40px; 
+    color: whitesmoke;
+    text-shadow: 5px;
+  
+  }

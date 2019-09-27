@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SimpleTimer } from 'ng2-simple-timer';
 import { Router } from '@angular/router';
 import { SocketioService } from '../../socketio.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-mojbroj-multi',
@@ -11,7 +12,7 @@ import { SocketioService } from '../../socketio.service';
 export class MojbrojMultiComponent implements OnInit {
 
 
-  isLoading : Boolean = true;
+  isLoading: Boolean = true;
   brojacZaIzlaz: number;
   izraz: string = "";
   operatori = ["+", "-", "*", "/", "(", ")"];
@@ -25,7 +26,7 @@ export class MojbrojMultiComponent implements OnInit {
 
   brojac = 60;
 
-  brojpoena: number;
+  brojpoena: number = 0;
 
   jednocifreni1;
   jednocifreni2;
@@ -34,7 +35,7 @@ export class MojbrojMultiComponent implements OnInit {
   dvocifreni1;
   dvocifreni2;
 
-  prikaziVreme : Boolean = false;
+  prikaziVreme: Boolean = false;
 
   potvrdiclicked = true;
   jednocifreni1clicked = true;
@@ -48,9 +49,11 @@ export class MojbrojMultiComponent implements OnInit {
 
   constructor(private simpleTimer: SimpleTimer, private router: Router, private socketioService: SocketioService) { }
 
+  vratiPocetniBrojSubscription: Subscription;
+  cekamBrojSubscription: Subscription = null;
+
   ngOnInit() {
 
-    this.brojpoena = 0;
     this.simpleTimer.newTimer('brojeviSeVrte', 0.05, true);
 
     this.simpleTimer.subscribe('brojeviSeVrte', () => {
@@ -67,7 +70,7 @@ export class MojbrojMultiComponent implements OnInit {
 
     });
 
-    this.socketioService.vratiPocetniBroj().subscribe(data => {
+    this.vratiPocetniBrojSubscription = this.socketioService.vratiPocetniBroj().subscribe(data => {
       this.trazenibroj = data.trazeniBroj;
       this.isLoading = false;
       this.naRedu = data.naRedu;
@@ -76,7 +79,7 @@ export class MojbrojMultiComponent implements OnInit {
         this.myTurn = true;
       } else {    //nisam na redu
         this.myTurn = false;
-        this.socketioService.cekamBroj().subscribe(data => {
+        this.cekamBrojSubscription = this.socketioService.cekamBroj().subscribe(data => {
           this.counter++;
           if (data.koji == "jednocifreni1") this.jednocifreni1 = data.broj;
           if (data.koji == "jednocifreni2") this.jednocifreni2 = data.broj;
@@ -86,7 +89,7 @@ export class MojbrojMultiComponent implements OnInit {
           if (data.koji == "dvocifreni2") this.dvocifreni2 = data.broj;
 
 
-          if (this.counter == 6){
+          if (this.counter == 6) {
             this.potvrdiclicked = false;
             this.jednocifreni1clicked = false;
             this.jednocifreni2clicked = false;
@@ -97,15 +100,16 @@ export class MojbrojMultiComponent implements OnInit {
           }
 
           if (data.koji == "tajmer") {
+
             this.brojac = data.broj;
             if (this.brojac == 0) this.kraj();
           }
 
-      
+
 
         });
       }
-  
+
     });
   }
 
@@ -144,7 +148,7 @@ export class MojbrojMultiComponent implements OnInit {
       case 4: this.jednocifreni4 = this.opseg1[Math.floor((Math.random() * 1000) % this.opseg1.length)]; this.socketioService.dodajBroj("jednocifreni4", this.jednocifreni4); break;
       case 5: this.dvocifreni1 = this.opseg2[Math.floor((Math.random() * 1000) % this.opseg2.length)]; this.socketioService.dodajBroj("dvocifreni1", this.dvocifreni1); break;
       case 6: {
-      this.dvocifreni2 = this.opseg3[Math.floor((Math.random() * 1000) % this.opseg3.length)]; this.socketioService.dodajBroj("dvocifreni2", this.dvocifreni2);
+        this.dvocifreni2 = this.opseg3[Math.floor((Math.random() * 1000) % this.opseg3.length)]; this.socketioService.dodajBroj("dvocifreni2", this.dvocifreni2);
         this.simpleTimer.newTimer('tajmer', 1, true);
         this.simpleTimer.subscribe('tajmer', () => {
           this.brojac--;
@@ -155,6 +159,7 @@ export class MojbrojMultiComponent implements OnInit {
           }
         });
         this.simpleTimer.unsubscribe("brojeviSeVrte");
+        this.simpleTimer.delTimer("brojeviSeVrte");
         this.potvrdiclicked = false;
         this.jednocifreni1clicked = false;
         this.jednocifreni2clicked = false;
@@ -169,9 +174,14 @@ export class MojbrojMultiComponent implements OnInit {
   }
 
   kraj() {
-    console.log("AAAAAAAAAAAAAAAABBBBBBBBBBBBBBBB");
-    //this.simpleTimer.unsubscribe("tajmer");
-    //this.simpleTimer.delTimer("tajmer");
+    console.log("MOJBROJ KRAJ");
+    this.simpleTimer.delTimer("tajmer");
+    this.vratiPocetniBrojSubscription.unsubscribe();
+    try {
+      this.cekamBrojSubscription.unsubscribe();
+    } catch{
+
+    }
     this.prikaziVreme = false;
     this.vasrezultat = eval(this.izraz);
     if (this.vasrezultat == this.trazenibroj.toString()) this.brojpoena += 10;
@@ -181,21 +191,22 @@ export class MojbrojMultiComponent implements OnInit {
       this.brojacZaIzlaz--;
       if (this.brojacZaIzlaz == 0) {
         this.simpleTimer.delTimer('tajmerZaIzlaz');
-        localStorage.setItem("poeniMojbroj", this.brojpoena.toString());
         this.isLoading = true;
 
         if (this.naRedu == "plavi") {
-          this.jednocifreni1clicked = false;
-          this.jednocifreni2clicked = false;
-          this.jednocifreni3clicked = false;
-          this.jednocifreni4clicked = false;
-          this.dvocifreni1clicked = false;
-          this.dvocifreni2clicked = false;
+          this.jednocifreni1clicked = true;
+          this.jednocifreni2clicked = true;
+          this.jednocifreni3clicked = true;
+          this.jednocifreni4clicked = true;
+          this.dvocifreni1clicked = true;
+          this.dvocifreni2clicked = true;
           this.izraz = "";
-          this.vasrezultat="";
+          this.vasrezultat = "";
           this.brojac = 60;
+          this.counter = 0;
           this.ngOnInit();
         } else {
+          localStorage.setItem("poeniMojbroj", this.brojpoena.toString());
           this.socketioService.zavrsioMojbroj();
         }
       }

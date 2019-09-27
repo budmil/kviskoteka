@@ -15,11 +15,9 @@ Vasi poeni u ovoj igri: {{brojpoena}}
                 <mat-tab label="{{oblast}}">
                     <div *ngFor="let bppo of brojPojmovaPoOblasti; let j = index">
                         <mat-form-field>
-                            <input matInput type="text" placeholder="{{oblast}}" name="name{{i}}{{j}}" [(ngModel)]="unetiPojmovi[i][j]" [disabled]="prikazujFlegove">
+                            <input matInput type="text" placeholder="{{oblast}}" name="name{{i}}{{j}}" [(ngModel)]="unetiPojmovi[i][j]" >
                         </mat-form-field>
-                        <mat-icon *ngIf="cekamSupervizora[i][j] && prikazujFlegove">hourglass_empty</mat-icon>
-                        <mat-icon *ngIf="tacanPojam[i][j] && !cekamSupervizora[i][j] && prikazujFlegove">done</mat-icon>
-                        <mat-icon *ngIf="!tacanPojam[i][j] && !cekamSupervizora[i][j] && prikazujFlegove">cancel</mat-icon>
+                      
 
                     </div>
                 </mat-tab>
@@ -27,7 +25,7 @@ Vasi poeni u ovoj igri: {{brojpoena}}
         </mat-tab-group>
 
 
-    <button mat-stroked-button color="accent" (click)="proveriOdgovore()" [disabled]="prikazujFlegove">Potvrdi</button>
+    <button mat-stroked-button color="accent" (click)="proveriOdgovore()" >Potvrdi</button>
 
 
 

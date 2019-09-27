@@ -5,16 +5,17 @@ brojSobe = 0;
 var redSpremnihTakmicara = new Map();
 var mapa_takmicara_i_socketa = new Map();
 
-var crvenizavrsio = false;
-var plavizavrsio = false;
 var crvenipobedio = false;
 var plavipobedio = false;
 var brojKontektovanihMojBroj = 0;
-var brojKontektovanihAnagram = 0;
+var brojKonektovanihAnagram = 0;
 var naReduMojBroj = "plavi";
 var naReduAnagram = "plavi";
 var brojKontektovanihPehar = 0;
 var naReduPehar = "plavi";
+
+var brojKonektovanihVesala = 0;
+var naReduVesala = "plavi";
 
 var brojPromasajaPehar = new Array(13);
 for (let iii = 0; iii < 13; iii++) {
@@ -73,13 +74,17 @@ exports = module.exports = function (io) {
 
 
         socket.on('pogodak', function (data) {
-            //console.log("VRATI REC ZA POGADJANJE ALO");
-            for (var prop in socket.rooms) {
-                if (prop.substr(0, 4) == "soba") {
-                    var reci = ["krava", "trava", "zmaj", "covek", "automobil", "kuca", "racunar", "matematika"];
-                    let ret = reci[Math.floor((Math.random() * 1000) % reci.length)];
-                    io.to(prop).emit("recZaPogadjanje", ret);
+            console.log("VESALAAAA");
+            if (brojKonektovanihVesala == 0) brojKonektovanihVesala++; else {
+                brojKonektovanihVesala = 0;
+                for (var prop in socket.rooms) {
+                    if (prop.substr(0, 4) == "soba") {
+                        var reci = ["krava", "trava", "zmaj", "covek", "automobil", "kuca", "racunar", "matematika"];
+                        let ret = reci[Math.floor((Math.random() * 1000) % reci.length)];
+                        io.to(prop).emit("recZaPogadjanje", ret);
+                    }
                 }
+                //naReduVesala = "crveni";
             }
 
         });
@@ -102,33 +107,50 @@ exports = module.exports = function (io) {
         });
 
 
-        socket.on('pogodio', function (pogodak) {
-            if (crvenizavrsio == false) {
-                crvenizavrsio = true;
-                if (pogodak) crvenipobedio = true; else crvenipobedio = false;
+        socket.on('pogodio', function (data) {
+            if (data.boja == "crveni") {
+                if (data.pogodio) crvenipobedio = true;
             } else {
-                plavizavrsio = true;
-                if (pogodak) plavipobedio = true; else plavipobedio = false;
-
-                var soba;
+                if (data.pogodio) plavipobedio = true;
+            }
+            if (brojKonektovanihVesala == 0) brojKonektovanihVesala++;
+            else {
+                brojKonektovanihVesala = 0;
                 for (var prop in socket.rooms) {
                     if (prop.substr(0, 4) == "soba") {
-                        soba = prop;
+                        if (plavipobedio && crvenipobedio) {
+                            io.to(prop).emit("rezultat", { plavi: 5, crveni: 5, naRedu: naReduVesala });
+                        }
+                        if (plavipobedio && !crvenipobedio) {
+                            io.to(prop).emit("rezultat", { plavi: 10, crveni: 0, naRedu: naReduVesala });
+                        }
+                        if (!plavipobedio && crvenipobedio) {
+                            io.to(prop).emit("rezultat", { plavi: 0, crveni: 10, naRedu: naReduVesala });
+                        }
+                        if (!plavipobedio && !crvenipobedio) {
+                            io.to(prop).emit("rezultat", { plavi: 0, crveni: 0, naRedu: naReduVesala });
+                        }
                     }
                 }
-                if (plavipobedio && crvenipobedio) {
-                    io.to(soba).emit("rezultat", { plavi: 5, crveni: 5, naRedu: naReduMojBroj });
+                naReduVesala = "crveni";
+            }
+        });
+
+
+        socket.on('vesala/zavrsioVesala', function (data) {
+            naReduVesala = "plavi";
+            crvenipobedio = false;
+            plavipobedio = false;
+            if (brojKonektovanihVesala == 0) {
+                brojKonektovanihVesala++;
+            } else {
+                brojKonektovanihVesala = 0;
+                for (var prop in socket.rooms) {
+                    if (prop.substr(0, 4) == "soba") {
+                        io.to(prop).emit("vesala/mozesDaljeVesala");
+                    }
                 }
-                if (plavipobedio && !crvenipobedio) {
-                    io.to(soba).emit("rezultat", { plavi: 10, crveni: 0, naRedu: naReduMojBroj });
-                }
-                if (!plavipobedio && crvenipobedio) {
-                    io.to(soba).emit("rezultat", { plavi: 0, crveni: 10, naRedu: naReduMojBroj });
-                }
-                if (!plavipobedio && !crvenipobedio) {
-                    io.to(soba).emit("rezultat", { plavi: 0, crveni: 0, naRedu: naReduMojBroj });
-                }
-                naReduMojBroj = "crveni";
+
             }
         });
 
@@ -157,15 +179,32 @@ exports = module.exports = function (io) {
             }
         });
 
+
+        socket.on('mojbroj/zavrsioMojbroj', function (data) {
+            naReduMojBroj = "plavi";
+
+            if (brojKontektovanihMojBroj == 0) {
+                brojKontektovanihMojBroj++;
+            } else {
+                brojKontektovanihMojBroj = 0;
+                for (var prop in socket.rooms) {
+                    if (prop.substr(0, 4) == "soba") {
+                        io.to(prop).emit("mojbroj/mozesDaljeMojbroj");
+                    }
+                }
+
+            }
+        });
+
         ///////////////////////////anagram//////////////////////////////////////////////////////////
 
         socket.on('anagram/dohvatiAnagram', function (data) {
             console.log("dohvati Anagram");
-            if (brojKontektovanihAnagram == 0) {
-                console.log(brojKontektovanihAnagram);
-                brojKontektovanihAnagram++;
+            if (brojKonektovanihAnagram == 0) {
+                console.log(brojKonektovanihAnagram);
+                brojKonektovanihAnagram++;
             } else {
-                brojKontektovanihAnagram = 0;
+                brojKonektovanihAnagram = 0;
                 Anagram.count().exec(function (err, count) {
                     var random = Math.floor(Math.random() * count);
                     Anagram.findOne().skip(random).exec(function (err, anagram) {
@@ -182,13 +221,44 @@ exports = module.exports = function (io) {
             }
         });
 
+        socket.on('anagram/sracunajPoene', function (data) {
+            if (data.boja == "crveni") {
+                if (data.pogodio) crvenipobedio = true;
+            } else {
+                if (data.pogodio) plavipobedio = true;
+            }
+
+            if (brojKonektovanihAnagram == 0) brojKonektovanihAnagram++;
+            else {
+                brojKonektovanihAnagram = 0;
+                for (var prop in socket.rooms) {
+                    if (prop.substr(0, 4) == "soba") {
+                        if (plavipobedio && crvenipobedio) {
+                            io.to(prop).emit("anagram/rezultat", { plavi: 5, crveni: 5 });
+                        }
+                        if (plavipobedio && !crvenipobedio) {
+                            io.to(prop).emit("anagram/rezultat", { plavi: 10, crveni: 0 });
+                        }
+                        if (!plavipobedio && crvenipobedio) {
+                            io.to(prop).emit("anagram/rezultat", { plavi: 0, crveni: 10 });
+                        }
+                        if (!plavipobedio && !crvenipobedio) {
+                            io.to(prop).emit("anagram/rezultat", { plavi: 0, crveni: 0 });
+                        }
+                    }
+                }
+            }
+        });
+
         socket.on('anagram/zavrsioAnagram', function (data) {
             naReduAnagram = "plavi";
+            crvenipobedio = false;
+            plavipobedio = false;
 
-            if (brojKontektovanihAnagram == 0) {
-                brojKontektovanihAnagram++;
+            if (brojKonektovanihAnagram == 0) {
+                brojKonektovanihAnagram++;
             } else {
-                brojKontektovanihAnagram = 0;
+                brojKonektovanihAnagram = 0;
                 for (var prop in socket.rooms) {
                     if (prop.substr(0, 4) == "soba") {
                         io.to(prop).emit("anagram/mozesDaljeAnagram");
@@ -309,7 +379,7 @@ exports = module.exports = function (io) {
         socket.on('geografija/dajSansuDrugom', function (data) {
             for (var prop in socket.rooms) {
                 if (prop.substr(0, 4) == "soba") {
-                    io.to(prop).emit("geografija/dobijamSansu", { unetiPojmovi: data.unetiPojmovi });
+                    io.to(prop).emit("geografija/dobijamSansu", { unetiPojmovi: data.unetiPojmovi, tacanPojam: data.tacanPojam });
                 }
             }
         });
@@ -339,6 +409,20 @@ exports = module.exports = function (io) {
 
             }
         });
+
+        //////////////////////////rezultat//////////////////////////////////////
+
+        socket.on('rezultat/evoTiRezultat', function (data) {
+            console.log("evoTiRezultat");
+            for (var prop in socket.rooms) {
+                if (prop.substr(0, 4) == "soba") {
+                    io.to(prop).emit("rezultat/primamRezultat", { rezultat: data.rezultat });
+                }
+            }
+
+
+        });
+
 
 
     });

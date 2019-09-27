@@ -110,6 +110,11 @@ export class AdministratorComponent implements OnInit, OnDestroy {
 
   potvrdi() {
 
+    if (this.anagramilirebus == "anagram") {
+      this.izabraniRebusId = null;
+    } else {
+      this.izabraniAnagramId = null;
+    }
 
     var podaci = {
       vesala: this.izabranoVesaloId,
@@ -163,6 +168,13 @@ export class AdministratorComponent implements OnInit, OnDestroy {
 
 
     this.omoguciAzuriranje = false;
+
+    if (this.anagramilirebus == "anagram") {
+      this.izabraniRebusId = null;
+    } else {
+      this.izabraniAnagramId = null;
+    }
+
 
     var podaci = {
       vesala: this.izabranoVesaloId,

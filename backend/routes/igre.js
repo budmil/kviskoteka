@@ -8,6 +8,9 @@ const Vesala = require("../models/vesala");
 const Igradana = require("../models/igradana");
 const Rebus = require("../models/rebus");
 const Poeni = require("../models/poeni");
+const Poenimulti = require("../models/poenimulti.js");
+
+
 
 const router = express.Router();
 
@@ -157,6 +160,27 @@ router.post("/geografija/proveriPojam", (req, res, next) => {
 });
 
 
+router.post("/geografija/dodajGeografiju", (req, res, next) => {
+    const geografija = new Geografija({
+        slovo: req.body.slovo,
+        kategorija: req.body.kategorija,
+        termin: req.body.termin
+    });
+    geografija.save()
+        .then(result => {
+            res.status(201).json({
+                message: "Uspesno dodat pojam za Zanimljivu Geografiju u bazu."
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+
+
 router.get("/vesala/dohvati", (req, res, next) => {
     Vesala.countDocuments().exec(function (err, count) {
         var random = Math.floor(Math.random() * count);
@@ -202,6 +226,8 @@ router.get("/admin/dovuciRebuse", (req, res, next) => {
 });
 
 router.post("/admin/igraDana", (req, res, next) => {
+    console.log("REBUSCINA");
+    console.log(req.body.rebus);
     var igradana = new Igradana({
         vesala: req.body.vesala,
         pehar: req.body.pehar,
@@ -396,6 +422,47 @@ router.post("/admin/azurirajIgruDana", (req, res, next) => {
         .then(result => {
             res.status(201).json({
                 message: "Uspesno azurirana igra dana za " + req.body.datum
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+
+});
+
+
+
+
+router.post("/multi/poeni", (req, res, next) => {
+    console.log("REQ>BODY!!!!!");
+    console.log(req.body);
+    var poenimulti = new Poenimulti({
+        plavi: {
+            poeniAnagram: req.body.plavi.poeniAnagram,
+        poeniMojbroj: req.body.plavi.poeniMojbroj,
+        poeniVesala: req.body.plavi.poeniVesala,
+        poeniGeografija: req.body.plavi.poeniGeografija,
+        poeniPehar: req.body.plavi.poeniPehar,
+        poeniUkupno: req.body.plavi.poeniUkupno,
+        takmicar: req.body.plavi.takmicar 
+        },
+        crveni: {
+            poeniAnagram: req.body.crveni.poeniAnagram,
+            poeniMojbroj: req.body.crveni.poeniMojbroj,
+            poeniVesala: req.body.crveni.poeniVesala,
+            poeniGeografija: req.body.crveni.poeniGeografija,
+            poeniPehar: req.body.crveni.poeniPehar,
+            poeniUkupno: req.body.crveni.poeniUkupno,
+            takmicar: req.body.crveni.takmicar 
+        },
+        datum: new Date()        
+    });
+    poenimulti.save()
+        .then(result => {
+            res.status(201).json({
+                message: "Uspesno sacuvani poeni!"
             });
         })
         .catch(err => {

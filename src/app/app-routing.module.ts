@@ -26,31 +26,33 @@ import { PeharMultiComponent } from './multi-igre/pehar-multi/pehar-multi.compon
 import { PromeniLozinkuComponent } from './auth/promeni-lozinku/promeni-lozinku.component';
 import { RezultatmultiComponent } from './multi-igre/rezultatmulti/rezultatmulti.component';
 import { GeografijamultiComponent } from './multi-igre/geografijamulti/geografijamulti.component';
+import { TakmicarGuard } from './auth/takmicar.guard';
+import { IngameGuard } from './auth/ingame.guard';
 
 const routes: Routes = [
   { path: "", component: PocetnaComponent },
-  { path: "takmicar", component: TakmicarComponent, canActivate: [AuthGuard] },
+  { path: "takmicar", component: TakmicarComponent, canActivate: [AuthGuard, TakmicarGuard] },
   { path: "supervizor", component: SupervizorComponent, canActivate: [AuthGuard, SupervizorGuard] },
   { path: "admin", component: AdministratorComponent, canActivate: [AuthGuard, AdminovGuard] },
   { path: "zaboravljenaLozinka", component: ZaboravljenaLozinkaComponent },
   { path: "tajanstvenoPitanje", component: TajanstvenoPitanjeComponent },
-  { path: "igradana", component: IgraDanaComponent },
-  { path: "vesala", component: VesalaComponent },
-  { path: "anagram", component: AnagramComponent },
-  { path: "mojbroj", component: MojBrojComponent },
-  { path: "geografija", component: GeografijaComponent },
-  { path: "pehar", component: PeharComponent },
-  { path: "rezultat", component: RezultatComponent },
-  { path: "basNovaLozinka", component: BasNovaLozinkaComponent },
+  { path: "igradana", component: IgraDanaComponent , canActivate: [IngameGuard] },
+  { path: "vesala", component: VesalaComponent , canActivate: [IngameGuard]},
+  { path: "anagram", component: AnagramComponent , canActivate: [IngameGuard]},
+  { path: "mojbroj", component: MojBrojComponent , canActivate: [IngameGuard]},
+  { path: "geografija", component: GeografijaComponent, canActivate: [IngameGuard] },
+  { path: "pehar", component: PeharComponent, canActivate: [IngameGuard] },
+  { path: "rezultat", component: RezultatComponent , canActivate: [IngameGuard] },
+  { path: "basNovaLozinka", component: BasNovaLozinkaComponent, canActivate: [IngameGuard] },
   {path: "promeniLozinku", component: PromeniLozinkuComponent},
-  { path: "plavi", component: PlaviComponent },
-  { path: "crveni", component: CrveniComponent },
-  { path: "anagrammulti", component: AnagramMultiComponent },
-  { path: "vesalamulti", component: VesalaMultiComponent },
-  { path: "mojbrojmulti", component: MojbrojMultiComponent },
-  { path: "peharmulti", component: PeharMultiComponent },
-  { path: "geografijamulti", component: GeografijamultiComponent},
-  { path: "rezultatmulti", component: RezultatmultiComponent}
+  { path: "plavi", component: PlaviComponent, canActivate: [IngameGuard] },
+  { path: "crveni", component: CrveniComponent , canActivate: [IngameGuard]},
+  { path: "anagrammulti", component: AnagramMultiComponent , canActivate: [IngameGuard]},
+  { path: "vesalamulti", component: VesalaMultiComponent , canActivate: [IngameGuard] },
+  { path: "mojbrojmulti", component: MojbrojMultiComponent , canActivate: [IngameGuard] },
+  { path: "peharmulti", component: PeharMultiComponent , canActivate: [IngameGuard] },
+  { path: "geografijamulti", component: GeografijamultiComponent , canActivate: [IngameGuard]} ,
+  { path: "rezultatmulti", component: RezultatmultiComponent , canActivate: [IngameGuard]}
 
 
 
@@ -60,6 +62,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [AuthGuard, AdminovGuard, SupervizorGuard]
+  providers: [AuthGuard, AdminovGuard, SupervizorGuard, TakmicarGuard, IngameGuard]
 })
 export class AppRoutingModule { }

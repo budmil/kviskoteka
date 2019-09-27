@@ -1,0 +1,26 @@
+.dugme {
+    height: 40px;
+    width: fit-content;
+    background-color: #0aaaab;
+    border-radius: 5px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 40px; 
+    color: whitesmoke;
+    text-shadow: 5px;
+  
+  }
+
+
+  .dugme1 {
+    height: 40px;
+    width: fit-content;
+    background-color: #C2185B;
+    border-radius: 5px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 40px; 
+    color: whitesmoke;
+    text-shadow: 5px;
+  
+  }

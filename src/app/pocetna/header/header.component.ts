@@ -23,6 +23,13 @@ export class HeaderComponent implements OnInit {
      this.userIsAuthenticated = isAuth;
    });
 
+   switch(this.authService.getTip()) {
+    case "Takmicar": this.jeTakmicar = true; this.jeAdmin = false; this.jeSupervizor = false; break;
+    case "Admin": this.jeTakmicar = false; this.jeAdmin = true; this.jeSupervizor = false; break;
+    case "Supervizor": this.jeTakmicar = false; this.jeAdmin = false; this.jeSupervizor = true; break;
+    default: this.jeTakmicar = false; this.jeAdmin = false; this.jeSupervizor = false; break;
+   }
+
    this.authService.getTipKorisnikaListener().subscribe(tip => {
     switch(tip) {
       case "takmicar": this.jeTakmicar = true; this.jeAdmin = false; this.jeSupervizor = false; break;

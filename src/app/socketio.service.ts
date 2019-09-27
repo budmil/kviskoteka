@@ -25,6 +25,7 @@ export class SocketioService {
     console.log(this.socket);
     this.socket.on("igra_pocinje", data => {
       this.router.navigate(["/anagrammulti"]);
+      
     });
   }
 
@@ -51,8 +52,6 @@ export class SocketioService {
 
   vratiRecZaPogadjanje(): Observable<any> {
     let ret = new Subject<any>();
-    console.log('vrati rec za pogadjanje');
-    console.log(this.socket);
     this.socket.emit('pogodak');
     this.socket.on("recZaPogadjanje", data => {
       ret.next(data);
@@ -63,18 +62,23 @@ export class SocketioService {
 
 
   zavrsio(pogodio: Boolean) {
-    console.log("ZAVRSIO");
     let ret = new Subject<any>();
-    this.socket.emit('pogodio', pogodio);
+    this.socket.emit('pogodio', {pogodio: pogodio, boja: localStorage.getItem("boja")});
     this.socket.on('rezultat', rezultat => {
-      ret.next(rezultat);
+      console.log("VRATIO REZULTAT: ");
       console.log(rezultat);
-      if (rezultat.naRedu == "plavi") this.router.navigate(["/vesalamulti"]); else this.router.navigate(["/peharmulti"]);
+    if (rezultat.naRedu == "plavi") ret.next({ rezultat: rezultat, jos: true }); else ret.next({ rezultat: rezultat, jos: false });
     });
     return ret.asObservable();
   }
 
 
+  zavrsioVesala() {
+    this.socket.emit('vesala/zavrsioVesala');
+    this.socket.on("vesala/mozesDaljeVesala", data => {
+      this.router.navigate(['/geografijamulti']);
+    });
+  }
 
 
   /////////////////////mojbroj////////////////////////
@@ -106,8 +110,8 @@ export class SocketioService {
 
 
   zavrsioMojbroj() {
-    this.socket.emit('anagram/zavrsioAnagram');
-    this.socket.on("anagram/mozesDaljeAnagram", data => {
+    this.socket.emit('mojbroj/zavrsioMojbroj');
+    this.socket.on("mojbroj/mozesDaljeMojbroj", data => {
       this.router.navigate(['/vesalamulti']);
     });
   }
@@ -129,10 +133,19 @@ export class SocketioService {
     console.log('zavrsio anagram service');
     this.socket.emit('anagram/zavrsioAnagram');
     this.socket.on("anagram/mozesDaljeAnagram", data => {
-      this.router.navigate(['/geografijamulti']);
+      this.router.navigate(['/mojbrojmulti']);
     });
   }
 
+
+  sracunajPoeneAnagram(pogodio : Boolean) : Observable<any>{
+    let ret = new Subject<any>();
+    this.socket.emit('anagram/sracunajPoene', {pogodio: pogodio, boja: localStorage.getItem("boja")});
+    this.socket.on("anagram/rezultat", data => {
+      ret.next(data);
+    });
+    return ret.asObservable();
+  }
   //////////////////////////////////////////pehar//////////////////////////////////////////////
 
 
@@ -147,8 +160,8 @@ export class SocketioService {
   }
 
 
-  proveriPehar(tacno: Boolean, boja : string, i: string){
-    this.socket.emit('pehar/proveriPehar', {tacno: tacno, boja: boja, i: i});
+  proveriPehar(tacno: Boolean, boja: string, i: string) {
+    this.socket.emit('pehar/proveriPehar', { tacno: tacno, boja: boja, i: i });
   }
 
 
@@ -173,11 +186,11 @@ export class SocketioService {
 
   //////////////////////////////////////////GEOGRAFIJA////////////////////////////////////////
 
-  saljiSupervizoru(pojam : any) {
-    this.socket.emit('geografija/zaSupervizora', {pojam: pojam});
+  saljiSupervizoru(pojam: any) {
+    this.socket.emit('geografija/zaSupervizora', { pojam: pojam });
   }
 
-  primiOdSupervizora() : Observable<any> {
+  primiOdSupervizora(): Observable<any> {
     let ret = new Subject<any>();
     this.socket.on("geografija/vracamProverenPojam", data => {
       ret.next(data);
@@ -186,30 +199,30 @@ export class SocketioService {
   }
 
 
-  vratiSlovoZaGeografiju() : Observable<any>{
+  vratiSlovoZaGeografiju(): Observable<any> {
     let ret = new Subject<any>();
     this.socket.emit('geografija/vratiSlovo');
 
     this.socket.on("geografija/pocetnoSlovo", data => {
-      console.log('servis slovo: ' );
+      console.log('servis slovo: ');
       console.log(data);
       ret.next(data);
     });
     return ret.asObservable();
   }
- 
 
-  dajSansuDrugom(unetiPojmovi : any) : Observable<any>{
+
+  dajSansuDrugom(unetiPojmovi: any, tacanOdgovor: any): Observable<any> {
     console.log("SERVIS DAJ SANSU DRUGOM");
     let ret = new Subject<any>();
-    this.socket.emit('geografija/dajSansuDrugom', {unetiPojmovi:unetiPojmovi});
+    this.socket.emit('geografija/dajSansuDrugom', { unetiPojmovi: unetiPojmovi, tacanPojam: tacanOdgovor });
     this.socket.on("geografija/zavrsio", data => {
       ret.next(data);
     });
     return ret.asObservable();
   }
 
-  cekamSansu() : Observable<any> {
+  cekamSansu(): Observable<any> {
     let ret = new Subject<any>();
     this.socket.on("geografija/dobijamSansu", data => {
       ret.next(data);
@@ -217,16 +230,28 @@ export class SocketioService {
     return ret.asObservable();
   }
 
-  javljamDaSamZavrsio(){
+  javljamDaSamZavrsio() {
     this.socket.emit('geografija/javljamDaSamZavrsio');
   }
 
   zavrsioGeografiju() {
     this.socket.emit('geografija/zavrsioGeografiju');
     this.socket.on("geografija/mozesDaljeGeografija", data => {
-      this.router.navigate(['/rezultatmulti']);
+      this.router.navigate(['/peharmulti']);
     });
   }
 
+
+  ////////////////////////////////rezultat//////////////////////////////////////
+
+ 
+  vratiRezultat(rezultat: any): Observable<any> {
+    let ret = new Subject<any>();
+    this.socket.emit('rezultat/evoTiRezultat', {rezultat: rezultat});
+    this.socket.on("rezultat/primamRezultat", data => {
+      ret.next(data);
+    });
+    return ret.asObservable();
+  }
 
 }

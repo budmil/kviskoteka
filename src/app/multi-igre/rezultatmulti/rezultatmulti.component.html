@@ -1,1 +1,54 @@
-<p>rezultatmulti works!</p>
+<h1>Rezultat multiplayer</h1>
+
+<app-mojspiner *ngIf="cekam"></app-mojspiner>
+<table matSort *ngIf="!cekam">
+
+    <tr>
+
+        <th mat-sort-header="igra">Igra</th>
+        <th mat-sort-header="plavi">Plavi {{poeniPlavi.takmicar}}</th>
+        <th mat-sort-header="crveni">Crveni {{poeniCrveni.takmicar}}</th>
+
+    </tr>
+
+    <tr>
+        <td>Anagram</td>
+        <td>{{poeniPlavi.poeniAnagram}}</td>
+        <td>{{poeniCrveni.poeniAnagram}}</td>
+    </tr>
+
+    <tr>
+        <td>Moj broj</td>
+        <td>{{poeniPlavi.poeniMojbroj}}</td>
+        <td>{{poeniCrveni.poeniMojbroj}}</td>
+    </tr>
+
+
+    <tr>
+        <td>Vešala</td>
+        <td>{{poeniPlavi.poeniVesala}}</td>
+        <td>{{poeniCrveni.poeniVesala}}</td>
+    </tr>
+
+
+    <tr>
+        <td>Zanimljiva geografija</td>
+        <td>{{poeniPlavi.poeniGeografija}}</td>
+        <td>{{poeniCrveni.poeniGeografija}}</td>
+    </tr>
+
+
+    <tr>
+        <td>Pehar</td>
+        <td>{{poeniPlavi.poeniPehar}}</td>
+        <td>{{poeniCrveni.poeniPehar}}</td>
+    </tr>
+
+
+    <tr>
+        <td>Konačan rezultat</td>
+        <td>{{poeniPlavi.poeniUkupno}}</td>
+        <td>{{poeniCrveni.poeniUkupno}}</td>
+    </tr>
+
+</table>

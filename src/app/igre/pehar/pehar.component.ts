@@ -72,6 +72,8 @@ export class PeharComponent implements OnInit {
 
 
   kraj() {
+
+    this.simpleTimer.delTimer('tajmer');
     this.brojacZaIzlaz = 3;
     this.simpleTimer.newTimer('tajmerZaIzlaz', 1, true);
     this.simpleTimer.subscribe('tajmerZaIzlaz', () => {

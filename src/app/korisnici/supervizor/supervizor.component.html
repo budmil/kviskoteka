@@ -294,14 +294,44 @@
   </mat-accordion>
 </form>
 
+<!---------------------------GEOGRAFIJA BAZA---------------------------------->
 
+<mat-accordion multi="true">
 
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        Zanimljiva geografija - pojmovi
+      </mat-expansion-panel-header>
+  
+      <mat-form-field>
+        <input matInput type="text" placeholder="Slovo" [(ngModel)]="slovo">
+  
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <input matInput type="text" placeholder="Kategorija" [(ngModel)]="kategorija">
+  
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <input matInput type="text" placeholder="Termin" [(ngModel)]="termin">
+  
+      </mat-form-field>
+  
+  
+      <mat-action-row>
+        <button mat-button color="primary" (click)="dodajGeografiju()">Dodaj pojam u bazu</button>
+      </mat-action-row>
+  
+    </mat-expansion-panel>
+  
+  </mat-accordion>
 
 
 
 <br>
 <br>
-<!---------------------------GEOGRAFIJA---------------------------------->
+<!---------------------------GEOGRAFIJA MULTIPLAYER---------------------------------->
 
 
 <mat-accordion multi="true">

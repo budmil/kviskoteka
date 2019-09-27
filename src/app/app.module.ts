@@ -41,6 +41,7 @@ import { MojspinerComponent } from './mojspiner/mojspiner.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { RezultatmultiComponent } from './multi-igre/rezultatmulti/rezultatmulti.component';
 import { GeografijamultiComponent } from './multi-igre/geografijamulti/geografijamulti.component';
+import { AuthAdminInterceptor } from './auth/auth-admin-interceptor';
 
 @NgModule({
   declarations: [
@@ -105,6 +106,7 @@ import { GeografijamultiComponent } from './multi-igre/geografijamulti/geografij
   ],
   providers: [
     SimpleTimer, 
+    { provide: HTTP_INTERCEPTORS, useClass: AuthAdminInterceptor, multi: true },
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
